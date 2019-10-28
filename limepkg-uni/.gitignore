@@ -1,0 +1,14 @@
+*.egg*
+tags
+venv
+build/
+dist/
+__pycache__
+**/*.pyc
+**/.idea
+.pytest_cache/
+docker-compose.override.yml
+.stencil/
+node_modules
+.htmlcov
+pip-wheel-metadata

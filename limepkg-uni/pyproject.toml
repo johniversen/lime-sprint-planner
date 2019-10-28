@@ -1,0 +1,17 @@
+[build-system]
+# MC Hammer - U Can't Touch
+requires = ['setuptools', 'wheel', 'lime-buildtools']
+
+[tool.metadata]
+version = '0.1.0'
+project_version = '1'
+display_name = 'uni'
+package_name = 'limepkg-uni'
+lib_name = 'limepkg_uni'
+
+[tool.lime.dependencies]
+# Note:
+# Your package dependencies libraries like:
+# lib = '>=1.1,<2' # range of versions
+# lib1 = '==1.1' # specific version
+# lib2 = '>=1.1' # at least that version and over

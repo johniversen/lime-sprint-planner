@@ -1,0 +1,10 @@
+[
+    {
+        "name": "lwc-limepkg-uni-loader",
+        "slot": "plugin.loaders"
+    },
+    {
+        "name": "lwc-limepkg-uni-uni-components",
+        "slot": "dashboard"
+    }
+]

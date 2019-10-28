@@ -1,0 +1,24 @@
+--index-url https://pypi.lime.tech/lime/develop
+
+-e .
+
+click>=5.1
+
+autopep8
+flake8>=2.1.0
+
+ipdb>=0.8.1
+ipython>=4.0.0
+
+lime-test>=1.10.0
+lime-plugins>=0.0.6
+lime-webserver>=2.20.0
+lime-event-handler>=0.2.0
+lime-admin>=5.0.0
+lime-task>=2.0.0
+
+pyreadline>=2.1
+pytest-cov
+pytest-watch>=4.1.0
+pytest<=5.0.1
+
