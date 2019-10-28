@@ -136,6 +136,7 @@ export class UniComponents implements LimeWebComponent {
         this.dialogIsOpen = false;
         console.log(this.dialog);
         console.log(this.dialogIsOpen);
+        this.dialog = null;
     }
 
     public render() {
