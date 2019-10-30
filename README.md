@@ -2,7 +2,7 @@
 
 1. Ställ dig i c:\src i Git Bash
 2. Skriv git clone https://github.com/johniversen/lime-sprint-planner.git
-3. Byt till Lime Pro Command cmd - Cd in i lime-sprint-planner
+3. Byt till Lime Pro Command cmd - Cd in i c:\src\lime-sprint-planner
 4. Cd in i limepkg-uni
 5. Skriv pip install -e . --no-use-pep517
 6. Cd in i frontend
