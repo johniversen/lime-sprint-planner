@@ -5,6 +5,7 @@ from webargs.flaskparser import use_args
 from ..endpoints import api
 import lime_query
 from ..querys import querys
+from limepkg_uni.config import RuntimeConfig
 
 
 logger = logging.getLogger(__name__)
@@ -27,10 +28,16 @@ class LimeobjectCounter(webserver.LimeResource):
         # limetype = self.application.limetypes.get_limetype(args['limetype'])
         # ALSHDASDSasdfgsdhgf
         # limeobjects = limetype.get_all()
+        rtcfg = RuntimeConfig()
+        app = self.application
+        rtcfg.application = app
+        config = rtcfg.get_config()
+
         limetype = args['limetype']
+        print(config)
 
         if(limetype == 'solutionimprovement'):
-            query = querys.get_solution_improvement_query()
+            query = querys.get_solution_improvement_query(limetype, config)
         elif(limetype == 'deal'):
             query = querys.get_deal_query()
         elif(limetype == 'company'):

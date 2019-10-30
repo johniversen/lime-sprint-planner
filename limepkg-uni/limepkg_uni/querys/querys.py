@@ -1,18 +1,18 @@
-def get_solution_improvement_query():
+def get_solution_improvement_query(limetype, config):
     return {
-        'limetype': 'solutionimprovement',
+        'limetype': limetype,
         'responseFormat': {
             'object': {
-                'title': {
-                    '_alias': 'name'
+                config['limetypes'][limetype]['title']: None,
+                # 'title': {
+                #     '_alias': 'name'
+                # },
+                config['limetypes'][limetype]['priority']: None,
+                config['limetypes'][limetype]['misc']: None,
+                config['limetypes'][limetype]['comment']: None,
+                config['limetypes'][limetype]['status']: {
+                    '_alias': 'status'   
                 },
-                'priority': None,
-                'coworkercreatedby': None,
-                'card': None,
-                'misc': None,
-                'comment': None,
-                'solutionimprovementstatus': None,
-                'coworker': None,
             }
         }, 'orderBy': [
             {'title': 'ASC'},
