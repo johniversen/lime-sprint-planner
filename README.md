@@ -1,7 +1,7 @@
 # lime-sprint-planner
 
 ### Installationsinstruktioner för utvecklingsmiljö
-### Samt startande av webserver
+Samt startande av webserver
 
 Gör följande i din VM:
 
@@ -18,5 +18,5 @@ Gör följande i din VM:
 11. Om det står något i stil med att ingen sådan fil hittas, gå vidare till nästa steg
 12. I lime console, skriv lime-webserver-debug
 13. Navigera till localhost/client/ i Chrome 
-      (https://localhost/client/ ifall det inte fungerar)
+      (https://localhost/client/ ifall det inte fungerar, eller https://127.0.0.1:5442/client/)
 14. Logga in med username: admin, lösen: 
