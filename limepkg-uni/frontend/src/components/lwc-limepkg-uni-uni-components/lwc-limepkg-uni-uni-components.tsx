@@ -4,7 +4,7 @@ import {
     LimeWebComponentPlatform,
     //NotificationService,
     PlatformServiceName,
-    HttpService,
+    HttpService
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import { ListItem, ListSeparator } from '@limetech/lime-elements';
@@ -14,6 +14,7 @@ import { ListItem, ListSeparator } from '@limetech/lime-elements';
     shadow: true,
     styleUrl: 'lwc-limepkg-uni-uni-components.scss',
 })
+
 export class UniComponents implements LimeWebComponent {
     @Prop()
     public platform: LimeWebComponentPlatform;
@@ -48,8 +49,6 @@ export class UniComponents implements LimeWebComponent {
         this.openDialog = this.openDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
     }
- 
-
 
     public componentWillLoad() {
         this.http = this.platform.get(PlatformServiceName.Http);
@@ -63,8 +62,7 @@ export class UniComponents implements LimeWebComponent {
         this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType).then(res => {
             this.updateData(res);
             console.log(res);
-        }
-        );
+        });
     }
 
     private updateData = (res) => {
@@ -99,8 +97,8 @@ export class UniComponents implements LimeWebComponent {
                     { separator: true }
                 )
             }
-        }
-        )
+        });
+
         this.outputLeftList = <limel-list type="selectable" onChange={this.openDialog} items={itemsLeftList} />
         this.outputMiddleList = <limel-list type="selectable" onChange={this.openDialog} items={itemsMiddleList} />
         this.outputRightList = <limel-list type="selectable" onChange={this.openDialog} items={itemsRightList} />
@@ -122,13 +120,12 @@ export class UniComponents implements LimeWebComponent {
                 </limel-dialog>
                 )
             }
-        })
+        });
+
         console.log(this.dialog);
         console.log(this.dialogIsOpen);
         
-        return event.detail;
-        
-        
+        return event.detail; 
     }
 
     private closeDialog() {
