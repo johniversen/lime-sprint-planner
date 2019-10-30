@@ -39,9 +39,9 @@ export class UniComponents implements LimeWebComponent {
     private outputLeftList: String;
     private outputMiddleList: String;
     private outputRightList: String;
-    
+
     @State()
-    private dialog = <limel-dialog/>;
+    private dialog = <limel-dialog />;
 
     private http: HttpService;
 
@@ -110,22 +110,22 @@ export class UniComponents implements LimeWebComponent {
         this.dialog = this.section.map(item => {
             if (item.name === event.detail.text) {
                 return (
-                <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                    <p>{item.name}</p>
-                    <p>{item.priority}</p>
-                    <p>{item.misc}</p>
-                    <limel-flex-container justify="end" slot="button">
-                        <limel-button primary={true} label="Close" onClick={this.closeDialog} />
-                    </limel-flex-container>
-                </limel-dialog>
+                    <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
+                        <p>{item.name}</p>
+                        <p>{item.priority}</p>
+                        <p>{item.misc}</p>
+                        <limel-flex-container justify="end" slot="button">
+                            <limel-button primary={true} label="Close" onClick={this.closeDialog} />
+                        </limel-flex-container>
+                    </limel-dialog>
                 )
             }
         });
 
         console.log(this.dialog);
         console.log(this.dialogIsOpen);
-        
-        return event.detail; 
+
+        return event.detail;
     }
 
     private closeDialog() {
@@ -157,7 +157,9 @@ export class UniComponents implements LimeWebComponent {
                     <h3>Priority better get started</h3>
                     {this.outputRightList}
                 </limel-flex-container>
+                
             </limel-flex-container>
+            
         );
     }
 }

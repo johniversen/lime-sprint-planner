@@ -1,0 +1,95 @@
+body{
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0%;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 25% 75%;
+    grid-template-areas:
+        "header"
+        "main"; 
+}
+
+header{
+    display: grid;
+    box-sizing: border-box;
+    grid-area: header;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-gap: 10%;
+    grid-template-areas:
+        "h1 dropdown week-display";
+    padding: 1%;
+    background-color: lightgray;
+}
+
+header > h1{
+    box-sizing: border-box;
+    grid-area: h1;
+    display: inline-block;
+}
+
+header > .dropdown{
+    box-sizing: border-box;
+    grid-area: dropdown;
+    display: inline-block;
+}
+
+header > #week-display{
+    box-sizing: border-box;
+    grid-area: week-display;
+    display: inline-block;
+}
+
+main{
+    grid-area: main;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    padding-top: 0%;
+}
+
+#urgent{
+    box-sizing: border-box;
+    background-color:lightcoral;
+    border-style: solid;
+    border-color: red;
+    width: 100%;
+    padding: 0%;
+    margin: 0%;
+}
+
+#urgent:empty{
+    display: none;
+}
+
+section{
+    box-sizing: border-box;
+    grid-area: section;
+    width: 16.6%;
+    flex-wrap: wrap; 
+    align-items: center;
+    align-items: flex-start;
+    padding: 0.5%;
+    border-right: dotted 1px;
+}
+
+section > h3{
+    margin: 1%;
+}
+.card{
+    box-sizing: border-box;
+    /*grid-template-rows: 30% 40% 30%;
+    grid-template-columns: auto;
+    grid-template-areas: 
+        "title"
+        "description"
+        "information"; */
+    box-shadow: 1px 1px 1px 1px lightgrey;
+    background-color: lightslategray;
+    padding: 1%;
+    margin: 1%;
+}
