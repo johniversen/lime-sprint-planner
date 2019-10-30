@@ -24,8 +24,8 @@ export class Framework implements LimeWebComponent {
 
     public render() {
         return (
-            <div id="grid-container">
-                <header>
+            <limel-grid>
+                <grid-header>
                     <h1>Heading</h1>
                     <select class="dropdown">
                         <option value="default"> Filter </option>
@@ -35,31 +35,22 @@ export class Framework implements LimeWebComponent {
                     <div id="week-display">
                         <p>Vecka x</p>
                     </div>
-                </header>
-                <div id="urgent"> AKUT AKUT !!!</div>
-                <main>
-                    <section>
+                </grid-header>
+                <urgent-component>
+                    <p>AKUT AKUT !!!</p>
+                </urgent-component>
+                <grid-main>
+                    <flex-section> 
                         <h3>state</h3>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                    </section>
-                    <section>
-                        <h3>state</h3>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                    </section>
-                    <section>
+                        <card-component>
+                            <div class="card">
+                                <h3 class="title"> Title </h3>
+                                <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
+                                <p class="values"> bla bla bla </p>
+                            </div>
+                        </card-component>
+                        </flex-section>   
+                        <flex-section>
                         <h3>state</h3>
                         <div class="card">
                             <h3 class="title"> Title </h3>
@@ -71,39 +62,52 @@ export class Framework implements LimeWebComponent {
                             <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
                             <p class="information"> bla bla bla </p>
                         </div>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                    </section>
-                    <section>
+                    </flex-section>
+                    <flex-section>
                         <h3>state</h3>
                         <div class="card">
                             <h3 class="title"> Title </h3>
                             <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
                             <p class="information"> bla bla bla </p>
                         </div>
-                    </section>
-                    <section>
+                        <div class="card">
+                            <h3 class="title"> Title </h3>
+                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
+                            <p class="information"> bla bla bla </p>
+                        </div>
+                        <div class="card">
+                            <h3 class="title"> Title </h3>
+                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
+                            <p class="information"> bla bla bla </p>
+                        </div>
+                    </flex-section>
+                    <flex-section>
                         <h3>state</h3>
                         <div class="card">
                             <h3 class="title"> Title </h3>
                             <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
                             <p class="information"> bla bla bla </p>
                         </div>
-                    </section>
-                    <section>
+                    </flex-section>
+                    <flex-section>
+                        <h3>state</h3>
+                        <div class="card">
+                            <h3 class="title"> Title </h3>
+                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
+                            <p class="information"> bla bla bla </p>
+                        </div>
+                    </flex-section>
+                    <flex-section>
                         <h3>state</h3>
                         <div class="card">
                             <h3 class="title"> Title </h3>
                             <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
                             <p class="information"> bla bla bla</p>
                         </div>
-                    </section>
-                </main>
+                    </flex-section>
+                </grid-main>
 
-            </div>
-        );
+            </limel-grid>    
+                    );
     }
 }

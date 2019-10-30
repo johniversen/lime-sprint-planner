@@ -1,50 +1,54 @@
 body{
     font-family: 'Courier New', Courier, monospace;
     margin: 0;
-    padding: 0%;
 }
 
-.grid-container{
-    display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: 25% 75%;
-    grid-template-areas:
+limel-grid { 
+    font-family: Roboto, 'Open Sans', Helvetica, sans-serif;
+    /*display: grid; */
+    --lime-grid-columns: auto;
+    --lime-grid-rows: 3;
+    --lime-grid-cell-height: auto auto 75%;
+    --lime-grid-area:
         "header"
+        "urgent"
         "main"; 
+    width: 100%;
 }
 
-header{
-    display: grid;
+grid-header{
+    /*display: grid;*/
     box-sizing: border-box;
     grid-area: header;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr;
-    grid-gap: 10%;
-    grid-template-areas:
-        "h1 dropdown week-display";
+    --lime-grid-columns: repeat(3, auto);
+    /*--lime-grid-cell-width: 30%; */
+    --lime-grid-rows: auto;
+    --lime-grid-area:
+        "h1 dropdown week-display"; 
     padding: 1%;
-    background-color: lightgray;
+    grid-gap: 5%;
+    background-color:whitesmoke;
 }
 
-header > h1{
+grid-header > h1{
     box-sizing: border-box;
     grid-area: h1;
     display: inline-block;
 }
 
-header > .dropdown{
+grid-header > .dropdown{
     box-sizing: border-box;
     grid-area: dropdown;
     display: inline-block;
 }
 
-header > #week-display{
+grid-header > #week-display{
     box-sizing: border-box;
     grid-area: week-display;
     display: inline-block;
 }
 
-main{
+grid-main{
     grid-area: main;
     display: flex;
     flex-wrap: wrap;
@@ -52,7 +56,8 @@ main{
     padding-top: 0%;
 }
 
-#urgent{
+urgent-component{
+    grid-area: urgent;
     box-sizing: border-box;
     background-color:lightcoral;
     border-style: solid;
@@ -62,11 +67,11 @@ main{
     margin: 0%;
 }
 
-#urgent:empty{
+urgent-component:empty{
     display: none;
 }
 
-section{
+flex-section{
     box-sizing: border-box;
     grid-area: section;
     width: 16.6%;
@@ -77,9 +82,10 @@ section{
     border-right: dotted 1px;
 }
 
-section > h3{
+flex-section > h3{
     margin: 1%;
 }
+
 .card{
     box-sizing: border-box;
     /*grid-template-rows: 30% 40% 30%;
@@ -87,8 +93,8 @@ section > h3{
     grid-template-areas: 
         "title"
         "description"
-        "information"; */
-    box-shadow: 1px 1px 1px 1px lightgrey;
+        "information"; 
+    box-shadow: 1px 1px 1px 1px lightgrey; */
     background-color: lightslategray;
     padding: 1%;
     margin: 1%;
