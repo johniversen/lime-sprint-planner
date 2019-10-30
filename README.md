@@ -1,4 +1,8 @@
 # lime-sprint-planner
+## Installationsinstruktioner för utvecklingsmiljö
+### Samt startande av webserver
+
+Gör följande i din VM:
 
 1. Ställ dig i c:\src i Git Bash
 2. Skriv git clone https://github.com/johniversen/lime-sprint-planner.git
