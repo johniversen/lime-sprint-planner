@@ -1,5 +1,6 @@
 # lime-sprint-planner
-## Installationsinstruktioner för utvecklingsmiljö
+
+### Installationsinstruktioner för utvecklingsmiljö
 ### Samt startande av webserver
 
 Gör följande i din VM:
