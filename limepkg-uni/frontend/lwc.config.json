@@ -5,10 +5,18 @@
     },
     {
         "name": "lwc-limepkg-uni-uni-components",
-        "slot": "dashboard"
+        "slot": null
     },
     {
         "name": "lwc-limepkg-uni-framework",
         "slot": "dashboard"
+    },
+    {
+        "name": "lwc-limepkg-uni-date-picker",
+        "slot": null
+    },
+    {
+        "name": "lwc-limepkg-uni-filter",
+        "slot": null
     }
 ]
