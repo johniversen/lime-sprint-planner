@@ -6,6 +6,7 @@ import {
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import  { Option } from '@limetech/lime-elements';
+import { UniComponents } from '../lwc-limepkg-uni-uni-components/lwc-limepkg-uni-uni-components';
 
 @Component({
     tag: 'lwc-limepkg-uni-framework',
@@ -55,7 +56,7 @@ export class Framework implements LimeWebComponent {
                           onChange={this.onChange}
                           // multiple={true}
                          />
-                        <p>Value: {JSON.stringify(this.selectValue)}</p>
+                       
                     </div>
                     <div id="week-display">
                     <p>
@@ -65,87 +66,16 @@ export class Framework implements LimeWebComponent {
                         value={this.dateValue}
                         onChange={this.handleChange}
                     />
-                    <p style={{ 'font-size': 'small' }}>
-                        Value:{' '}
-                        <code>
-                            {this.dateValue
-                                ? this.dateValue.toString()
-                                : JSON.stringify(this.dateValue)}
-                        </code>
-                    </p>
+                    
                 </p>
  
                 </div>
                 </grid-header>
                 <urgent-component>
-                    <p>AKUT AKUT !!!</p>
+            
                 </urgent-component>
                 <grid-main>
-                    <flex-section> 
-                        <h3>state</h3>
-                        <card-component>
-                            <div class="card">
-                                <h3 class="title"> Title </h3>
-                                <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                                <p class="values"> bla bla bla </p>
-                            </div>
-                        </card-component>
-                        </flex-section>   
-                        <flex-section>
-                        <h3>state</h3>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                    </flex-section>
-                    <flex-section>
-                        <h3>state</h3>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                    </flex-section>
-                    <flex-section>
-                        <h3>state</h3>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                    </flex-section>
-                    <flex-section>
-                        <h3>state</h3>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla </p>
-                        </div>
-                    </flex-section>
-                    <flex-section>
-                        <h3>state</h3>
-                        <div class="card">
-                            <h3 class="title"> Title </h3>
-                            <p class="description"> Detta är en exempelbeskrivning som skulle kunna va på ett card. </p>
-                            <p class="information"> bla bla bla</p>
-                        </div>
-                    </flex-section>
+                    <lwc-limepkg-uni-uni-components platform={this.platform} context = {this.context} />
                 </grid-main>
 
             </limel-grid>    
