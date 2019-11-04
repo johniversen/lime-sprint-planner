@@ -1,8 +1,6 @@
-import json
-
 def get_query(limetype, config):
     # Build skeleton for database request
-    jsonresponse = {
+    jsonrequest = {
         'limetype': limetype,
         'responseFormat': {
             'object': {
@@ -13,6 +11,6 @@ def get_query(limetype, config):
     
     # Fill json with info from the config
     for key, val in config['limetypes'][limetype].items():
-        jsonresponse['responseFormat']['object'][val] = {'_alias': key}
+        jsonrequest['responseFormat']['object'][val] = {'_alias': key}
         
-    return jsonresponse
+    return jsonrequest
