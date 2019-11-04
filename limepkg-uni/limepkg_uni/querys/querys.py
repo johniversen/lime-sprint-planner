@@ -1,4 +1,4 @@
-def get_solution_improvement_query(limetype, config):
+def get_query(limetype, config):
     return {
         'limetype': limetype,
         'responseFormat': {
@@ -11,11 +11,11 @@ def get_solution_improvement_query(limetype, config):
                 config['limetypes'][limetype]['misc']: None,
                 config['limetypes'][limetype]['comment']: None,
                 config['limetypes'][limetype]['status']: {
-                    '_alias': 'status'   
+                    '_alias': 'status'
                 },
             }
         }, 'orderBy': [
-            {'title': 'ASC'},
+            {config['limetypes'][limetype]['status']: 'ASC'},
             {'priority': 'DESC'},
         ]
     }

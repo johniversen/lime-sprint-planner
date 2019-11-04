@@ -7,7 +7,6 @@ import lime_query
 from ..querys import querys
 from limepkg_uni.config import RuntimeConfig
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -17,7 +16,7 @@ class LimeobjectCounter(webserver.LimeResource):
     # This describes the schema for the payload when posting a new deal
     # See https://webargs.readthedocs.io/en/latest/ for more info.
     args = {
-        "limetype": fields.String(required=True),
+        "limetype": fields.String(required=True)
         # "_filter": fields.String(required=False),
     }
 
@@ -35,13 +34,7 @@ class LimeobjectCounter(webserver.LimeResource):
 
         limetype = args['limetype']
         print(config)
-
-        if(limetype == 'solutionimprovement'):
-            query = querys.get_solution_improvement_query(limetype, config)
-        elif(limetype == 'deal'):
-            query = querys.get_deal_query()
-        elif(limetype == 'company'):
-            query = querys.get_company_query()
+        query = querys.get_query(limetype, config)
 
         limeapp = self.application
         response = lime_query.execute_query(

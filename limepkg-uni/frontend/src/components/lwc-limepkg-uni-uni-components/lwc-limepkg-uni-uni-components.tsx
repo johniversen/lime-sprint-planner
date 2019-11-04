@@ -27,10 +27,15 @@ export class UniComponents implements LimeWebComponent {
 
     @State()
     private section = [{
-        name: null,
+        title: null,
         priority: null,
         misc: null,
+        comment: null,
+        status: null
     }];
+
+    @State()
+    private listContainer = [];
 
     @State()
     private dialogIsOpen = false;
@@ -69,8 +74,45 @@ export class UniComponents implements LimeWebComponent {
         this.section = res.objects.map(el => {
             return this.section = { ...el };
         });
-        this.createOutPut();
+        //this.createOutPut();
+        console.log("update data");
+        console.log(this.section);
+        this.createOutPut2();
     }
+
+    private createOutPut2() {
+        let outPutList: Array<ListItem<any> | ListSeparator> = [];
+        let currentStatus = this.section[0].status;
+        let index = 0;
+        this.section.forEach(object => {
+            let item = {
+                text: object.title,
+                secondaryText: "Priority: " + object.priority,
+                value: index++,
+            }
+            if(currentStatus == object.status) {
+                console.log("första if sats: " + object.status)
+                console.log(item);
+                outPutList.push(
+                    (item as ListItem),
+                    { separator: true })
+            } else {
+                console.log("Else sats: " + object.status);
+                console.log(item);
+            this.listContainer.push(outPutList);
+            console.log(this.listContainer);
+            currentStatus = object.status;
+            outPutList = [];
+            outPutList.push(
+                (item as ListItem),
+                { separator: true })
+            }
+        })
+        this.listContainer.push(outPutList);
+        console.log("List container");
+        console.log(this.listContainer);
+    }
+
 
     private createOutPut() {
         let itemsLeftList: Array<ListItem<any> | ListSeparator> = [];
@@ -79,7 +121,7 @@ export class UniComponents implements LimeWebComponent {
         let index = 1;
         this.section.forEach(element => {
             const item = {
-                text: element.name,
+                text: element.title + "",
                 secondaryText: "Priority: " + element.priority,
                 value: index++,
             }
@@ -108,12 +150,14 @@ export class UniComponents implements LimeWebComponent {
         console.log("open dialog");
         this.dialogIsOpen = true;
         this.dialog = this.section.map(item => {
-            if (item.name === event.detail.text) {
+            if (item.title === event.detail.text) {
                 return (
                 <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                    <p>{item.name}</p>
+                    <p>{item.title}</p>
                     <p>{item.priority}</p>
                     <p>{item.misc}</p>
+                    <p>{item.comment}</p>
+                    <p>{item.status}</p>
                     <limel-flex-container justify="end" slot="button">
                         <limel-button primary={true} label="Close" onClick={this.closeDialog} />
                     </limel-flex-container>
@@ -136,27 +180,22 @@ export class UniComponents implements LimeWebComponent {
         this.dialog = null;
     }
 
+
     public render() {
         console.log("Render()");
         console.log(this.dialog);
+        console.log(this.section);
+        let output = this.listContainer.map(list => {
+            return (
+             <limel-flex-container direction = {'vertical'} align = {"stretch"} justify ={"start"}>
+                <limel-list type="selectable" onChange={this.openDialog} items={list} />
+            </limel-flex-container>
+            )
+        })
+
         return (
             <limel-flex-container direction={"horizontal"} align={"start"} justify={"space-between"}>
-                {this.dialog}
-                <limel-flex-container direction={"vertical"} align={"stretch"} justify={"start"}>
-                    <limel-button outlined={true} label="Get deals" onClick={() => this.getDataFromEndPoint("deal")} />
-                    <h3>Priority Urgent</h3>
-                    {this.outputLeftList}
-                </limel-flex-container>
-                <limel-flex-container direction={"vertical"} align={"stretch"} justify={"space-around"}>
-                    <limel-button outlined={true} label="Get solution improvements" onClick={() => this.getDataFromEndPoint("solutionimprovement")} />
-                    <h3>Priority Wish</h3>
-                    {this.outputMiddleList}
-                </limel-flex-container>
-                <limel-flex-container direction={"vertical"} align={"stretch"} justify={"end"}>
-                    <limel-button outlined={true} label="Get Companies" onClick={() => this.getDataFromEndPoint("company")} />
-                    <h3>Priority better get started</h3>
-                    {this.outputRightList}
-                </limel-flex-container>
+                {output}
             </limel-flex-container>
         );
     }

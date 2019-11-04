@@ -7,15 +7,12 @@ limetypes:
     status: solutionimprovementstatus
     # name: title
 
-    
-    lanes:
-    card:
-      title: 
-      status:
-      priority:
-
   deal:
-    name:
+    title: name
+    priority: probability
+    misc: value
+    comment: wonlostreason
+    status: dealstatus
     
         
   other_limetype_example:
