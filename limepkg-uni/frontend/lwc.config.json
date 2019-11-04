@@ -6,5 +6,9 @@
     {
         "name": "lwc-limepkg-uni-uni-components",
         "slot": "dashboard"
+    },
+    {
+        "name": "lwc-limepkg-uni-framework",
+        "slot": "dashboard"
     }
 ]

@@ -15,6 +15,8 @@ import { ListItem, ListSeparator } from '@limetech/lime-elements';
     styleUrl: 'lwc-limepkg-uni-uni-components.scss',
 })
 
+// Test
+
 export class UniComponents implements LimeWebComponent {
     @Prop()
     public platform: LimeWebComponentPlatform;
@@ -39,7 +41,6 @@ export class UniComponents implements LimeWebComponent {
 
     @State()
     private dialogIsOpen = false;
-
 
     private dialog = <limel-dialog />;
 
@@ -116,23 +117,6 @@ export class UniComponents implements LimeWebComponent {
             </limel-flex-container>
 
         </limel-dialog>
-        /* this.dialog = this.section.map(item => {
-            if (item.title === event.detail.text) {
-                return (
-                    <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                        <p>{item.title}</p>
-                        <p>{item.priority}</p>
-                        <p>{item.misc}</p>
-                        <p>{item.comment}</p>
-                        <p>{item.status}</p>
-                        <limel-flex-container justify="end" slot="button">
-                            <limel-button primary={true} label="Close" onClick={this.closeDialog} />
-                        </limel-flex-container>
-                    </limel-dialog>
-                )
-            }
-        }); */
-
         return event.detail;
     }
 
@@ -165,6 +149,7 @@ export class UniComponents implements LimeWebComponent {
                 {this.dialog}
                 {output}
             </limel-flex-container>
+            
         );
     }
 }
