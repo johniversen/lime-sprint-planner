@@ -24,16 +24,12 @@ class LimeobjectCounter(webserver.LimeResource):
     def get(self, args):
         """Get the current number of objects of the given type in the system.
         """
-        # limetype = self.application.limetypes.get_limetype(args['limetype'])
-        # ALSHDASDSasdfgsdhgf
-        # limeobjects = limetype.get_all()
         rtcfg = RuntimeConfig()
         app = self.application
         rtcfg.application = app
         config = rtcfg.get_config()
 
         limetype = args['limetype']
-        print(config)
         query = querys.get_query(limetype, config)
 
         limeapp = self.application

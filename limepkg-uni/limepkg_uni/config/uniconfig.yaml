@@ -5,7 +5,7 @@ limetypes:
     misc: misc
     comment: comment
     status: solutionimprovementstatus
-    # name: title
+    # donedate: donedate // DateTime not serializable error ?
 
   deal:
     title: name
@@ -13,17 +13,22 @@ limetypes:
     misc: value
     comment: wonlostreason
     status: dealstatus
-         
-  other_limetype_example:
-   solution_improvement_config:
-    title:
-    lanes:
-      - chill
-      - less chill
-      - urgent
-    card:
-      title: 
-      status:
-      priority:
-      customfields:
-        - blablafield:
+
+  company:
+    title: name
+    priority: buyingstatus 
+
+  todo:
+    title: subject
+    comment: note
+    priority: location # ? 
+    # starttime: starttime // DateTime not serializable error?
+
+  campaign:
+    title: name
+    priority: campaignstatus
+    type: type
+    purpose: purpose
+    goal: goal
+    workmode: workmode
+
