@@ -6,7 +6,7 @@ import {
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import  { Option } from '@limetech/lime-elements';
-import { UniComponents } from '../lwc-limepkg-uni-uni-components/lwc-limepkg-uni-uni-components';
+//import { UniComponents } from '../lwc-limepkg-uni-uni-components/lwc-limepkg-uni-uni-components';
 
 @Component({
     tag: 'lwc-limepkg-uni-framework',
@@ -38,7 +38,6 @@ export class Framework implements LimeWebComponent {
 
     constructor() {
         this.handleChange = this.handleChange.bind(this);
-
         this.onChange = this.onChange.bind(this);
     }
 
