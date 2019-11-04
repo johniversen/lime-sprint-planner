@@ -40,13 +40,8 @@ export class UniComponents implements LimeWebComponent {
     @State()
     private dialogIsOpen = false;
 
-    @State()
-    private outputLeftList: String;
-    private outputMiddleList: String;
-    private outputRightList: String;
-    
-    @State()
-    private dialog = <limel-dialog/>;
+
+    private dialog = <limel-dialog />;
 
     private http: HttpService;
 
@@ -63,10 +58,8 @@ export class UniComponents implements LimeWebComponent {
     }
 
     private getDataFromEndPoint(limeType) {
-        console.log(limeType)
         this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType).then(res => {
             this.updateData(res);
-            console.log(res);
         });
     }
 
@@ -74,13 +67,12 @@ export class UniComponents implements LimeWebComponent {
         this.section = res.objects.map(el => {
             return this.section = { ...el };
         });
-        //this.createOutPut();
-        console.log("update data");
-        console.log(this.section);
-        this.createOutPut2();
+
+
+        this.createOutPut();
     }
 
-    private createOutPut2() {
+    private createOutPut() {
         let outPutList: Array<ListItem<any> | ListSeparator> = [];
         let currentStatus = this.section[0].status;
         let index = 0;
@@ -89,67 +81,69 @@ export class UniComponents implements LimeWebComponent {
                 text: object.title,
                 secondaryText: "Priority: " + object.priority + " Status: " + object.status,
                 value: index++,
+                open: "false"
             }
-            if(currentStatus == object.status) {
-                console.log("första if sats: " + object.status)
-                console.log(item);
+            if (currentStatus == object.status) {
                 outPutList.push(
                     (item as ListItem),
                     { separator: true })
             } else {
-                console.log("Else sats: " + object.status);
-                console.log(item);
-            this.listContainer.push(outPutList);
-            console.log(this.listContainer);
-            currentStatus = object.status;
-            outPutList = [];
-            outPutList.push(
-                (item as ListItem),
-                { separator: true })
+
+                this.listContainer.push(outPutList);
+                currentStatus = object.status;
+                outPutList = [];
+                outPutList.push(
+                    (item as ListItem),
+                    { separator: true })
             }
         })
         this.listContainer.push(outPutList);
-        console.log("List container");
-        console.log(this.listContainer);
     }
 
 
     private openDialog(event: CustomEvent<ListItem>) {
         console.log("open dialog");
         this.dialogIsOpen = true;
-        this.dialog = this.section.map(item => {
+        let item = this.section.find(obj => obj.title === event.detail.text);
+        this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
+            <h1>{item.title}</h1>
+            <p>{"Priority: " + item.priority}</p>
+            <p>{"Misc: " + item.misc}</p>
+            <p>{"Comment: " + item.comment}</p>
+            <p>{"Status: " + item.status}</p>
+            <limel-flex-container justify="end" slot="button">
+                <limel-button primary={true} label="Close" onClick={this.closeDialog} />
+            </limel-flex-container>
+
+        </limel-dialog>
+        /* this.dialog = this.section.map(item => {
             if (item.title === event.detail.text) {
                 return (
-                <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                    <p>{item.title}</p>
-                    <p>{item.priority}</p>
-                    <p>{item.misc}</p>
-                    <p>{item.comment}</p>
-                    <p>{item.status}</p>
-                    <limel-flex-container justify="end" slot="button">
-                        <limel-button primary={true} label="Close" onClick={this.closeDialog} />
-                    </limel-flex-container>
-                </limel-dialog>
+                    <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
+                        <p>{item.title}</p>
+                        <p>{item.priority}</p>
+                        <p>{item.misc}</p>
+                        <p>{item.comment}</p>
+                        <p>{item.status}</p>
+                        <limel-flex-container justify="end" slot="button">
+                            <limel-button primary={true} label="Close" onClick={this.closeDialog} />
+                        </limel-flex-container>
+                    </limel-dialog>
                 )
             }
-        });
+        }); */
 
-        console.log(this.dialog);
-        console.log(this.dialogIsOpen);
-        
-        return event.detail; 
+        return event.detail;
     }
 
     private closeDialog() {
         console.log("Close dialog");
         this.dialogIsOpen = false;
-        console.log(this.dialog);
-        console.log(this.dialogIsOpen);
         this.dialog = null;
     }
     private getDeals() {
-    this.listContainer = [];
-    this.getDataFromEndPoint("deal");
+        this.listContainer = [];
+        this.getDataFromEndPoint("deal");
     }
 
 
@@ -159,15 +153,16 @@ export class UniComponents implements LimeWebComponent {
         console.log(this.section);
         let output = this.listContainer.map(list => {
             return (
-             <limel-flex-container direction = {'vertical'} align = {"stretch"} justify ={"start"}>
-                 <limel-button label={"Deals"} onClick={this.getDeals.bind(this)}/>
-                <limel-list type="selectable" onChange={this.openDialog} items={list} />
-            </limel-flex-container>
+                <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
+                    <limel-list type="selectable" onChange={this.openDialog} items={list}  />
+                </limel-flex-container>
             )
         })
 
         return (
             <limel-flex-container direction={"horizontal"} align={"start"} justify={"space-between"}>
+                <limel-button label={"Deals"} onClick={this.getDeals.bind(this)} />
+                {this.dialog}
                 {output}
             </limel-flex-container>
         );
