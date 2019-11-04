@@ -7,12 +7,10 @@ limel-grid {
     font-family:'Roboto','Open Sans','Helvetica Neue',Arial,Helvetica,Verdana,sans-serif;
     font-size: small;
     --lime-grid-columns: 1;
-    --lime-grid-rows: 3;
-    --lime-grid-cell-height: auto  auto 70%; 
+    --lime-grid-rows: auto;
     --lime-grid-area:
         "header"
-        "urgent"
-        "main"; 
+        "main" !important; 
     width: 100%;
     padding: 2%;
     box-sizing: border-box;
@@ -61,13 +59,10 @@ grid-header > #week-display{
 
 grid-main{
     grid-area: main;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
     padding-top: 0%;
 }
 
-urgent-component{
+#urgent{
     grid-area: urgent;
     box-sizing: border-box;
     background-color: #f05750;
@@ -78,28 +73,8 @@ urgent-component{
     margin: 0%;
 }
 
-urgent-component:empty{
+#urgent:empty{
     display: none;
 }
 
-flex-section{
-    box-sizing: border-box;
-    grid-area: section;
-    width: 16.6%;
-    flex-wrap: wrap; 
-    align-items: center;
-    align-items: flex-start;
-    padding: 0.5%;
-    border-right: dotted 1px;
-}
 
-flex-section > h3{
-    margin: 1%;
-}
-
-.card{
-    box-sizing: border-box;
-    background-color:#adadad;
-    padding: 1%;
-    margin: 1%;
-}
