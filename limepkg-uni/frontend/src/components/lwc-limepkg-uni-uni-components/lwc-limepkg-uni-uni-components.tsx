@@ -87,7 +87,7 @@ export class UniComponents implements LimeWebComponent {
         this.section.forEach(object => {
             let item = {
                 text: object.title,
-                secondaryText: "Priority: " + object.priority,
+                secondaryText: "Priority: " + object.priority + " Status: " + object.status,
                 value: index++,
             }
             if(currentStatus == object.status) {
@@ -113,38 +113,6 @@ export class UniComponents implements LimeWebComponent {
         console.log(this.listContainer);
     }
 
-
-    private createOutPut() {
-        let itemsLeftList: Array<ListItem<any> | ListSeparator> = [];
-        let itemsMiddleList: Array<ListItem<any> | ListSeparator> = [];
-        let itemsRightList: Array<ListItem<any> | ListSeparator> = [];
-        let index = 1;
-        this.section.forEach(element => {
-            const item = {
-                text: element.title + "",
-                secondaryText: "Priority: " + element.priority,
-                value: index++,
-            }
-            if (element.priority == "urgent" || element.priority == "rejection" || element.priority == "agreement") {
-                itemsLeftList.push(
-                    (item as ListItem),
-                    { separator: true })
-            } else if (element.priority == "wish" || element.priority == "contact" || element.priority == "prospect") {
-                itemsMiddleList.push(
-                    (item as ListItem),
-                    { separator: true })
-            } else if (element.priority == "better" || element.priority == "agreement" || element.priority == "active") {
-                itemsRightList.push(
-                    (item as ListItem),
-                    { separator: true }
-                )
-            }
-        });
-
-        this.outputLeftList = <limel-list type="selectable" onChange={this.openDialog} items={itemsLeftList} />
-        this.outputMiddleList = <limel-list type="selectable" onChange={this.openDialog} items={itemsMiddleList} />
-        this.outputRightList = <limel-list type="selectable" onChange={this.openDialog} items={itemsRightList} />
-    }
 
     private openDialog(event: CustomEvent<ListItem>) {
         console.log("open dialog");
@@ -179,6 +147,10 @@ export class UniComponents implements LimeWebComponent {
         console.log(this.dialogIsOpen);
         this.dialog = null;
     }
+    private getDeals() {
+    this.listContainer = [];
+    this.getDataFromEndPoint("deal");
+    }
 
 
     public render() {
@@ -188,6 +160,7 @@ export class UniComponents implements LimeWebComponent {
         let output = this.listContainer.map(list => {
             return (
              <limel-flex-container direction = {'vertical'} align = {"stretch"} justify ={"start"}>
+                 <limel-button label={"Deals"} onClick={this.getDeals.bind(this)}/>
                 <limel-list type="selectable" onChange={this.openDialog} items={list} />
             </limel-flex-container>
             )

@@ -3,20 +3,24 @@ def get_query(limetype, config):
         'limetype': limetype,
         'responseFormat': {
             'object': {
-                config['limetypes'][limetype]['title']: None,
-                # 'title': {
-                #     '_alias': 'name'
-                # },
-                config['limetypes'][limetype]['priority']: None,
-                config['limetypes'][limetype]['misc']: None,
-                config['limetypes'][limetype]['comment']: None,
+                config['limetypes'][limetype]['title']: {
+                    '_alias': 'title'
+                },
+                config['limetypes'][limetype]['priority']: {
+                    '_alias': 'priority'
+                },
+                config['limetypes'][limetype]['misc']: {
+                    '_alias': 'misc'
+                },
+                config['limetypes'][limetype]['comment']: {
+                    '_alias': 'comment'
+                },
                 config['limetypes'][limetype]['status']: {
                     '_alias': 'status'
                 },
             }
         }, 'orderBy': [
             {config['limetypes'][limetype]['status']: 'ASC'},
-            {'priority': 'DESC'},
         ]
     }
 
