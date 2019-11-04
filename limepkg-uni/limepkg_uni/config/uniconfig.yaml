@@ -1,0 +1,29 @@
+limetypes:
+  solutionimprovement:
+    title: title
+    priority: priority
+    misc: misc
+    comment: comment
+    status: solutionimprovementstatus
+    # name: title
+
+  deal:
+    title: name
+    priority: probability
+    misc: value
+    comment: wonlostreason
+    status: dealstatus
+         
+  other_limetype_example:
+   solution_improvement_config:
+    title:
+    lanes:
+      - chill
+      - less chill
+      - urgent
+    card:
+      title: 
+      status:
+      priority:
+      customfields:
+        - blablafield:
