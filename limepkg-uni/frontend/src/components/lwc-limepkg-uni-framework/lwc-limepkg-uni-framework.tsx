@@ -70,11 +70,10 @@ export class Framework implements LimeWebComponent {
                 </p>
  
                 </div>
-                </grid-header>
-                <urgent-component>
-            
-                </urgent-component>
+                </grid-header>            
                 <grid-main>
+                    <div id="urgent">
+                    </div>
                     <lwc-limepkg-uni-uni-components platform={this.platform} context = {this.context} />
                 </grid-main>
 

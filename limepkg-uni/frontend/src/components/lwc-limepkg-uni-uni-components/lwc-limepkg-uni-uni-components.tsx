@@ -137,14 +137,14 @@ export class UniComponents implements LimeWebComponent {
         console.log(this.section);
         let output = this.listContainer.map(list => {
             return (
-                <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
+                <limel-flex-container class="column-class" direction={'vertical'} align={"stretch"} justify={"start"}>
                     <limel-list type="selectable" onChange={this.openDialog} items={list}  />
                 </limel-flex-container>
             )
         })
 
         return (
-            <limel-flex-container direction={"horizontal"} align={"start"} justify={"space-between"}>
+            <limel-flex-container class="card" direction={"horizontal"} align={"start"} justify={"space-between"}>
                 <limel-button label={"Deals"} onClick={this.getDeals.bind(this)} />
                 {this.dialog}
                 {output}
