@@ -1,3 +1,13 @@
+# TODO: Handle priority, handle DateTime (possible?)
+#
+# Here you can define custom limetypes to be presented.
+# The structure is as follows:
+# example_limetype: 
+#   presentation_alias: database_key
+#
+# Special keywords: 
+#   title:    // This will become the title of the item in the list.
+#   priority: // This decides how the items will be displayed horizontally (prio) ? 
 limetypes:
   solutionimprovement:
     title: title

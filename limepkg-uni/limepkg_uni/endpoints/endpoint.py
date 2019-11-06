@@ -17,7 +17,6 @@ class LimeobjectCounter(webserver.LimeResource):
     # See https://webargs.readthedocs.io/en/latest/ for more info.
     args = {
         "limetype": fields.String(required=True)
-        # "_filter": fields.String(required=False),
     }
 
     @use_args(args)
@@ -37,6 +36,8 @@ class LimeobjectCounter(webserver.LimeResource):
             query, limeapp.database.connection,
             limeapp.limetypes, limeapp.acl, limeapp.user
         )
+
+        # TODO: Handle priority here? add prio nr based on limetype from config...?
 
         return response
 
