@@ -61,10 +61,10 @@ class RuntimeConfig(lime_admin.plugins.AdminPlugin):
 
         # TODO: TEMPORARY until we can read config from webinterface. (loads config from local file)
         try:
-            with open("C:/src/lime-sprint-planner/limepkg-uni/limepkg_uni/config/uniconfig.yaml") as file:
+            with open("C:/src/lime-sprint-planner/limepkg-uni/limepkg_uni/config/config.yaml") as file:
                 config = yaml.load(file, Loader=yaml.FullLoader)
             return config
-            # return super().get_config() # ORIGINAL, reads from webinterface
+            # return super().get_config() # ORIGINAL, reads from webinterface (i think?)
         except lime_admin.plugins.NotFoundError:
             return {}
 
