@@ -15,7 +15,7 @@ class LimeobjectCounter(webserver.LimeResource):
     # This describes the schema for the payload when posting a new deal
     # See https://webargs.readthedocs.io/en/latest/ for more info.
     args = {
-        "limetype": fields.String(required=True)
+        "limetype": fields.String(required=False)
     }
 
     @use_args(args)
@@ -38,14 +38,11 @@ class LimeobjectCounter(webserver.LimeResource):
             limeapp.limetypes, limeapp.acl, limeapp.user
         )
 
+        # Add priority info to the objects
         for obj in response['objects']:
             status = obj['status']
             obj['priorityValue'] = config['limetypes'][limetype]['prio'][status]
 
-
-        # TODO: Handle priority here? add prio nr based on limetype from config...?
-
-        print(response)
         return response
 
 
