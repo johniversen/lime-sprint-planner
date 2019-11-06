@@ -2,12 +2,12 @@
 #
 # Here you can define custom limetypes to be presented.
 # The structure is as follows:
-# example_limetype: 
-#   presentation_alias: database_key
+#   example_limetype: 
+#     presentation_alias: database_key
 #
 # Special keywords: 
-#   title:    // This will become the title of the item in the list.
-#   priority: // This decides how the items will be displayed horizontally (prio) ? 
+#   title    - This will become the title (header) of the item.
+#   priority - This decides the order of the items on the on the horizontal axis. (WIP) 
 limetypes:
   solutionimprovement:
     title: title
@@ -31,7 +31,7 @@ limetypes:
   todo:
     title: subject
     comment: note
-    priority: location # ? 
+    priority: location  
     # starttime: starttime // DateTime not serializable error?
 
   campaign:

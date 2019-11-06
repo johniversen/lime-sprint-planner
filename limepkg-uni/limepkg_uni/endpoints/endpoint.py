@@ -9,7 +9,6 @@ from limepkg_uni.config import RuntimeConfig
 
 logger = logging.getLogger(__name__)
 
-
 class LimeobjectCounter(webserver.LimeResource):
     """Summarize your resource's functionality here"""
 
@@ -21,8 +20,7 @@ class LimeobjectCounter(webserver.LimeResource):
 
     @use_args(args)
     def get(self, args):
-        """Get the current number of objects of the given type in the system.
-        """
+        """Get the current number of objects of the given type in the system."""
         rtcfg = RuntimeConfig()
         app = self.application
         rtcfg.application = app
