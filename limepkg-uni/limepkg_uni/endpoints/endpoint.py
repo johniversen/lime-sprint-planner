@@ -40,6 +40,7 @@ class LimeobjectCounter(webserver.LimeResource):
 
         # TODO: Handle priority here? add prio nr based on limetype from config...?
 
+        print(response)
         return response
 
 

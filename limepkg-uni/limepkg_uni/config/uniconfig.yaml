@@ -6,23 +6,25 @@
 #     presentation_alias: database_key
 #
 # Special keywords: 
-#   title    - This will become the title (header) of the item.
-#   priority - This decides the order of the items on the on the horizontal axis. (WIP) 
+#   title          - This will become the title (header) of the item. (required)
+#   secondary_text - This will be displayed underneath the header. (not required) 
+#   priority       - This decides the order of the items on the on the horizontal axis. (WIP) 
+#   
 limetypes:
   solutionimprovement:
     title: title
-    priority: priority
-    misc: misc
-    comment: comment
-    status: solutionimprovementstatus
+    Secondary Text: comment
+    Priority: priority
+    Misc: misc
+    Status: solutionimprovementstatus
     # donedate: donedate # DateTime not serializable error ?
 
   deal:
     title: name
     priority: probability
-    misc: value
-    comment: wonlostreason
-    status: dealstatus
+    value: value
+    wonlostreason: wonlostreason
+    dealstatus: dealstatus
 
   company:
     title: name
@@ -30,8 +32,8 @@ limetypes:
 
   todo:
     title: subject
-    comment: note
     priority: location  
+    comment: note
     # starttime: starttime # DateTime not serializable error?
 
   campaign:
