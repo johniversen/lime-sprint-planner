@@ -28,17 +28,11 @@ export class UniComponents implements LimeWebComponent {
     @Prop()
     mainData: [{
         title: string,
-        priority: string,
-        misc: string,
-        comment: string,
-        status: string
+        secondaryText: string,
+        priorityValue: number,
+        id: number
     }];
 
-    @Prop()
-    dialogIsOpen: boolean;
-
-    @Prop()
-    dialogData: {};
 
     @Prop()
     onListItemClick: (event: CustomEvent<ListItem>) => void;
@@ -46,40 +40,34 @@ export class UniComponents implements LimeWebComponent {
     @State()
     private listContainer = [];
 
-
-
-
- 
     public componentWillRender() {
         console.log("componentWillRender")
         this.createOutPut();
     }
-    private closeDialog() {
-        console.log("Close dialog");
-        this.dialogIsOpen = false;
-    }
-
 
 
     private createOutPut() {
         this.listContainer = [];
         let outPutList: Array<ListItem<any> | ListSeparator> = [];
-        let currentStatus = this.mainData[0].status;
-        let index = 0;
+        let currentStatus = this.mainData[0].priorityValue;
         this.mainData.forEach(object => {
+            let secondaryText = null;
+            if (object.secondaryText != null) {
+                secondaryText = object.secondaryText;
+            }
             let item = {
-                text: object.title,
-                secondaryText: "Priority: " + object.priority + " Status: " + object.status,
-                value: index++,
+                text: object[Object.keys(object)[0]],
+                secondaryText: secondaryText,
+                value: object.id,
                 open: "false"
             }
-            if (currentStatus == object.status) {
+            if (currentStatus == object.priorityValue) {
                 outPutList.push(
                     (item as ListItem),
                     { separator: true })
             } else {
                 this.listContainer.push(outPutList);
-                currentStatus = object.status;
+                currentStatus = object.priorityValue;
                 outPutList = [];
                 outPutList.push(
                     (item as ListItem),

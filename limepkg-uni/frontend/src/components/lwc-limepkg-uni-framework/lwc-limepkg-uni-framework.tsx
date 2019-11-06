@@ -8,7 +8,7 @@ import {
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import { Option } from '@limetech/lime-elements';
-import { ListItem, ListSeparator } from '@limetech/lime-elements';
+import { ListItem } from '@limetech/lime-elements';
 
 @Component({
     tag: 'lwc-limepkg-uni-framework',
@@ -40,10 +40,9 @@ export class Framework implements LimeWebComponent {
     @State()
     private mainData: [{
         title: string,
-        priority: string,
-        misc: string,
-        comment: string,
-        status: string
+        secondaryText: string,
+        priorityValue: number,
+        id: number
     }];
 
     @State()
@@ -75,9 +74,10 @@ export class Framework implements LimeWebComponent {
 
 
     private updateData = (res) => {
+        let id = 0;
         this.mainData = res.objects.map(el => {
             console.log(this.mainData);
-            return this.mainData = { ...el };
+            return this.mainData = { ...el, value: id++ };
         });
     }
 
@@ -88,7 +88,7 @@ export class Framework implements LimeWebComponent {
 
         private openDialog(event: CustomEvent<ListItem>) {
             this.dialogIsOpen = true;
-            let item = this.mainData.find(obj => obj.title === event.detail.text);
+            let item = this.mainData.find(obj => obj.id === event.detail.value);
             this.dialogData = item;
             console.log("Dialog funk i framework")
         }
@@ -112,13 +112,14 @@ export class Framework implements LimeWebComponent {
                 onListItemClick={this.openDialog}
             />
         }
-         let temp = [];
+         let dialogOutput = [];
+ 
         if(this.dialogIsOpen) {
             const entries = Object.entries(this.dialogData);
           
            for(const [key,count] of entries) {
                 //temp +=  `${key} : ${count} `;
-                temp.push(`${key} : ${count} \n`);
+                dialogOutput.push(`${key} : ${count} `);
            }
 
         }
@@ -126,7 +127,7 @@ export class Framework implements LimeWebComponent {
         return [
             <limel-grid>
                 <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                {temp}
+                {dialogOutput}
                 <limel-flex-container justify="end" slot="button">
                     <limel-button label="Ok" onClick={this.closeDialog} />
                 </limel-flex-container>
