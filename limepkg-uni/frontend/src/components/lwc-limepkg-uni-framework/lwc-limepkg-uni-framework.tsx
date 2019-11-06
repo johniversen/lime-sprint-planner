@@ -77,7 +77,7 @@ export class Framework implements LimeWebComponent {
         let id = 0;
         this.mainData = res.objects.map(el => {
             console.log(this.mainData);
-            return this.mainData = { ...el, value: id++ };
+            return this.mainData = { ...el, id: id++ };
         });
     }
 
@@ -86,23 +86,23 @@ export class Framework implements LimeWebComponent {
             this.getDataFromEndPoint("deal");
         } */
 
-        private openDialog(event: CustomEvent<ListItem>) {
-            this.dialogIsOpen = true;
-            let item = this.mainData.find(obj => obj.id === event.detail.value);
-            this.dialogData = item;
-            console.log("Dialog funk i framework")
-        }
-        private closeDialog() {
-            console.log("Close dialog");
-            this.dialogIsOpen = false;
-            //this.dialog = null;
-            // console.log(this.dialog);
-        }
+    private openDialog(event: CustomEvent<ListItem>) {
+        this.dialogIsOpen = true;
+        let item = this.mainData.find(obj => obj.id === event.detail.value);
+        this.dialogData = item;
+        console.log(event);
+    }
+
+    private closeDialog() {
+        console.log("Close dialog");
+        this.dialogIsOpen = false;
+        //this.dialog = null;
+        // console.log(this.dialog);
+    }
 
 
     public render() {
-        console.log("mainData i framework Render()");
-        //console.log(this.mainData);
+        console.log("framework Render()");
         let cardData = null;
         if (this.mainData != null) {
             cardData = <lwc-limepkg-uni-uni-components
@@ -112,26 +112,26 @@ export class Framework implements LimeWebComponent {
                 onListItemClick={this.openDialog}
             />
         }
-         let dialogOutput = [];
- 
-        if(this.dialogIsOpen) {
+        let dialogOutput = [];
+
+        if (this.dialogIsOpen) {
             const entries = Object.entries(this.dialogData);
-          
-           for(const [key,count] of entries) {
+
+            for (const [key, count] of entries) {
                 //temp +=  `${key} : ${count} `;
                 dialogOutput.push(`${key} : ${count} `);
-           }
+            }
 
         }
 
         return [
             <limel-grid>
                 <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                {dialogOutput}
-                <limel-flex-container justify="end" slot="button">
-                    <limel-button label="Ok" onClick={this.closeDialog} />
-                </limel-flex-container>
-            </limel-dialog>
+                    {dialogOutput}
+                    <limel-flex-container justify="end" slot="button">
+                        <limel-button label="Ok" onClick={this.closeDialog} />
+                    </limel-flex-container>
+                </limel-dialog>
                 <grid-header>
                     <limel-icon badge={true} name="megaphone" size="medium" />
                     <h1>Sprint planner</h1>
@@ -177,7 +177,6 @@ export class Framework implements LimeWebComponent {
     private onChange(event) {
         this.selectValue = event.detail;
         let limeType = this.selectValue.value;
-        console.log(limeType);
         //limeType = limeType.toLowerCase();
         this.getDataFromEndPoint(limeType);
     }

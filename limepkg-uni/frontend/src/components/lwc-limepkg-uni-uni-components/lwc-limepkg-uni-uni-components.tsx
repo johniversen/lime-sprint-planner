@@ -40,6 +40,9 @@ export class UniComponents implements LimeWebComponent {
     @State()
     private listContainer = [];
 
+    constructor() {
+        this.createOutPut =this.createOutPut.bind(this);
+    }
     public componentWillRender() {
         console.log("componentWillRender")
         this.createOutPut();
@@ -47,6 +50,7 @@ export class UniComponents implements LimeWebComponent {
 
 
     private createOutPut() {
+        this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         this.listContainer = [];
         let outPutList: Array<ListItem<any> | ListSeparator> = [];
         let currentStatus = this.mainData[0].priorityValue;
@@ -75,6 +79,7 @@ export class UniComponents implements LimeWebComponent {
             }
         })
         this.listContainer.push(outPutList);
+        
     }
 
 
@@ -83,15 +88,11 @@ export class UniComponents implements LimeWebComponent {
 
         let output = this.listContainer.map(list => {
             return (
-
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
                     <limel-list type="selectable" onChange={this.onListItemClick} items={list} />
-
                 </limel-flex-container>
             )
         })
-
-        console.log(output);
         return (
             <limel-flex-container class="card" direction={"horizontal"} align={"start"} justify={"space-between"}>
                 {output}
