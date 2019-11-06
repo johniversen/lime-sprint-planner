@@ -59,13 +59,12 @@ class RuntimeConfig(lime_admin.plugins.AdminPlugin):
             `lime_admin.plugins.NotFoundError` if the config doesn't exist.
         """
 
-        """TODO: Ladda in config från lokal fil. Funkar detta?"""
+        # TODO: TEMPORARY until we can read config from webinterface. (loads config from local file)
         try:
-            # with open(os.path.join(sys.path[0], 'uniconfig.yaml')) as file:
             with open("C:/src/lime-sprint-planner/limepkg-uni/limepkg_uni/config/uniconfig.yaml") as file:
                 config = yaml.load(file, Loader=yaml.FullLoader)
             return config
-            # return super().get_config()
+            # return super().get_config() # ORIGINAL, reads from webinterface
         except lime_admin.plugins.NotFoundError:
             return {}
 

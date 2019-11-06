@@ -1,29 +1,46 @@
+# TODO: Handle priority, handle DateTime (possible?)
+#
+# Here you can define custom limetypes to be presented.
+# The structure is as follows:
+#   example_limetype: 
+#     presentation_alias: database_key
+#
+# Special keywords: 
+#   title          - This will become the title (header) of the item. (required)
+#   secondary_text - This will be displayed underneath the header. (not required) 
+#   priority       - This decides the order of the items on the on the horizontal axis. (WIP) 
+#   
 limetypes:
   solutionimprovement:
     title: title
-    priority: priority
-    misc: misc
-    comment: comment
-    status: solutionimprovementstatus
-    # name: title
+    Secondary Text: comment
+    Priority: priority
+    Misc: misc
+    Status: solutionimprovementstatus
+    # donedate: donedate # DateTime not serializable error ?
 
   deal:
     title: name
     priority: probability
-    misc: value
-    comment: wonlostreason
-    status: dealstatus
-         
-  other_limetype_example:
-   solution_improvement_config:
-    title:
-    lanes:
-      - chill
-      - less chill
-      - urgent
-    card:
-      title: 
-      status:
-      priority:
-      customfields:
-        - blablafield:
+    value: value
+    wonlostreason: wonlostreason
+    dealstatus: dealstatus
+
+  company:
+    title: name
+    priority: buyingstatus 
+
+  todo:
+    title: subject
+    priority: location  
+    comment: note
+    # starttime: starttime # DateTime not serializable error?
+
+  campaign:
+    title: name
+    priority: campaignstatus
+    type: type
+    purpose: purpose
+    goal: goal
+    workmode: workmode
+
