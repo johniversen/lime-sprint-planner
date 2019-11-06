@@ -33,10 +33,8 @@ export class Framework implements LimeWebComponent {
     public selectValue: Option;
 
     @State()
-    private options: Option[] = [
-        { text: 'Deal', value: 'deal' },
-        { text: 'Solution Improvement', value: 'solutionimprovement' }
-    ]
+    private options: Option[] = []
+
     @State()
     private mainData: [{
         title: string,
@@ -64,15 +62,27 @@ export class Framework implements LimeWebComponent {
         this.http = this.platform.get(PlatformServiceName.Http);
         console.log("componentWillLoad");
         //this.getDataFromEndPoint("solutionimprovement")
-
+        this.getLimeTypes();
     }
+
+    private getLimeTypes() {
+        this.http.get(`https://localhost/lime/limepkg-uni/test/getlimetypes`).then(res => {
+            this.updateOptions(res);
+        });
+    }
+
     private getDataFromEndPoint(limeType) {
         this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType).then(res => {
             this.updateData(res);
         });
     }
 
-
+    private updateOptions(res) {
+        for (let [key, value] of Object.entries(res['limetypes'])) {
+            let el = { text: value as string, value: key }
+            this.options.push(el);
+        }
+    }
     private updateData = (res) => {
         let id = 0;
         this.mainData = res.objects.map(el => {
@@ -176,7 +186,8 @@ export class Framework implements LimeWebComponent {
 
     private onChange(event) {
         this.selectValue = event.detail;
-        let limeType = this.selectValue.value;
+        let limeType = event.detail.value;
+        console.log(event);
         //limeType = limeType.toLowerCase();
         this.getDataFromEndPoint(limeType);
     }

@@ -56,9 +56,9 @@ class LimeobjectsRetriever(webserver.LimeResource):
         }
         # Fill json with info from the config
         for key, val in config['limetypes'][limetype].items():
-            if (key != "prio") :
+            if (key != "prio" & key != "displayName") :
                 jsonrequest['responseFormat']['object'][val] = {'_alias': key}
-            
+
         return jsonrequest
 
     def query_db(self, query):
@@ -73,7 +73,8 @@ class LimeobjectsRetriever(webserver.LimeResource):
         for obj in response['objects']:
             status = obj['status']
             obj['priorityValue'] = config['limetypes'][limetype]['prio'][status]
-        
+
         return response
+    
 
 api.add_resource(LimeobjectsRetriever, '/test/')

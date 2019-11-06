@@ -26,8 +26,9 @@
 
 limetypes:
   solutionimprovement:
+    displayName: Solution Improvement
     title: title
-    Secondary Text: comment
+    secondaryText: comment
     priority: priority
     misc: misc
     status: solutionimprovementstatus
@@ -40,6 +41,7 @@ limetypes:
       done: 6
 
   deal:
+    displayName: Deal
     title: name
     priority: probability
     value: value
@@ -54,15 +56,18 @@ limetypes:
       onhold: 6
 
   company:
+    displayName: Company
     title: name
     priority: buyingstatus 
 
   todo:
+    displayName: To Do
     title: subject
     priority: location  
     comment: note
 
   campaign:
+    displayName: Campaign
     title: name
     priority: campaignstatus
     type: type

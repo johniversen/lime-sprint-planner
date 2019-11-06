@@ -20,11 +20,15 @@ class LimetypesRetriever(webserver.LimeResource):
         # Get config
         config = self.get_config()
         response = {
-            'limetypes': []
+            'limetypes': {}
          }
 
-        for obj in config['limetypes']:
-            response['limetypes'].append(obj)
+        # for obj in config['limetypes']:
+            # response['limetypes'][obj.keys()[0]] = obj['displayName']
+        for key, val in config['limetypes'].items():
+            response['limetypes'][key] = config['limetypes'][key]['displayName']
+            print(key)
+            print(val)
 
         return response
 
