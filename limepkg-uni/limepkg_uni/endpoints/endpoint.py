@@ -21,14 +21,17 @@ class LimeobjectCounter(webserver.LimeResource):
     @use_args(args)
     def get(self, args):
         """Get the current number of objects of the given type in the system."""
+        # Retrieve config file. 
         rtcfg = RuntimeConfig()
         app = self.application
         rtcfg.application = app
         config = rtcfg.get_config()
 
+        # Get limetype that we wish to display from args
         limetype = args['limetype']
         query = querys.get_query(limetype, config)
 
+        # Query the db and fill a json with data formatted by config
         limeapp = self.application
         response = lime_query.execute_query(
             query, limeapp.database.connection,

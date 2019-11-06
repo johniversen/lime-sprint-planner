@@ -15,7 +15,7 @@ limetypes:
     misc: misc
     comment: comment
     status: solutionimprovementstatus
-    # donedate: donedate // DateTime not serializable error ?
+    # donedate: donedate # DateTime not serializable error ?
 
   deal:
     title: name
@@ -32,7 +32,7 @@ limetypes:
     title: subject
     comment: note
     priority: location  
-    # starttime: starttime // DateTime not serializable error?
+    # starttime: starttime # DateTime not serializable error?
 
   campaign:
     title: name
