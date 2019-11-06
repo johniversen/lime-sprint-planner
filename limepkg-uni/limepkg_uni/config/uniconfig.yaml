@@ -8,23 +8,37 @@
 # Special keywords: 
 #   title          - This will become the title (header) of the item. (required)
 #   secondary_text - This will be displayed underneath the header. (not required) 
-#   priority       - This decides the order of the items on the on the horizontal axis. (WIP) 
+#   status         - This decides the order of the items on the on the horizontal axis. (WIP) 
 #   
 limetypes:
   solutionimprovement:
     title: title
     Secondary Text: comment
-    Priority: priority
-    Misc: misc
-    Status: solutionimprovementstatus
+    # priority: priority
+    misc: misc
+    status: solutionimprovementstatus
     # donedate: donedate # DateTime not serializable error ?
-
+    prio:
+      deny: 1
+      More info needed: 2
+      reported: 3
+      started: 4
+      approved: 5
+      done: 6
+      
   deal:
     title: name
     priority: probability
     value: value
     wonlostreason: wonlostreason
-    dealstatus: dealstatus
+    status: dealstatus
+    prio:
+      contact: 1
+      requirement: 2
+      tender: 3
+      agreement: 4
+      rejection: 5
+      onhold: 6
 
   company:
     title: name

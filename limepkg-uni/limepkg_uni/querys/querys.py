@@ -11,6 +11,7 @@ def get_query(limetype, config):
     
     # Fill json with info from the config
     for key, val in config['limetypes'][limetype].items():
-        jsonrequest['responseFormat']['object'][val] = {'_alias': key}
+        if (key != "prio") :
+            jsonrequest['responseFormat']['object'][val] = {'_alias': key}
         
     return jsonrequest

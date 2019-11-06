@@ -38,6 +38,11 @@ class LimeobjectCounter(webserver.LimeResource):
             limeapp.limetypes, limeapp.acl, limeapp.user
         )
 
+        for obj in response['objects']:
+            status = obj['status']
+            obj['priorityValue'] = config['limetypes'][limetype]['prio'][status]
+
+
         # TODO: Handle priority here? add prio nr based on limetype from config...?
 
         print(response)
