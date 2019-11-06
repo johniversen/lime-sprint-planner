@@ -57,28 +57,9 @@ export class UniComponents implements LimeWebComponent {
     private closeDialog() {
         console.log("Close dialog");
         this.dialogIsOpen = false;
-        //this.dialog = null;
-        // console.log(this.dialog);
     }
 
 
-    /*     private createDialog(event: CustomEvent<ListItem>) {
-            console.log("open dialog");
-            let item = this.mainData.find(obj => obj.title === event.detail.text);
-            this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                <h1>{item.title}</h1>
-                <p>{"Priority: " + item.priority}</p>
-                <p>{"Misc: " + item.misc}</p>
-                <p>{"Comment: " + item.comment}</p>
-                <p>{"Status: " + item.status}</p>
-                <limel-flex-container justify="end" slot="button">
-                    <limel-button primary={true} label="Close" onClick={this.closeDialog} />
-                </limel-flex-container>
-            </limel-dialog>
-            console.log(this.dialogIsOpen);
-    
-            return event.detail;
-        } */
 
     private createOutPut() {
         this.listContainer = [];
@@ -114,15 +95,17 @@ export class UniComponents implements LimeWebComponent {
 
         let output = this.listContainer.map(list => {
             return (
+
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
                     <limel-list type="selectable" onChange={this.onListItemClick} items={list} />
+
                 </limel-flex-container>
             )
         })
 
         console.log(output);
         return (
-            <limel-flex-container direction={"horizontal"} align={"start"} justify={"space-between"}>
+            <limel-flex-container class="card" direction={"horizontal"} align={"start"} justify={"space-between"}>
                 {output}
             </limel-flex-container>
         );

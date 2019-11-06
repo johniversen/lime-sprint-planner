@@ -145,6 +145,7 @@ export class Framework implements LimeWebComponent {
 
                     </div>
                     <div id="week-display">
+
                         <p>
                             <limel-date-picker
                                 type="week"
@@ -162,6 +163,7 @@ export class Framework implements LimeWebComponent {
                 </urgent-component>
                 <grid-main>
                     {cardData}
+
                 </grid-main>
 
             </limel-grid>
