@@ -56,7 +56,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
         }
         # Fill json with info from the config
         for key, val in config['limetypes'][limetype].items():
-            if (key != "prio" & key != "displayName") :
+            if (key != "prio" and key != "displayName") :
                 jsonrequest['responseFormat']['object'][val] = {'_alias': key}
 
         return jsonrequest

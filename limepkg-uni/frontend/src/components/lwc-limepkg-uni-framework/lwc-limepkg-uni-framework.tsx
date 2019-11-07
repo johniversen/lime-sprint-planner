@@ -7,7 +7,7 @@ import {
 
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
-import { Option } from '@limetech/lime-elements';
+import { Option, DialogHeading } from '@limetech/lime-elements';
 import { ListItem } from '@limetech/lime-elements';
 
 @Component({
@@ -45,9 +45,12 @@ export class Framework implements LimeWebComponent {
 
     @State()
     private dialogIsOpen = false;
-    private dialogData: {};
+
+    private dialogData: { title: string };
 
     private http: HttpService;
+
+    private dialog = null;
 
 
 
@@ -91,23 +94,34 @@ export class Framework implements LimeWebComponent {
         });
     }
 
-    /*     private getDeals() {
-            this.listContainer = [];
-            this.getDataFromEndPoint("deal");
-        } */
-
     private openDialog(event: CustomEvent<ListItem>) {
         this.dialogIsOpen = true;
         let item = this.mainData.find(obj => obj.id === event.detail.value);
-        this.dialogData = item;
-        console.log(event);
+        console.log("item");
+        console.log(item);
+        this.dialogData = Object.assign({},item);
+
+        let dialogOutput = [];
+        dialogOutput.push(<h1>{this.dialogData.title}</h1>);
+        delete this.dialogData.title;
+
+        const entries = Object.entries(this.dialogData);
+        for (const [key, count] of entries) {
+            dialogOutput.push(<li>{key + " : " + count}</li>);
+        }
+        this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
+            <ul>{dialogOutput}</ul>
+            <limel-flex-container justify="end" slot="button">
+                <limel-button label="Ok" onClick={this.closeDialog} />
+            </limel-flex-container>
+        </limel-dialog>
+        console.log(this.mainData);
     }
 
     private closeDialog() {
         console.log("Close dialog");
         this.dialogIsOpen = false;
-        //this.dialog = null;
-        // console.log(this.dialog);
+        this.dialog = null;
     }
 
 
@@ -122,26 +136,11 @@ export class Framework implements LimeWebComponent {
                 onListItemClick={this.openDialog}
             />
         }
-        let dialogOutput = [];
 
-        if (this.dialogIsOpen) {
-            const entries = Object.entries(this.dialogData);
-
-            for (const [key, count] of entries) {
-                //temp +=  `${key} : ${count} `;
-                dialogOutput.push(`${key} : ${count} `);
-            }
-
-        }
 
         return [
             <limel-grid>
-                <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                    {dialogOutput}
-                    <limel-flex-container justify="end" slot="button">
-                        <limel-button label="Ok" onClick={this.closeDialog} />
-                    </limel-flex-container>
-                </limel-dialog>
+                {this.dialog}
                 <grid-header>
                     <limel-icon badge={true} name="megaphone" size="medium" />
                     <h1>Sprint planner</h1>

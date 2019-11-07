@@ -58,20 +58,33 @@ limetypes:
   company:
     displayName: Company
     title: name
-    priority: buyingstatus 
+    secondaryText: country
+    status: buyingstatus 
+    prio:
+      notinterested: 1
+      inactive: 2
+      inactive: 3
+      prospect: 4
+      active: 5
 
   todo:
     displayName: To Do
     title: subject
-    priority: location  
-    comment: note
+    status: location  
+    note: note
+    prio:
 
   campaign:
     displayName: Campaign
     title: name
-    priority: campaignstatus
+    status: campaignstatus
     type: type
     purpose: purpose
     goal: goal
     workmode: workmode
+    prio:
+      cancelled: 1
+      planned: 2
+      ongoing: 3
+      finished: 4
 
