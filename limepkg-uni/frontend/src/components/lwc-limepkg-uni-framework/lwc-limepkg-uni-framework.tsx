@@ -107,10 +107,10 @@ export class Framework implements LimeWebComponent {
 
         const entries = Object.entries(this.dialogData);
         for (const [key, count] of entries) {
-            dialogOutput.push(<li>{key + " : " + count}</li>);
+            dialogOutput.push(<p><strong>{key}</strong>: {count}<hr></hr></p>);
         }
         this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-            <ul>{dialogOutput}</ul>
+            <div>{dialogOutput}</div>
             <limel-flex-container justify="end" slot="button">
                 <limel-button label="Ok" onClick={this.closeDialog} />
             </limel-flex-container>

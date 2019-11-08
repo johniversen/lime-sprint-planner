@@ -89,6 +89,7 @@ export class UniComponents implements LimeWebComponent {
         let output = this.listContainer.map(list => {
             return (
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
+                    <h4 class="column-header">Heading of status</h4>
                     <limel-list type="selectable" onChange={this.onListItemClick} items={list} />
                 </limel-flex-container>
             )
