@@ -27,12 +27,14 @@ grid-header{
     padding: 1%;
     grid-gap: 5%;
     background-color:whitesmoke;
-    box-shadow: 2px #575756;
+    box-shadow: 2px --lime-light-gray;
 }
 
-limel-icon {
-    color:white;
-    background-color: #575756;
+.citrus-icon {
+    box-sizing: border-box;
+    padding: 0%;
+    margin-top: 1%;
+    float: left;
 } 
 
 grid-header > *{
@@ -45,10 +47,13 @@ grid-header > *{
     align-content: center;
 } 
 
-grid-header > h1{
+grid-header > #heading-icon{
     grid-area: heading;
-    font-size: small;
     text-align: start;
+}
+
+#heading-icon h1{
+    font-size: small;
 }
 
 grid-header > #filter{
@@ -59,6 +64,10 @@ grid-header > #week-display{
     grid-area: week-display;
 }
 
+#week-display > label > .mdc-text-field {
+    background-color: #444444 !important;
+}
+
 grid-main{
     grid-area: main;
     padding-top: 0%;
@@ -67,7 +76,7 @@ grid-main{
 #urgent{
     grid-area: urgent;
     box-sizing: border-box;
-    background-color: #f05750;
+    background-color: #f05750; 
     border-style: solid;
     border-color: red;
     width: 100%;
