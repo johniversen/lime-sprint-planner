@@ -18,5 +18,9 @@
     {
         "name": "lwc-limepkg-uni-filter",
         "slot": null
+    },
+    {
+        "name": "lwc-limepkg-uni-card",
+        "slot": null
     }
 ]
