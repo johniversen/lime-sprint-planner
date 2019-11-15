@@ -41,7 +41,7 @@ export class UniComponents implements LimeWebComponent {
     private listContainer = [];
 
     constructor() {
-        this.createOutPut =this.createOutPut.bind(this);
+        this.createOutPut = this.createOutPut.bind(this);
     }
     public componentWillRender() {
         console.log("componentWillRender")
@@ -52,34 +52,30 @@ export class UniComponents implements LimeWebComponent {
     private createOutPut() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         this.listContainer = [];
-        let outPutList: Array<ListItem<any> | ListSeparator> = [];
+        let outPutList = [];
         let currentStatus = this.mainData[0].priorityValue;
+
         this.mainData.forEach(object => {
             let secondaryText = null;
             if (object.secondaryText != null) {
                 secondaryText = object.secondaryText;
             }
-            let item = {
-                text: object[Object.keys(object)[0]],
-                secondaryText: secondaryText,
-                value: object.id,
-                open: "false"
-            }
+            let item =
+                <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} id={object.id} clickHandler={this.onListItemClick} />
+
             if (currentStatus == object.priorityValue) {
-                outPutList.push(
-                    (item as ListItem),
-                    { separator: true })
+                outPutList.push(item)
             } else {
                 this.listContainer.push(outPutList);
                 currentStatus = object.priorityValue;
                 outPutList = [];
                 outPutList.push(
-                    (item as ListItem),
+                    item,
                     { separator: true })
             }
         })
         this.listContainer.push(outPutList);
-        
+
     }
 
 
@@ -89,7 +85,7 @@ export class UniComponents implements LimeWebComponent {
             return (
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
                     <h4 class="column-header">Heading of status</h4>
-                    <limel-list type="selectable" onChange={this.onListItemClick} items={list} />
+                    {list}
                 </limel-flex-container>
             )
         })

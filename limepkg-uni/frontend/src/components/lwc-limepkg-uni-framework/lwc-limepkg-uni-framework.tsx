@@ -7,7 +7,7 @@ import {
 
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
-import { Option, /*DialogHeading */} from '@limetech/lime-elements';
+import { Option, /*DialogHeading */ } from '@limetech/lime-elements';
 import { ListItem } from '@limetech/lime-elements';
 
 @Component({
@@ -94,12 +94,13 @@ export class Framework implements LimeWebComponent {
         });
     }
 
-    private openDialog(event: CustomEvent<ListItem>) {
+    private openDialog(event: CustomEvent) {
         this.dialogIsOpen = true;
         let item = this.mainData.find(obj => obj.id === event.detail.value);
+
         console.log("item");
         console.log(item);
-        this.dialogData = Object.assign({},item);
+        this.dialogData = Object.assign({}, item);
 
         let dialogOutput = [];
         dialogOutput.push(<h1>{this.dialogData.title}</h1>);
@@ -129,12 +130,14 @@ export class Framework implements LimeWebComponent {
         console.log("framework Render()");
         let cardData = null;
         if (this.mainData != null) {
-            cardData = <lwc-limepkg-uni-uni-components
-                platform={this.platform}
-                context={this.context}
-                mainData={this.mainData}
-                onListItemClick={this.openDialog}
-            />
+            cardData =
+                    <lwc-limepkg-uni-uni-components
+                        platform={this.platform}
+                        context={this.context}
+                        mainData={this.mainData}
+                        onListItemClick={this.openDialog}
+                    />
+                
         }
 
 
@@ -163,7 +166,7 @@ export class Framework implements LimeWebComponent {
                                 label="week"
                                 value={this.dateValue}
                                 onChange={this.handleChange}
-                                style={{'background-color': 'whitesmoke;'}}
+                                style={{ 'background-color': 'whitesmoke;' }}
                             />
                         </p>
                     </div>

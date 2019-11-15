@@ -19,22 +19,47 @@ export class Card implements LimeWebComponent {
     @Prop()
     public context: LimeWebComponentContext;
 
+    @Prop()
+    public header: string;
+
+    @Prop()
+    public subTitle: string;
+
+    @Prop()
+    public id: number;
+
+    @Prop()
+    public clickHandler: Function;
+
     @Element()
     public element: HTMLElement;
 
+
+
+
+    private async handleClick() {
+        console.log("HandleClick " + `${this.id}`);
+        let event = new CustomEvent("onClick", {
+            detail: {
+                title: this.header,
+                subTitle: this.subTitle,
+                value: this.id
+            }
+        });
+        this.clickHandler(event);
+    }
+
     public render() {
+
         return (
-            <limel-button
-                label={`Hello World!`}
-                outlined={true}
-                icon={'house_stark'}
-                onClick={() => {
-                    const notifications: NotificationService = this.platform.get(
-                        PlatformServiceName.Notification
-                    );
-                    notifications.notify(`Winter is coming`);
-                }}
-            />
+            <div class="card" id={`${this.id}`} onClick={this.handleClick.bind(this)}>
+                <h1 >{this.header}</h1>
+                <h3 >{this.subTitle}</h3>
+            </div>
+
+
+
+
         );
     }
 }
