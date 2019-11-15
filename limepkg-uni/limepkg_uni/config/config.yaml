@@ -1,0 +1,90 @@
+# Here you can define limetypes to be presented.
+# The structure is as follows:
+# limetypes:
+#   example_limetype: 
+#     presentation_alias: database_key
+#
+# The presentation alias is the name by which the variable is displayed in the app.
+# These can be named whatever you'd like, with the exception of these special keywords: 
+#   title          - Becomes the title (header) of the item.                     (required)
+#   secondary_text - Displayed underneath the header.                            (not required) 
+#   status         - Determines what variable decides priority.                  (required) 
+#   prio           - List of possible values from 'status' that decide priority. (required)
+#                    Each value should contain a unique number afterwards that
+#                    decides its priority (position on the x axis of the app,  
+#                    1 being the leftmost)
+#   
+# Restrictions:
+#   Due to the nature of the database-API, there are certain restrictions 
+#   on what data can be retrieved and displayed: 
+#     DateTime   - DateTime variables are currently not handled by the database-api
+#                  and therefore cannot be returned. (?)
+#     Duplicates - The database-api does not handle duplicates, and will not return
+#                  the same variable under two different aliases. This means that 
+#                  we can not use a variable both as status and as secondary_text
+#                  for example. (?)
+
+limetypes:
+  solutionimprovement:
+    displayName: Solution Improvement
+    title: title
+    secondaryText: comment
+    priority: priority
+    misc: misc
+    status: solutionimprovementstatus
+    prio:
+      deny: 1
+      More info needed: 2
+      reported: 3
+      started: 4
+      approved: 5
+      done: 6
+
+  deal:
+    displayName: Deal
+    title: name
+    priority: probability
+    value: value
+    wonlostreason: wonlostreason
+    status: dealstatus
+    prio:
+      contact: 1
+      requirement: 2
+      tender: 3
+      agreement: 4
+      rejection: 5
+      onhold: 6
+
+  company:
+    displayName: Company
+    title: name
+    secondaryText: country
+    status: buyingstatus 
+    prio:
+      notinterested: 1
+      inactive: 2
+      inactive: 3
+      prospect: 4
+      active: 5
+
+  todo:
+    displayName: To Do
+    title: subject
+    status: location  
+    note: note
+    prio:
+
+  campaign:
+    displayName: Campaign
+    title: name
+    status: campaignstatus
+    type: type
+    purpose: purpose
+    goal: goal
+    workmode: workmode
+    prio:
+      cancelled: 1
+      planned: 2
+      ongoing: 3
+      finished: 4
+

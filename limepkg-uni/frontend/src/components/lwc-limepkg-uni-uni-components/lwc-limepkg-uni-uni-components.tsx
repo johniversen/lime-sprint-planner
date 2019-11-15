@@ -28,17 +28,11 @@ export class UniComponents implements LimeWebComponent {
     @Prop()
     mainData: [{
         title: string,
-        priority: string,
-        misc: string,
-        comment: string,
-        status: string
+        secondaryText: string,
+        priorityValue: number,
+        id: number
     }];
 
-    @Prop()
-    dialogIsOpen: boolean;
-
-    @Prop()
-    dialogData: {};
 
     @Prop()
     onListItemClick: (event: CustomEvent<ListItem>) => void;
@@ -46,40 +40,38 @@ export class UniComponents implements LimeWebComponent {
     @State()
     private listContainer = [];
 
-
-
-
- 
+    constructor() {
+        this.createOutPut =this.createOutPut.bind(this);
+    }
     public componentWillRender() {
         console.log("componentWillRender")
         this.createOutPut();
     }
-    private closeDialog() {
-        console.log("Close dialog");
-        this.dialogIsOpen = false;
-    }
-
 
 
     private createOutPut() {
+        this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         this.listContainer = [];
         let outPutList: Array<ListItem<any> | ListSeparator> = [];
-        let currentStatus = this.mainData[0].status;
-        let index = 0;
+        let currentStatus = this.mainData[0].priorityValue;
         this.mainData.forEach(object => {
+            let secondaryText = null;
+            if (object.secondaryText != null) {
+                secondaryText = object.secondaryText;
+            }
             let item = {
-                text: object.title,
-                secondaryText: "Priority: " + object.priority + " Status: " + object.status,
-                value: index++,
+                text: object[Object.keys(object)[0]],
+                secondaryText: secondaryText,
+                value: object.id,
                 open: "false"
             }
-            if (currentStatus == object.status) {
+            if (currentStatus == object.priorityValue) {
                 outPutList.push(
                     (item as ListItem),
                     { separator: true })
             } else {
                 this.listContainer.push(outPutList);
-                currentStatus = object.status;
+                currentStatus = object.priorityValue;
                 outPutList = [];
                 outPutList.push(
                     (item as ListItem),
@@ -87,6 +79,7 @@ export class UniComponents implements LimeWebComponent {
             }
         })
         this.listContainer.push(outPutList);
+        
     }
 
 
@@ -95,15 +88,11 @@ export class UniComponents implements LimeWebComponent {
 
         let output = this.listContainer.map(list => {
             return (
-
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
                     <limel-list type="selectable" onChange={this.onListItemClick} items={list} />
-
                 </limel-flex-container>
             )
         })
-
-        console.log(output);
         return (
             <limel-flex-container class="card" direction={"horizontal"} align={"start"} justify={"space-between"}>
                 {output}

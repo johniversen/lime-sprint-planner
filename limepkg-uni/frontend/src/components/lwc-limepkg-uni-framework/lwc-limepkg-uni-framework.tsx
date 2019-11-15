@@ -7,8 +7,8 @@ import {
 
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
-import { Option } from '@limetech/lime-elements';
-import { ListItem, ListSeparator } from '@limetech/lime-elements';
+import { Option, DialogHeading } from '@limetech/lime-elements';
+import { ListItem } from '@limetech/lime-elements';
 
 @Component({
     tag: 'lwc-limepkg-uni-framework',
@@ -33,24 +33,24 @@ export class Framework implements LimeWebComponent {
     public selectValue: Option;
 
     @State()
-    private options: Option[] = [
-        { text: 'Deal', value: 'deal' },
-        { text: 'Solution Improvement', value: 'solutionimprovement' }
-    ]
+    private options: Option[] = []
+
     @State()
     private mainData: [{
         title: string,
-        priority: string,
-        misc: string,
-        comment: string,
-        status: string
+        secondaryText: string,
+        priorityValue: number,
+        id: number
     }];
 
     @State()
     private dialogIsOpen = false;
-    private dialogData: {};
+
+    private dialogData: { title: string };
 
     private http: HttpService;
+
+    private dialog = null;
 
 
 
@@ -65,44 +65,68 @@ export class Framework implements LimeWebComponent {
         this.http = this.platform.get(PlatformServiceName.Http);
         console.log("componentWillLoad");
         //this.getDataFromEndPoint("solutionimprovement")
-
+        this.getLimeTypes();
     }
+
+    private getLimeTypes() {
+        this.http.get(`https://localhost/lime/limepkg-uni/test/getlimetypes`).then(res => {
+            this.updateOptions(res);
+        });
+    }
+
     private getDataFromEndPoint(limeType) {
         this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType).then(res => {
             this.updateData(res);
         });
     }
 
-
+    private updateOptions(res) {
+        for (let [key, value] of Object.entries(res['limetypes'])) {
+            let el = { text: value as string, value: key }
+            this.options.push(el);
+        }
+    }
     private updateData = (res) => {
+        let id = 0;
         this.mainData = res.objects.map(el => {
             console.log(this.mainData);
-            return this.mainData = { ...el };
+            return this.mainData = { ...el, id: id++ };
         });
     }
 
-    /*     private getDeals() {
-            this.listContainer = [];
-            this.getDataFromEndPoint("deal");
-        } */
+    private openDialog(event: CustomEvent<ListItem>) {
+        this.dialogIsOpen = true;
+        let item = this.mainData.find(obj => obj.id === event.detail.value);
+        console.log("item");
+        console.log(item);
+        this.dialogData = Object.assign({},item);
 
-        private openDialog(event: CustomEvent<ListItem>) {
-            this.dialogIsOpen = true;
-            let item = this.mainData.find(obj => obj.title === event.detail.text);
-            this.dialogData = item;
-            console.log("Dialog funk i framework")
+        let dialogOutput = [];
+        dialogOutput.push(<h1>{this.dialogData.title}</h1>);
+        delete this.dialogData.title;
+
+        const entries = Object.entries(this.dialogData);
+        for (const [key, count] of entries) {
+            dialogOutput.push(<li>{key + " : " + count}</li>);
         }
-        private closeDialog() {
-            console.log("Close dialog");
-            this.dialogIsOpen = false;
-            //this.dialog = null;
-            // console.log(this.dialog);
-        }
+        this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
+            <ul>{dialogOutput}</ul>
+            <limel-flex-container justify="end" slot="button">
+                <limel-button label="Ok" onClick={this.closeDialog} />
+            </limel-flex-container>
+        </limel-dialog>
+        console.log(this.mainData);
+    }
+
+    private closeDialog() {
+        console.log("Close dialog");
+        this.dialogIsOpen = false;
+        this.dialog = null;
+    }
 
 
     public render() {
-        console.log("mainData i framework Render()");
-        //console.log(this.mainData);
+        console.log("framework Render()");
         let cardData = null;
         if (this.mainData != null) {
             cardData = <lwc-limepkg-uni-uni-components
@@ -112,25 +136,11 @@ export class Framework implements LimeWebComponent {
                 onListItemClick={this.openDialog}
             />
         }
-         let temp = [];
-        if(this.dialogIsOpen) {
-            const entries = Object.entries(this.dialogData);
-          
-           for(const [key,count] of entries) {
-                //temp +=  `${key} : ${count} `;
-                temp.push(`${key} : ${count} \n`);
-           }
 
-        }
 
         return [
             <limel-grid>
-                <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-                {temp}
-                <limel-flex-container justify="end" slot="button">
-                    <limel-button label="Ok" onClick={this.closeDialog} />
-                </limel-flex-container>
-            </limel-dialog>
+                {this.dialog}
                 <grid-header>
                     <limel-icon badge={true} name="megaphone" size="medium" />
                     <h1>Sprint planner</h1>
@@ -175,8 +185,8 @@ export class Framework implements LimeWebComponent {
 
     private onChange(event) {
         this.selectValue = event.detail;
-        let limeType = this.selectValue.value;
-        console.log(limeType);
+        let limeType = event.detail.value;
+        console.log(event);
         //limeType = limeType.toLowerCase();
         this.getDataFromEndPoint(limeType);
     }
