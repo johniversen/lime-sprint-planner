@@ -7,7 +7,7 @@ import {
 
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
-import { Option, DialogHeading } from '@limetech/lime-elements';
+import { Option, /*DialogHeading */} from '@limetech/lime-elements';
 import { ListItem } from '@limetech/lime-elements';
 
 @Component({
@@ -107,10 +107,10 @@ export class Framework implements LimeWebComponent {
 
         const entries = Object.entries(this.dialogData);
         for (const [key, count] of entries) {
-            dialogOutput.push(<li>{key + " : " + count}</li>);
+            dialogOutput.push(<p><strong>{key}</strong>: {count}<hr></hr></p>);
         }
         this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-            <ul>{dialogOutput}</ul>
+            <div>{dialogOutput}</div>
             <limel-flex-container justify="end" slot="button">
                 <limel-button label="Ok" onClick={this.closeDialog} />
             </limel-flex-container>
@@ -142,8 +142,10 @@ export class Framework implements LimeWebComponent {
             <limel-grid>
                 {this.dialog}
                 <grid-header>
-                    <limel-icon badge={true} name="megaphone" size="medium" />
-                    <h1>Sprint planner</h1>
+                    <div id="heading-icon">
+                        <limel-icon class="citrus-icon" name="heart_with_arrow" size="large" />
+                        <h1>Sprint planner</h1>
+                    </div>
                     <div id="filter">
                         <limel-select
                             label="Limetype"
@@ -155,17 +157,15 @@ export class Framework implements LimeWebComponent {
 
                     </div>
                     <div id="week-display">
-
                         <p>
                             <limel-date-picker
                                 type="week"
                                 label="week"
                                 value={this.dateValue}
                                 onChange={this.handleChange}
+                                style={{'background-color': 'whitesmoke;'}}
                             />
-
                         </p>
-
                     </div>
                 </grid-header>
                 <urgent-component>
