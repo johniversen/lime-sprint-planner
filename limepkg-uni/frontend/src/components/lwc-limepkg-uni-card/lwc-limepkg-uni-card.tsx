@@ -2,8 +2,6 @@ import {
     LimeWebComponent,
     LimeWebComponentContext,
     LimeWebComponentPlatform,
-    NotificationService,
-    PlatformServiceName,
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop } from '@stencil/core';
 

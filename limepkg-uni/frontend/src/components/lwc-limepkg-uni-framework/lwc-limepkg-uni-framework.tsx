@@ -8,7 +8,6 @@ import {
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import { Option, /*DialogHeading */ } from '@limetech/lime-elements';
-import { ListItem } from '@limetech/lime-elements';
 
 @Component({
     tag: 'lwc-limepkg-uni-framework',
@@ -52,8 +51,6 @@ export class Framework implements LimeWebComponent {
     public selectValue: Option;
 
     private fetchingDataComplete = false;
-
-
 
     constructor() {
         this.handleChange = this.handleChange.bind(this);
@@ -140,7 +137,6 @@ export class Framework implements LimeWebComponent {
         this.dialog = null;
     }
 
-
     public render() {
         console.log("framework Render()");
         console.log(this.mainData);
@@ -156,7 +152,6 @@ export class Framework implements LimeWebComponent {
                     onListItemClick={this.openDialog}
                 />
         }
-        console.log("this.fetchingDataComplete i render() " + this.fetchingDataComplete);
 
         return [
             <limel-grid>
@@ -172,9 +167,7 @@ export class Framework implements LimeWebComponent {
                             value={this.selectValue}
                             options={this.options}
                             onChange={this.onChange}
-                        // multiple={true}
                         />
-
                     </div>
                     <div id="week-display">
                         <p>
@@ -193,7 +186,6 @@ export class Framework implements LimeWebComponent {
                 </urgent-component>
                 <grid-main>
                     {cardData}
-
                 </grid-main>
 
             </limel-grid>

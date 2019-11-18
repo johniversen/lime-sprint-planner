@@ -5,9 +5,7 @@ import {
     //NotificationService,
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
-import { ListItem, ListSeparator } from '@limetech/lime-elements';
-
-
+import { ListItem } from '@limetech/lime-elements';
 
 @Component({
     tag: 'lwc-limepkg-uni-uni-components',
@@ -33,7 +31,6 @@ export class UniComponents implements LimeWebComponent {
         postId: number
     }];
 
-
     @Prop()
     onListItemClick: (event: CustomEvent<ListItem>) => void;
 
@@ -48,11 +45,11 @@ export class UniComponents implements LimeWebComponent {
         this.createOutPut();
     }
 
-
     private createOutPut() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         this.listContainer = [];
         let outPutList = [];
+        outPutList.push(<h4 class="column-header">{this.mainData[0].status}</h4>)
         let currentStatus = this.mainData[0].priorityValue;
         //Måste läggas i Config vilken Header man vill ha på respektive lista?
         this.mainData.forEach(object => {
@@ -70,25 +67,26 @@ export class UniComponents implements LimeWebComponent {
                 currentStatus = object.priorityValue;
                 outPutList = [];
                 outPutList.push(item);
+                outPutList.push(<h4 class="column-header">{object.status}</h4>)
+                outPutList.push(item)
             }
         })
         this.listContainer.push(outPutList);
 
     }
 
-
     public render() {
         console.log("Render i main-grid-compoennt");
         let output = this.listContainer.map(list => {
+            console.log(list[0])
             return (
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
-                    <h4 class="column-header">Header status</h4>
                     {list}
                 </limel-flex-container>
             )
         })
         return (
-            <limel-flex-container class="card" direction={"horizontal"} align={"start"} justify={"space-between"}>
+            <limel-flex-container class="card" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
                 {output}
             </limel-flex-container>
         );

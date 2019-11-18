@@ -1,18 +1,15 @@
 body{
-    font-size: small;
     margin: 0;
 }
 
 limel-grid { 
-    font-family:'Roboto','Open Sans','Helvetica Neue',Arial,Helvetica,Verdana,sans-serif;
-    font-size: small;
+    font-family:'Roboto','Open Sans','Helvetica Neue', Arial, Helvetica, Verdana, sans-serif;
     --lime-grid-columns: 1;
-    --lime-grid-rows: 15% auto;
+    --lime-grid-cell-height: 80px;
     --lime-grid-area:
         "header"
-        "main" !important; 
+        "main"; 
     width: 100%;
-    padding: 2%;
     box-sizing: border-box;
     box-shadow: 2px #575756;
 }
@@ -21,12 +18,14 @@ grid-header{
     box-sizing: border-box;
     grid-area: header;
     --lime-grid-columns: 3;
-    --lime-grid-rows: auto;
     --lime-grid-area:
         "heading filter week-display"; 
     padding: 1%;
-    grid-gap: 5%;
+    gap: 5%;
     background-color:whitesmoke;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
     box-shadow: 2px --lime-light-gray;
 }
 
@@ -35,21 +34,20 @@ grid-header{
     padding: 0%;
     margin-top: 1%;
     float: left;
+    align-items: center;
 } 
 
-grid-header > *{
+grid-header > * {
     box-sizing: border-box;
-    display: inline-block;
-    grid-gap: 10%;
+    gap: 10%;
     width: 30%;
-    padding: 1%;
     text-align: center;
-    align-content: center;
-} 
+}
 
 grid-header > #heading-icon{
     grid-area: heading;
     text-align: start;
+    padding: 1%;
 }
 
 #heading-icon h1{
