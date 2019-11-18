@@ -24,7 +24,7 @@ export class Card implements LimeWebComponent {
     public subTitle: string;
 
     @Prop()
-    public id: number;
+    public postId: number;
 
     @Prop()
     public clickHandler: Function;
@@ -36,12 +36,12 @@ export class Card implements LimeWebComponent {
 
 
     private async handleClick() {
-        console.log("HandleClick " + `${this.id}`);
+        console.log("HandleClick " + `${this.postId}`);
         let event = new CustomEvent("onClick", {
             detail: {
                 title: this.header,
                 subTitle: this.subTitle,
-                value: this.id
+                value: this.postId
             }
         });
         this.clickHandler(event);
@@ -50,7 +50,7 @@ export class Card implements LimeWebComponent {
     public render() {
 
         return (
-            <div class="card" id={`${this.id}`} onClick={this.handleClick.bind(this)}>
+            <div class="card" id={`${this.postId}`} onClick={this.handleClick.bind(this)}>
                 <h1 >{this.header}</h1>
                 <h3 >{this.subTitle}</h3>
             </div>

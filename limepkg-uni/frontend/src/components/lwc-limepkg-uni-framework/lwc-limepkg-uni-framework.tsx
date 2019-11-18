@@ -29,9 +29,6 @@ export class Framework implements LimeWebComponent {
     private dateValue = new Date();
 
     @State()
-    public selectValue: Option;
-
-    @State()
     private options: Option[] = []
 
     @State()
@@ -39,8 +36,7 @@ export class Framework implements LimeWebComponent {
         title: string,
         secondaryText: string,
         priorityValue: number,
-        status: string,
-        id: number
+        postId: number
     }];
 
     @State()
@@ -51,6 +47,10 @@ export class Framework implements LimeWebComponent {
     private http: HttpService;
 
     private dialog = null;
+    
+    public selectValue: Option;
+
+    private fetchingDataComplete = false;
 
     constructor() {
         this.handleChange = this.handleChange.bind(this);
@@ -73,8 +73,23 @@ export class Framework implements LimeWebComponent {
     }
 
     private getDataFromEndPoint(limeType) {
+        this.fetchingDataComplete = false;
+        console.log("getDataFromEndpoint() with limeType: " + limeType);
+
         this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType).then(res => {
-            this.updateData(res);
+
+        //Detta funkar inte! Varför körs inte Rende(), trots state updateras?
+            if (res.objects[0] == null) {
+                console.log("res = undefined");
+                this.fetchingDataComplete = false;
+                this.mainData = null;
+                console.log(this.mainData);
+            }
+            else {
+                console.log("Kommer vi hit?");
+                this.fetchingDataComplete = true;
+                this.updateData(res);
+            }
         });
     }
 
@@ -87,14 +102,13 @@ export class Framework implements LimeWebComponent {
     private updateData = (res) => {
         let id = 0;
         this.mainData = res.objects.map(el => {
-            console.log(this.mainData);
-            return this.mainData = { ...el, id: id++ };
+            return this.mainData = { ...el, postId: id++ };
         });
     }
 
     private openDialog(event: CustomEvent) {
         this.dialogIsOpen = true;
-        let item = this.mainData.find(obj => obj.id === event.detail.value);
+        let item = this.mainData.find(obj => obj.postId === event.detail.value);
 
         console.log("item");
         console.log(item);
@@ -125,16 +139,18 @@ export class Framework implements LimeWebComponent {
 
     public render() {
         console.log("framework Render()");
-        let cardData = null;
-        if (this.mainData != null) {
+        console.log(this.mainData);
+
+        //Måste ha nån flagga som kollar om hämtning av data är klar. Render() körs "för tidigt".
+        let cardData = <h1>There are no data posts in the database</h1>;
+        if (this.fetchingDataComplete) {
             cardData =
-                    <lwc-limepkg-uni-uni-components
-                        platform={this.platform}
-                        context={this.context}
-                        mainData={this.mainData}
-                        onListItemClick={this.openDialog}
-                    />
-                
+                <lwc-limepkg-uni-uni-components
+                    platform={this.platform}
+                    context={this.context}
+                    mainData={this.mainData}
+                    onListItemClick={this.openDialog}
+                />
         }
 
         return [
@@ -159,7 +175,7 @@ export class Framework implements LimeWebComponent {
                                 type="week"
                                 label="week"
                                 value={this.dateValue}
-                                onChange={this.handleChange}
+                                 onChange={this.handleChange}
                                 style={{ 'background-color': 'whitesmoke;' }}
                             />
                         </p>
@@ -179,11 +195,11 @@ export class Framework implements LimeWebComponent {
         this.dateValue = event.detail;
     }
 
+    //Varför körs denna två gånger?
     private onChange(event) {
+        console.log("OnChange()");
         this.selectValue = event.detail;
         let limeType = event.detail.value;
-        console.log(event);
-        //limeType = limeType.toLowerCase();
         this.getDataFromEndPoint(limeType);
     }
 }
