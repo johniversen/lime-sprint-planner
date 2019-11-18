@@ -30,7 +30,7 @@ export class UniComponents implements LimeWebComponent {
         title: string,
         secondaryText: string,
         priorityValue: number,
-        id: number
+        postId: number
     }];
 
 
@@ -54,14 +54,14 @@ export class UniComponents implements LimeWebComponent {
         this.listContainer = [];
         let outPutList = [];
         let currentStatus = this.mainData[0].priorityValue;
-
+        //Måste läggas i Config vilken Header man vill ha på respektive lista?
         this.mainData.forEach(object => {
             let secondaryText = null;
             if (object.secondaryText != null) {
                 secondaryText = object.secondaryText;
             }
             let item =
-                <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} id={object.id} clickHandler={this.onListItemClick} />
+                <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} postId={object.postId} clickHandler={this.onListItemClick} />
 
             if (currentStatus == object.priorityValue) {
                 outPutList.push(item)
@@ -69,9 +69,7 @@ export class UniComponents implements LimeWebComponent {
                 this.listContainer.push(outPutList);
                 currentStatus = object.priorityValue;
                 outPutList = [];
-                outPutList.push(
-                    item,
-                    { separator: true })
+                outPutList.push(item);
             }
         })
         this.listContainer.push(outPutList);
@@ -84,7 +82,7 @@ export class UniComponents implements LimeWebComponent {
         let output = this.listContainer.map(list => {
             return (
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
-                    <h4 class="column-header">Heading of status</h4>
+                    <h4 class="column-header">Header status</h4>
                     {list}
                 </limel-flex-container>
             )
