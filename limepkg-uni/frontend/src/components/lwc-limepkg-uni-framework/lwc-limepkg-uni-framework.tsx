@@ -7,8 +7,7 @@ import {
 
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
-import { Option, /*DialogHeading */} from '@limetech/lime-elements';
-import { ListItem } from '@limetech/lime-elements';
+import { Option, /*DialogHeading */ } from '@limetech/lime-elements';
 
 @Component({
     tag: 'lwc-limepkg-uni-framework',
@@ -40,6 +39,7 @@ export class Framework implements LimeWebComponent {
         title: string,
         secondaryText: string,
         priorityValue: number,
+        status: string,
         id: number
     }];
 
@@ -51,8 +51,6 @@ export class Framework implements LimeWebComponent {
     private http: HttpService;
 
     private dialog = null;
-
-
 
     constructor() {
         this.handleChange = this.handleChange.bind(this);
@@ -94,12 +92,13 @@ export class Framework implements LimeWebComponent {
         });
     }
 
-    private openDialog(event: CustomEvent<ListItem>) {
+    private openDialog(event: CustomEvent) {
         this.dialogIsOpen = true;
         let item = this.mainData.find(obj => obj.id === event.detail.value);
+
         console.log("item");
         console.log(item);
-        this.dialogData = Object.assign({},item);
+        this.dialogData = Object.assign({}, item);
 
         let dialogOutput = [];
         dialogOutput.push(<h1>{this.dialogData.title}</h1>);
@@ -124,19 +123,19 @@ export class Framework implements LimeWebComponent {
         this.dialog = null;
     }
 
-
     public render() {
         console.log("framework Render()");
         let cardData = null;
         if (this.mainData != null) {
-            cardData = <lwc-limepkg-uni-uni-components
-                platform={this.platform}
-                context={this.context}
-                mainData={this.mainData}
-                onListItemClick={this.openDialog}
-            />
+            cardData =
+                    <lwc-limepkg-uni-uni-components
+                        platform={this.platform}
+                        context={this.context}
+                        mainData={this.mainData}
+                        onListItemClick={this.openDialog}
+                    />
+                
         }
-
 
         return [
             <limel-grid>
@@ -152,9 +151,7 @@ export class Framework implements LimeWebComponent {
                             value={this.selectValue}
                             options={this.options}
                             onChange={this.onChange}
-                        // multiple={true}
                         />
-
                     </div>
                     <div id="week-display">
                         <p>
@@ -163,7 +160,7 @@ export class Framework implements LimeWebComponent {
                                 label="week"
                                 value={this.dateValue}
                                 onChange={this.handleChange}
-                                style={{'background-color': 'whitesmoke;'}}
+                                style={{ 'background-color': 'whitesmoke;' }}
                             />
                         </p>
                     </div>
@@ -173,7 +170,6 @@ export class Framework implements LimeWebComponent {
                 </urgent-component>
                 <grid-main>
                     {cardData}
-
                 </grid-main>
 
             </limel-grid>
