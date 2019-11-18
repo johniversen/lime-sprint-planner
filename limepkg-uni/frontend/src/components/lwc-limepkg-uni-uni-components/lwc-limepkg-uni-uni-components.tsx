@@ -90,7 +90,7 @@ export class UniComponents implements LimeWebComponent {
             )
         })
         return (
-            <limel-flex-container class="card" direction={"horizontal"} align={"start"} justify={"space-between"}>
+            <limel-flex-container class="card" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
                 {output}
             </limel-flex-container>
         );
