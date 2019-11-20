@@ -1,5 +1,6 @@
 import lime_webserver.webserver as webserver
 import logging
+import re
 import webargs.fields as fields
 from webargs.flaskparser import use_args
 from ..endpoints import api
@@ -33,8 +34,9 @@ class LimeobjectsRetriever(webserver.LimeResource):
         # Query the db and fill a json with data formatted by config
         response = self.query_db(query)
 
-        # Add priority info to the objects
-        response = self.add_priorities(response, config, limetype)
+        # Adds priority info and formats date info
+        response = self.format_response(response, config, limetype)
+
         return response
 
     def get_config(self):
@@ -67,14 +69,20 @@ class LimeobjectsRetriever(webserver.LimeResource):
             query, limeapp.database.connection,
             limeapp.limetypes, limeapp.acl, limeapp.user
         )
+      
         return response
 
-    def add_priorities(self, response, config, limetype):
+    def format_response(self, response, config, limetype):
         for obj in response['objects']:
+            # Add priority
             status = obj['status']
             obj['priorityValue'] = config['limetypes'][limetype]['prio'][status]
+            for key, val in obj.items():
+                # Format dateobjects
+                if key.startswith('date_'):
+                    date_str = val.strftime("%m/%d/%Y, %H:%M:%S")
+                    obj[key] = date_str
 
         return response
-    
 
 api.add_resource(LimeobjectsRetriever, '/test/')

@@ -16,9 +16,9 @@
 #   
 # Restrictions:
 #   Due to the nature of the database-API, there are certain restrictions 
-#   on what data can be retrieved and displayed: 
-#     DateTime   - DateTime variables are currently not handled by the database-api
-#                  and therefore cannot be returned. (?)
+#   on how data is retrieved and displayed: 
+#     DateTime   - DateTime variables must be prefixed with 'date_' in order to be 
+#                  formatted correctly. eg. 'date_done' or 'date_expected' etc.
 #     Duplicates - The database-api does not handle duplicates, and will not return
 #                  the same variable under two different aliases. This means that 
 #                  we can not use a variable both as status and as secondary_text
@@ -26,6 +26,8 @@
 
 limetypes:
   solutionimprovement:
+    id: id
+    date_done: donedate
     displayName: Solution Improvement
     title: title
     secondaryText: comment
@@ -41,6 +43,7 @@ limetypes:
       done: 6
 
   deal:
+    id: id
     displayName: Deal
     title: name
     priority: probability
@@ -56,6 +59,7 @@ limetypes:
       onhold: 6
 
   company:
+    id: id
     displayName: Company
     title: name
     secondaryText: country
@@ -68,6 +72,7 @@ limetypes:
       active: 5
 
   todo:
+    id: id
     displayName: To Do
     title: subject
     status: location  
@@ -75,6 +80,7 @@ limetypes:
     prio:
 
   campaign:
+    id: id
     displayName: Campaign
     title: name
     status: campaignstatus
