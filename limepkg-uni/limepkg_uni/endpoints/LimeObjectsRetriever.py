@@ -61,6 +61,9 @@ class LimeobjectsRetriever(webserver.LimeResource):
             if (key != "prio" and key != "displayName") :
                 jsonrequest['responseFormat']['object'][val] = {'_alias': key}
 
+        # Add ID 
+        jsonrequest['responseFormat']['object']['id'] = {'_alias': 'id'}
+
         return jsonrequest
 
     def query_db(self, query):

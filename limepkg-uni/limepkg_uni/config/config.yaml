@@ -26,7 +26,6 @@
 
 limetypes:
   solutionimprovement:
-    id: id
     date_done: donedate
     displayName: Solution Improvement
     title: title
@@ -43,7 +42,6 @@ limetypes:
       done: 6
 
   deal:
-    id: id
     displayName: Deal
     title: name
     priority: probability
@@ -59,7 +57,6 @@ limetypes:
       onhold: 6
 
   company:
-    id: id
     displayName: Company
     title: name
     secondaryText: country
@@ -72,7 +69,6 @@ limetypes:
       active: 5
 
   todo:
-    id: id
     displayName: To Do
     title: subject
     status: location  
@@ -80,7 +76,6 @@ limetypes:
     prio:
 
   campaign:
-    id: id
     displayName: Campaign
     title: name
     status: campaignstatus
