@@ -28,6 +28,7 @@ export class UniComponents implements LimeWebComponent {
         title: string,
         secondaryText: string,
         priorityValue: number,
+        status: string,
         postId: number
     }];
 
@@ -66,9 +67,8 @@ export class UniComponents implements LimeWebComponent {
                 this.listContainer.push(outPutList);
                 currentStatus = object.priorityValue;
                 outPutList = [];
-                outPutList.push(item);
                 outPutList.push(<h4 class="column-header">{object.status}</h4>)
-                outPutList.push(item)
+                outPutList.push(item);
             }
         })
         this.listContainer.push(outPutList);
