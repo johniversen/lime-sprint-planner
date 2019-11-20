@@ -36,6 +36,7 @@ export class Framework implements LimeWebComponent {
         title: string,
         secondaryText: string,
         priorityValue: number,
+        status: string,
         postId: number
     }];
 
