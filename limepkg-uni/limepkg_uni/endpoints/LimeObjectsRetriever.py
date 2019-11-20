@@ -1,6 +1,5 @@
 import lime_webserver.webserver as webserver
 import logging
-import re
 import webargs.fields as fields
 from webargs.flaskparser import use_args
 from ..endpoints import api
@@ -36,7 +35,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
 
         # Adds priority info and formats date info
         response = self.format_response(response, config, limetype)
-
+        
         return response
 
     def get_config(self):
@@ -63,16 +62,17 @@ class LimeobjectsRetriever(webserver.LimeResource):
 
         # Add ID 
         jsonrequest['responseFormat']['object']['id'] = {'_alias': 'id'}
-
         return jsonrequest
 
     def query_db(self, query):
         limeapp = self.application
         response = lime_query.execute_query(
-            query, limeapp.database.connection,
-            limeapp.limetypes, limeapp.acl, limeapp.user
+            query, 
+            limeapp.database.connection,
+            limeapp.limetypes, 
+            limeapp.acl, 
+            limeapp.user
         )
-      
         return response
 
     def format_response(self, response, config, limetype):
