@@ -72,7 +72,6 @@ grid-main{
 }
 
 #urgent{
-    grid-area: urgent;
     box-sizing: border-box;
     background-color: #f05750; 
     border-style: solid;
