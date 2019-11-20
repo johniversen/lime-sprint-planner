@@ -42,7 +42,7 @@ export class UniComponents implements LimeWebComponent {
         this.createOutPut = this.createOutPut.bind(this);
     }
     public componentWillRender() {
-        console.log("componentWillRender")
+        //console.log("componentWillRender")
         this.createOutPut();
     }
 
@@ -76,9 +76,9 @@ export class UniComponents implements LimeWebComponent {
     }
 
     public render() {
-        console.log("Render i main-grid-compoennt");
+        //console.log("Render i main-grid-compoennt");
         let output = this.listContainer.map(list => {
-            console.log(list[0])
+            //console.log(list[0])
             return (
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
                     {list}
