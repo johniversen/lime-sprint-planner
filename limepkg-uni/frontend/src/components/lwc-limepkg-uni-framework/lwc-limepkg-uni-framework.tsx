@@ -36,14 +36,15 @@ export class Framework implements LimeWebComponent {
         secondaryText: string,
         priorityValue: number,
         status: string,
-        postId: number
+        postId: number,
+        priority: string
     }];
 
 
     @State()
     private dialogIsOpen = false;
 
-    private dialogData: { title: string, priorityValue: number, postId: number};
+    private dialogData: { title: string, priorityValue: number, postId: number, priority: string};
 
     private http: HttpService;
 

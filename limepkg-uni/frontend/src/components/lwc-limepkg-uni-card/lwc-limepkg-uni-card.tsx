@@ -27,6 +27,9 @@ export class Card implements LimeWebComponent {
     public postId: number;
 
     @Prop()
+    public priority: string;
+
+    @Prop()
     public clickHandler: Function;
 
     @Element()
@@ -41,23 +44,28 @@ export class Card implements LimeWebComponent {
             detail: {
                 title: this.header,
                 subTitle: this.subTitle,
-                value: this.postId
+                value: this.postId,
+                priority: this.priority
             }
         });
         this.clickHandler(event);
     }
 
     public render() {
-
-        return (
-            <div class="card" id={`${this.postId}`} onClick={this.handleClick.bind(this)}>
-                <h1 >{this.header}</h1>
-                <h3 >{this.subTitle}</h3>
-            </div>
-
-
-
-
-        );
+        if (this.priority == "urgent") {
+            return (
+                <div class="urgent card" id={`${this.postId}`} onClick={this.handleClick.bind(this)}>
+                    <h1>{this.header}</h1>
+                    <h3>{this.subTitle}</h3>
+                </div>
+            ); 
+        } else {
+            return (
+                <div class="card" id={`${this.postId}`} onClick={this.handleClick.bind(this)}>
+                    <h1>{this.header}</h1>
+                    <h3>{this.subTitle}</h3>
+                </div>
+            );
+        }
     }
 }
