@@ -17,6 +17,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0px 5px 6px -6px #adadad;
     margin: 5px 10px;
     background-color: #f5f5f5;
+    cursor: pointer;
 
     h1 {
         text-align: center;
@@ -30,5 +31,15 @@ h1, h2, h3, h4, h5, h6 {
         color: #adadad;
     } 
     
+}
+
+.urgent {
+    background-color: #f0575094;
+
+    h3 {
+        text-align: center;
+        font-size: 10px;
+        color: #575756;
+    } 
 }
 
