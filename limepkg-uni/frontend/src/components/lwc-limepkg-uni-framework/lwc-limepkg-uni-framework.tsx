@@ -125,19 +125,10 @@ export class Framework implements LimeWebComponent {
         const entries = Object.entries(this.dialogData);
         
         for (const [key, value] of entries) {
-            let item = {} 
-                if (value == "") {
-                    item = {
-                        text: key,
-                        secondaryText: "Not assigned"
-                 }
-                } else  {
-                    item = {
-                        text: key,
-                        secondaryText: value
-                 };
+            let item = {
+                text: key,
+                secondaryText: value
             }
-
             dialogOutput.push((item as ListItem)); 
         }
 
