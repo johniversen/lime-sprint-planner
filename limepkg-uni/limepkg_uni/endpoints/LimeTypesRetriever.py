@@ -23,12 +23,11 @@ class LimetypesRetriever(webserver.LimeResource):
             'limetypes': {}
          }
 
-        # for obj in config['limetypes']:
-            # response['limetypes'][obj.keys()[0]] = obj['displayName']
         for key, val in config['limetypes'].items():
-            response['limetypes'][key] = config['limetypes'][key]['displayName']
-            print(key)
-            print(val)
+            response['limetypes'][key] = {}
+            response['limetypes'][key]['status'] = val['status']
+            response['limetypes'][key]['prio'] = val['prio']
+            response['limetypes'][key]['displayName'] = val['displayName']
 
         return response
 

@@ -33,6 +33,7 @@ export class Framework implements LimeWebComponent {
     @State()
     private mainData: [{
         title: string,
+        displayName: string,
         secondaryText: string,
         priorityValue: number,
         status: string,
@@ -54,6 +55,8 @@ export class Framework implements LimeWebComponent {
 
     private fetchingDataComplete = false;
 
+    private limetypeData = [];
+
     constructor() {
         this.handleChange = this.handleChange.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -70,8 +73,14 @@ export class Framework implements LimeWebComponent {
 
     private getLimeTypes() {
         this.http.get(`https://localhost/lime/limepkg-uni/test/getlimetypes`).then(res => {
+            this.saveLimeTypeData(res);
             this.updateOptions(res);
         });
+    }
+
+    private saveLimeTypeData(res) {
+        this.limetypeData = {...res.limetypes}
+        console.log(this.limetypeData)
     }
 
     private getDataFromEndPoint(limeType) {
@@ -96,15 +105,16 @@ export class Framework implements LimeWebComponent {
     }
 
     private updateOptions(res) {
-        for (let [key, value] of Object.entries(res['limetypes'])) {
-            let el = { text: value as string, value: key }
-            this.options.push(el);
+        for (let [key, val] of Object.entries(res['limetypes'])) {
+            let el = { text: val['displayName'] as string, value: key as string }
+            this.options.push(el)
         }
     }
+
     private updateData = (res) => {
-        let id = 0;
+        let i = 0;
         this.mainData = res.objects.map(el => {
-            return this.mainData = { ...el, postId: id++ };
+            return this.mainData = { ...el, postId: i++ };
         });
     }
 
