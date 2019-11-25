@@ -29,7 +29,8 @@ export class UniComponents implements LimeWebComponent {
         secondaryText: string,
         priorityValue: number,
         status: string,
-        postId: number
+        postId: number,
+        priority: string
     }];
 
     @Prop()
@@ -59,7 +60,7 @@ export class UniComponents implements LimeWebComponent {
                 secondaryText = object.secondaryText;
             }
             let item =
-                <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} postId={object.postId} clickHandler={this.onListItemClick} />
+                <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} postId={object.postId} priority={object.priority} clickHandler={this.onListItemClick} />
 
             if (currentStatus == object.priorityValue) {
                 outPutList.push(item)
