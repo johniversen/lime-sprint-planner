@@ -35,12 +35,19 @@ export class UniComponents implements LimeWebComponent {
     @Prop()
     onListItemClick: (event: CustomEvent<ListItem>) => void;
 
+    @Prop()
+    dragObjectID: string;
+
     @State()
     private listContainer = [];
 
     constructor() {
         this.createOutPut = this.createOutPut.bind(this);
+        this.allowDrop = this.allowDrop.bind(this);
+        this.getDragObjectID = this.getDragObjectID.bind(this);
+        this.drop = this.drop.bind(this);
     }
+
     public componentWillRender() {
         //console.log("componentWillRender")
         this.createOutPut();
@@ -58,8 +65,10 @@ export class UniComponents implements LimeWebComponent {
             if (object.secondaryText != null) {
                 secondaryText = object.secondaryText;
             }
-            let item =
-                <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} postId={object.postId} clickHandler={this.onListItemClick} />
+            let item = <div id={object.postId as unknown as string} draggable={true} onDragStart={this.getDragObjectID}>
+                    <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} postId={object.postId} clickHandler={this.onListItemClick} />
+                </div>
+                
 
             if (currentStatus == object.priorityValue) {
                 outPutList.push(item)
@@ -72,7 +81,18 @@ export class UniComponents implements LimeWebComponent {
             }
         })
         this.listContainer.push(outPutList);
+    }
 
+    private allowDrop(event) {
+        event.preventDefault();
+    }
+
+    private getDragObjectID(event) {
+        this.dragObjectID = event.target.id;
+    }
+
+    private drop(event) {
+        event.target.append(document.getElementById(this.dragObjectID));
     }
 
     public render() {
@@ -80,9 +100,11 @@ export class UniComponents implements LimeWebComponent {
         let output = this.listContainer.map(list => {
             //console.log(list[0])
             return (
-                <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
-                    {list}
-                </limel-flex-container>
+                <div onDragOver={this.allowDrop} onDrop={this.drop}>
+                    <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
+                        {list}
+                    </limel-flex-container>
+                </div>
             )
         })
         return (
