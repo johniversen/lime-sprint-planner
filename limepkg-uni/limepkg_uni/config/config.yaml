@@ -33,6 +33,7 @@ limetypes:
     priority: priority
     misc: misc
     status: solutionimprovementstatus
+    responsible: coworker   # Can't get 'relationshipfield' from db?
     prio:
       deny: 1
       More info needed: 2
@@ -48,6 +49,7 @@ limetypes:
     value: value
     wonlostreason: wonlostreason
     status: dealstatus
+    weighted: weightedvalue
     prio:
       contact: 1
       requirement: 2

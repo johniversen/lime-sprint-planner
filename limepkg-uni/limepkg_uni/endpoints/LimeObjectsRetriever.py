@@ -73,6 +73,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
             limeapp.acl, 
             limeapp.user
         )
+        print(response)
         return response
 
     def format_response(self, response, config, limetype):
@@ -83,8 +84,9 @@ class LimeobjectsRetriever(webserver.LimeResource):
             for key, val in obj.items():
                 # Format dateobjects
                 if key.startswith('date_'):
-                    date_str = val.strftime("%m/%d/%Y, %H:%M:%S")
+                    date_str = val.strftime("%d/%m/%Y")
                     obj[key] = date_str
+
 
         return response
 
