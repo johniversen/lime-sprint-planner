@@ -61,7 +61,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
                 jsonrequest['responseFormat']['object'][val] = {'_alias': key}
 
         # Add ID 
-        jsonrequest['responseFormat']['object']['id'] = {'_alias': 'id'}
+        jsonrequest['responseFormat']['object']['id'] = {'_alias': 'postId'}
         return jsonrequest
 
     def query_db(self, query):
