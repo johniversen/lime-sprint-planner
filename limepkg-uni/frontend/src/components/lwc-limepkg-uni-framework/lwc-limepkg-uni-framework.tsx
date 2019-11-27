@@ -33,19 +33,18 @@ export class Framework implements LimeWebComponent {
     @State()
     private mainData: [{
         title: string,
-        displayName: string,
         secondaryText: string,
         priorityValue: number,
         status: string,
         postId: number,
-        priority: string
+        responsible: string
     }];
 
 
     @State()
     private dialogIsOpen = false;
 
-    private dialogData: { title: string, priorityValue: number, postId: number, priority: string};
+    private dialogData: { title: string, priorityValue: number, postId: number};
 
     private http: HttpService;
 
@@ -54,8 +53,6 @@ export class Framework implements LimeWebComponent {
     public selectValue: Option;
 
     private fetchingDataComplete = false;
-
-    private limetypeData = [];
 
     constructor() {
         this.handleChange = this.handleChange.bind(this);
@@ -69,19 +66,14 @@ export class Framework implements LimeWebComponent {
         //console.log("componentWillLoad");
         //this.getDataFromEndPoint("solutionimprovement")
         this.getLimeTypes();
+        console.log(this.dateValue);
     }
 
     private getLimeTypes() {
         this.http.get(`https://localhost/lime/limepkg-uni/test/getlimetypes`).then(res => {
-            this.saveLimeTypeData(res);
             this.updateOptions(res);
         });
-    }
-
-    private saveLimeTypeData(res) {
-        this.limetypeData = {...res.limetypes}
-        console.log(this.limetypeData)
-    }
+    }n
 
     private getDataFromEndPoint(limeType) {
         this.fetchingDataComplete = false;
@@ -105,16 +97,15 @@ export class Framework implements LimeWebComponent {
     }
 
     private updateOptions(res) {
-        for (let [key, val] of Object.entries(res['limetypes'])) {
-            let el = { text: val['displayName'] as string, value: key as string }
-            this.options.push(el)
+        for (let [key, value] of Object.entries(res['limetypes'])) {
+            let el = { text: value as string, value: key }
+            this.options.push(el);
         }
     }
-
     private updateData = (res) => {
-        let i = 0;
+        let id = 0;
         this.mainData = res.objects.map(el => {
-            return this.mainData = { ...el, postId: i++ };
+            return this.mainData = { ...el, postId: id++ };
         });
     }
 
@@ -207,12 +198,15 @@ export class Framework implements LimeWebComponent {
                                 type="week"
                                 label="week"
                                 value={this.dateValue}
-                                 onChange={this.handleChange}
+                                onChange={this.handleChange}
                                 style={{ 'background-color': 'whitesmoke;' }}
                             />
                         </p>
                     </div>
                 </grid-header>
+                <div id="urgent">
+                    
+                </div>
                 <grid-main>
                     {cardData}
                 </grid-main>
@@ -222,6 +216,7 @@ export class Framework implements LimeWebComponent {
     }
     private handleChange(event) {
         this.dateValue = event.detail;
+        console.log(this.dateValue);
     }
 
     //Varför körs denna två gånger?
