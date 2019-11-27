@@ -50,6 +50,7 @@ export class UniComponents implements LimeWebComponent {
         //console.log("componentWillRender")
         this.createOutPut();
     }
+    
 
 
 
@@ -57,6 +58,7 @@ export class UniComponents implements LimeWebComponent {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         console.log(this.limeTypeMetaData);
         let columnList = []
+        this.listContainer = [];
 
         Object.keys(this.limeTypeMetaData['prio']).forEach((key, index) => {
             let column = {
