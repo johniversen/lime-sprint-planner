@@ -45,12 +45,12 @@ export class Framework implements LimeWebComponent {
     @State()
     private dialogIsOpen = false;
 
-    private dialogData: { title: string, priorityValue: number, postId: number, priority: string};
+    private dialogData: { title: string, priorityValue: number, postId: number, priority: string };
 
     private http: HttpService;
 
     private dialog = null;
-    
+
     public selectValue: Option;
 
     private fetchingDataComplete = false;
@@ -79,25 +79,20 @@ export class Framework implements LimeWebComponent {
     }
 
     private saveLimeTypeData(res) {
-        this.limetypeData = {...res.limetypes}
+        this.limetypeData = { ...res.limetypes }
         console.log(this.limetypeData)
     }
 
     private getDataFromEndPoint(limeType) {
         this.fetchingDataComplete = false;
-        //console.log("getDataFromEndpoint() with limeType: " + limeType);
 
         this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType).then(res => {
 
-        //Detta funkar inte! Varför körs inte Rende(), trots state updateras?
             if (res.objects[0] == null) {
-                //console.log("res = undefined");
                 this.fetchingDataComplete = false;
                 this.mainData = null;
-                //console.log(this.mainData);
             }
             else {
-                //console.log("Kommer vi hit?");
                 this.fetchingDataComplete = true;
                 this.updateData(res);
             }
@@ -112,9 +107,9 @@ export class Framework implements LimeWebComponent {
     }
 
     private updateData = (res) => {
-        let i = 0;
+
         this.mainData = res.objects.map(el => {
-            return this.mainData = { ...el, postId: i++ };
+            return this.mainData = { ...el };
         });
     }
 
@@ -125,29 +120,29 @@ export class Framework implements LimeWebComponent {
         this.dialogData = Object.assign({}, item);
 
         let dialogOutput: Array<ListItem<any>> = [];
-       // dialogOutput.push(<h1>{this.dialogData.title}</h1>);
-       let title = <h1>{this.dialogData.title}</h1>;
+        // dialogOutput.push(<h1>{this.dialogData.title}</h1>);
+        let title = <h1>{this.dialogData.title}</h1>;
         delete this.dialogData.title;
         delete this.dialogData.priorityValue;
         delete this.dialogData.postId;
 
         const entries = Object.entries(this.dialogData);
-        
+
         for (const [key, value] of entries) {
-            let item = {} 
-                if (value == "") {
-                    item = {
-                        text: key,
-                        secondaryText: "Not assigned"
-                 }
-                } else  {
-                    item = {
-                        text: key,
-                        secondaryText: value
-                 };
+            let item = {}
+            if (value == "") {
+                item = {
+                    text: key,
+                    secondaryText: "Not assigned"
+                }
+            } else {
+                item = {
+                    text: key,
+                    secondaryText: value
+                };
             }
 
-            dialogOutput.push((item as ListItem)); 
+            dialogOutput.push((item as ListItem));
         }
 
         this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
@@ -170,17 +165,24 @@ export class Framework implements LimeWebComponent {
     }
 
     public render() {
-        //console.log("framework Render()");
-        //console.log(this.mainData);
+        console.log("framework Render()");
+        console.log(this.mainData);
 
-        //Måste ha nån flagga som kollar om hämtning av data är klar. Render() körs "för tidigt".
         let cardData = <h1>There are no data posts in the database</h1>;
         if (this.fetchingDataComplete) {
+            let limeTypeMetaData = null;
+            Object.keys(this.limetypeData).forEach( (key, index) => {
+                if (key === this.selectValue.value) {
+                    limeTypeMetaData = this.limetypeData[this.selectValue.value];
+                }
+            })
+
             cardData =
                 <lwc-limepkg-uni-uni-components
                     platform={this.platform}
                     context={this.context}
                     mainData={this.mainData}
+                    limeTypeMetaData={limeTypeMetaData}
                     onListItemClick={this.openDialog}
                 />
         }
@@ -207,7 +209,7 @@ export class Framework implements LimeWebComponent {
                                 type="week"
                                 label="week"
                                 value={this.dateValue}
-                                 onChange={this.handleChange}
+                                onChange={this.handleChange}
                                 style={{ 'background-color': 'whitesmoke;' }}
                             />
                         </p>
@@ -216,7 +218,6 @@ export class Framework implements LimeWebComponent {
                 <grid-main>
                     {cardData}
                 </grid-main>
-
             </limel-grid>
         ];
     }
@@ -226,7 +227,7 @@ export class Framework implements LimeWebComponent {
 
     //Varför körs denna två gånger?
     private onChange(event) {
-        //console.log("OnChange()");
+        console.log("OnChange()");
         this.selectValue = event.detail;
         let limeType = event.detail.value;
         this.getDataFromEndPoint(limeType);

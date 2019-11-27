@@ -6,6 +6,7 @@ import {
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import { ListItem } from '@limetech/lime-elements';
+import { forEachChild } from 'typescript';
 
 @Component({
     tag: 'lwc-limepkg-uni-uni-components',
@@ -34,6 +35,9 @@ export class UniComponents implements LimeWebComponent {
     }];
 
     @Prop()
+    limeTypeMetaData: {}
+
+    @Prop()
     onListItemClick: (event: CustomEvent<ListItem>) => void;
 
     @State()
@@ -47,32 +51,62 @@ export class UniComponents implements LimeWebComponent {
         this.createOutPut();
     }
 
+
+
     private createOutPut() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
+        console.log(this.limeTypeMetaData);
+        let columnList = []
+
+        Object.keys(this.limeTypeMetaData['prio']).forEach((key, index) => {
+            let column = {
+                header: key,
+                prio: this.limeTypeMetaData['prio'][key],
+                items: []
+            }
+            column.items.push(<h4 class="column-header">{column.header}</h4>)
+            columnList.push(column);
+        })
+
+        columnList.sort((a, b) => (a.prio > b.prio) ? 1 : ((b.prio > a.prio) ? -1 : 0));
         this.listContainer = [];
-        let outPutList = [];
-        outPutList.push(<h4 class="column-header">{this.mainData[0].status}</h4>)
-        let currentStatus = this.mainData[0].priorityValue;
-        //Måste läggas i Config vilken Header man vill ha på respektive lista?
+
         this.mainData.forEach(object => {
             let secondaryText = null;
             if (object.secondaryText != null) {
                 secondaryText = object.secondaryText;
             }
             let item =
-                <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} postId={object.postId} priority={object.priority} clickHandler={this.onListItemClick} />
+                <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} clickHandler={this.onListItemClick} />
 
-            if (currentStatus == object.priorityValue) {
-                outPutList.push(item)
-            } else {
-                this.listContainer.push(outPutList);
-                currentStatus = object.priorityValue;
-                outPutList = [];
-                outPutList.push(<h4 class="column-header">{object.status}</h4>)
-                outPutList.push(item);
-            }
+            let temp = columnList.find(col => col.prio === object.priorityValue);
+            temp['items'].push(item);
         })
-        this.listContainer.push(outPutList);
+        columnList.forEach(column => {
+            this.listContainer.push(column.items);
+        })
+
+        //let currentStatus = this.mainData[0].priorityValue;
+        //Måste läggas i Config vilken Header man vill ha på respektive lista?
+        /*         this.mainData.forEach(object => {
+                    let secondaryText = null;
+                    if (object.secondaryText != null) {
+                        secondaryText = object.secondaryText;
+                    }
+                    let item =
+                        <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} clickHandler={this.onListItemClick} />
+        
+                    if (currentStatus == object.priorityValue) {
+                        outPutList.push(item)
+                    } else {
+                        this.listContainer.push(outPutList);
+                        currentStatus = object.priorityValue;
+                        outPutList = [];
+                        outPutList.push(<h4 class="column-header">{object.status}</h4>)
+                        outPutList.push(item);
+                    }
+                })
+                this.listContainer.push(outPutList); */
 
     }
 
