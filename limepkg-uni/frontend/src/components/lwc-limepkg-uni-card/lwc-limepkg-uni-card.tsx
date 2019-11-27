@@ -35,11 +35,8 @@ export class Card implements LimeWebComponent {
     @Element()
     public element: HTMLElement;
 
-
-
-
     private async handleClick() {
-        console.log("HandleClick " + `${this.postId}`);
+        //console.log("HandleClick " + `${this.postId}`);
         let event = new CustomEvent("onClick", {
             detail: {
                 title: this.header,

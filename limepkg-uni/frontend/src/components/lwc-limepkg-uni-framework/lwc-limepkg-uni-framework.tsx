@@ -37,7 +37,7 @@ export class Framework implements LimeWebComponent {
         priorityValue: number,
         status: string,
         postId: number,
-        responsible: string
+        priority: string
     }];
 
 
@@ -54,6 +54,8 @@ export class Framework implements LimeWebComponent {
 
     private fetchingDataComplete = false;
 
+    public limetypeData = [];
+
     constructor() {
         this.handleChange = this.handleChange.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -66,14 +68,19 @@ export class Framework implements LimeWebComponent {
         //console.log("componentWillLoad");
         //this.getDataFromEndPoint("solutionimprovement")
         this.getLimeTypes();
-        console.log(this.dateValue);
     }
 
     private getLimeTypes() {
         this.http.get(`https://localhost/lime/limepkg-uni/test/getlimetypes`).then(res => {
+            this.saveLimeTypeData(res);
             this.updateOptions(res);
         });
-    }n
+    }
+
+    private saveLimeTypeData(res) {
+        this.limetypeData = {...res.limetypes}
+        //console.log(this.limetypeData)
+    }
 
     private getDataFromEndPoint(limeType) {
         this.fetchingDataComplete = false;
@@ -97,15 +104,16 @@ export class Framework implements LimeWebComponent {
     }
 
     private updateOptions(res) {
-        for (let [key, value] of Object.entries(res['limetypes'])) {
-            let el = { text: value as string, value: key }
-            this.options.push(el);
+        for (let [key, val] of Object.entries(res['limetypes'])) {
+            let el = { text: val['displayName'] as string, value: key as string }
+            this.options.push(el)
         }
     }
+
     private updateData = (res) => {
-        let id = 0;
+        let i = 0;
         this.mainData = res.objects.map(el => {
-            return this.mainData = { ...el, postId: id++ };
+            return this.mainData = { ...el, postId: i++ };
         });
     }
 
@@ -137,7 +145,6 @@ export class Framework implements LimeWebComponent {
                         secondaryText: value
                  };
             }
-
             dialogOutput.push((item as ListItem)); 
         }
 
@@ -217,7 +224,7 @@ export class Framework implements LimeWebComponent {
     private handleChange(event) {
         this.dateValue = event.detail;
         console.log(this.dateValue);
-    }
+   }
 
     //Varför körs denna två gånger?
     private onChange(event) {
