@@ -90,9 +90,8 @@ export class UniComponents implements LimeWebComponent {
     }
 
     public render() {
-        //console.log("Render i main-grid-compoennt");
+        console.log("Render i main-grid-compoennt");
         let output = this.listContainer.map(list => {
-            //console.log(list[0])
             return (
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
                     {list}

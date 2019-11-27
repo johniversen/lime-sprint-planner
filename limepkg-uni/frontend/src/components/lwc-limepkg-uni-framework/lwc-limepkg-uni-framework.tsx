@@ -27,12 +27,7 @@ export class Framework implements LimeWebComponent {
     @State()
     private dateValue = new Date();
 
-    private putOptions: Option[] = [
-        // Detta ska vara alla statusar för den Limetypen vi visar
-        //{ text: 'Luke Skywalker', value: 'luke' },
-        //{ text: 'Han Solo', value: 'han' },
-        //{ text: 'Leia Organo', value: 'leia' },
-    ];
+    private putOptions: Option[] = [];
 
     @State()
     private options: Option[] = []
@@ -50,6 +45,9 @@ export class Framework implements LimeWebComponent {
     @State()
     private dialogIsOpen = false;
 
+    @State()
+    public putValue: Option;
+
     private dialogData: { title: string, priorityValue: number, postId: number, priority: string };
 
     private http: HttpService;
@@ -58,7 +56,7 @@ export class Framework implements LimeWebComponent {
 
     public selectValue: Option;
 
-    public putValue: Option;
+
 
     private fetchingDataComplete = false;
 
@@ -72,6 +70,7 @@ export class Framework implements LimeWebComponent {
         this.openDialog = this.openDialog.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.putOnChange = this.putOnChange.bind(this);
+        this.updateCurrentCardStatus = this.updateCurrentCardStatus.bind(this);
     }
 
     public componentWillLoad() {
@@ -89,7 +88,7 @@ export class Framework implements LimeWebComponent {
     }
 
     private saveLimeTypeData(res) {
-        this.limetypeData = {...res.limetypes}
+        this.limetypeData = { ...res.limetypes }
         console.log(this.limetypeData);
     }
 
@@ -112,7 +111,7 @@ export class Framework implements LimeWebComponent {
     private sendPutRequest() {
         console.log("Send request");
         const limetypeStatus = this.limetypeData[this.selectValue.value].status;
-        console.log(typeof(limetypeStatus));
+        console.log(typeof (limetypeStatus));
         console.log(limetypeStatus);
         let postId = this.currentPostId;
         let data = {
@@ -120,7 +119,7 @@ export class Framework implements LimeWebComponent {
                 key: this.putValue.value
             }
         }
-        this.http.put(`https://localhost/lime/api/v1/limeobject/` + `${this.selectValue.value}` + `/` + `${postId}` + `/`,data).then(res => {
+        this.http.put(`https://localhost/lime/api/v1/limeobject/` + `${this.selectValue.value}` + `/` + `${postId}` + `/`, data).then(res => {
             console.log(res);
         })
     }
@@ -137,6 +136,15 @@ export class Framework implements LimeWebComponent {
             return this.mainData = { ...el };
         });
         console.log(this.mainData);
+    }
+
+    private updateCurrentCardStatus() {
+        console.log("Update currentCardStatus()");
+        this.mainData.map(obj => {
+            if (obj.postId === this.currentPostId) {
+                return obj = { ...obj, status: this.putValue.value };
+            }
+        })
     }
 
     private updatePutOptions() {
@@ -156,6 +164,7 @@ export class Framework implements LimeWebComponent {
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
         this.dialogData = Object.assign({}, item);
+        this.putValue = { text: item.status, value: item.status };
 
         let dialogOutput: Array<ListItem<any>> = [];
         // dialogOutput.push(<h1>{this.dialogData.title}</h1>);
@@ -179,7 +188,7 @@ export class Framework implements LimeWebComponent {
                     secondaryText: value
                 };
             }
-            dialogOutput.push((item as ListItem)); 
+            dialogOutput.push((item as ListItem));
         }
 
         this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
@@ -189,7 +198,7 @@ export class Framework implements LimeWebComponent {
                 </limel-list>
                 <limel-select
                     // Vi vill ändra label så att den är status kortet/dialogen har just nu
-                    label="Update status"
+                    label={this.putValue.value}
                     value={this.putValue}
                     options={this.putOptions}
                     onChange={this.putOnChange}
@@ -204,11 +213,13 @@ export class Framework implements LimeWebComponent {
     }
 
     private closeDialog() {
-        //console.log("Close dialog");
-        
+        console.log("Close dialog");
+
         this.dialogIsOpen = false;
         this.dialog = null;
+        this.updateCurrentCardStatus();
         this.currentPostId = null;
+
     }
 
     public render() {
@@ -218,7 +229,7 @@ export class Framework implements LimeWebComponent {
         let cardData = <h1>There are no data posts in the database</h1>;
         if (this.fetchingDataComplete) {
             let limeTypeMetaData = null;
-            Object.keys(this.limetypeData).forEach( (key, index) => {
+            Object.keys(this.limetypeData).forEach((key, index) => {
                 if (key === this.selectValue.value) {
                     limeTypeMetaData = this.limetypeData[this.selectValue.value];
                 }
@@ -262,7 +273,7 @@ export class Framework implements LimeWebComponent {
                     </div>
                 </grid-header>
                 <div id="urgent">
-                    
+
                 </div>
                 <grid-main>
                     {cardData}
@@ -273,7 +284,7 @@ export class Framework implements LimeWebComponent {
     private handleChange(event) {
         this.dateValue = event.detail;
         console.log(this.dateValue);
-   }
+    }
 
     //Varför körs denna två gånger?
     private onChange(event) {
@@ -286,7 +297,7 @@ export class Framework implements LimeWebComponent {
     private putOnChange(event) {
         // I denna vill vi skicka vårt PUT-request
         console.log("OnChange() för put");
-        this.putValue = event.detail;
+        this.putValue = Object.create(event.detail);
         console.log(this.putValue);
         this.sendPutRequest();
     }
