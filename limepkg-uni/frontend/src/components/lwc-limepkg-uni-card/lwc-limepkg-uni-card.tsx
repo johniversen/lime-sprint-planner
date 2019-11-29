@@ -3,7 +3,7 @@ import {
     LimeWebComponentContext,
     LimeWebComponentPlatform,
 } from '@limetech/lime-web-components-interfaces';
-import { Component, Element, h, Prop } from '@stencil/core';
+import { Component, Element, h, Prop, Event, EventEmitter } from '@stencil/core';
 
 @Component({
     tag: 'lwc-limepkg-uni-card',
@@ -29,36 +29,35 @@ export class Card implements LimeWebComponent {
     @Prop()
     public priority: string;
 
-    @Prop()
-    public clickHandler: Function; //Åtgärdas med @event()!
+    @Event({
+        eventName: 'cardClicked',
+        composed: true,
+        cancelable: true,
+        bubbles: true
+    }) cardClicked: EventEmitter;
 
     @Element()
     public element: HTMLElement;
 
-    private async handleClick() { // Emit event istället
-        //console.log("HandleClick " + `${this.postId}`);
-        let event = new CustomEvent("onClick", {
-            detail: {
-                title: this.header,
-                subTitle: this.subTitle,
-                value: this.postId,
-                priority: this.priority
-            }
-        });
-        this.clickHandler(event);
+    private cardClick() {
+        let event = {
+            value: this.postId,
+        }
+        this.cardClicked.emit(event);
     }
+
 
     public render() {
         if (this.priority == "urgent") {
             return (
-                <div class="urgent card" id={`${this.postId}`} onClick={this.handleClick.bind(this)}>
+                <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
                     <h1>{this.header}</h1>
                     <h3>{this.subTitle}</h3>
                 </div>
-            ); 
+            );
         } else {
             return (
-                <div class="card" id={`${this.postId}`} onClick={this.handleClick.bind(this)}>
+                <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
                     <h1>{this.header}</h1>
                     <h3>{this.subTitle}</h3>
                 </div>

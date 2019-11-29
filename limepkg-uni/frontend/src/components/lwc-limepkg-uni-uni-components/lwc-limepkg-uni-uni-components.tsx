@@ -44,13 +44,13 @@ export class UniComponents implements LimeWebComponent {
     private listContainer = [];
 
     constructor() {
-        this.createOutPut = this.createOutPut.bind(this);
+        this.createOutput = this.createOutput.bind(this);
     }
     public componentWillRender() {
-        this.createOutPut();
+        this.createOutput();
     }
 
-    private createOutPut() {
+    private createOutput() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         console.log(this.limeTypeMetaData);
         let columnList = []
@@ -75,7 +75,7 @@ export class UniComponents implements LimeWebComponent {
                 secondaryText = object.secondaryText;
             }
             let item =
-                <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} clickHandler={this.onListItemClick} />
+                <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} />
 
             let temp = columnList.find(col => col.prio === object.priorityValue);
             temp['items'].push(item);

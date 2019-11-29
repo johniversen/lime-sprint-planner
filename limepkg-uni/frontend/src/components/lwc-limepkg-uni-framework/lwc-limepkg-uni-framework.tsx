@@ -5,7 +5,7 @@ import {
     HttpService,
     PlatformServiceName,
 } from '@limetech/lime-web-components-interfaces';
-import { Component, Element, h, Prop, State } from '@stencil/core';
+import { Component, Element, h, Prop, State, Listen } from '@stencil/core';
 import { Option, ListItem } from '@limetech/lime-elements';
 
 @Component({
@@ -156,7 +156,8 @@ export class Framework implements LimeWebComponent {
         })
     }
 
-    private openDialog(event: CustomEvent) {
+    @Listen('cardClicked')
+    private openDialog(event) {
         this.updateStatusOptions();
         this.dialogIsOpen = true;
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
@@ -238,6 +239,7 @@ export class Framework implements LimeWebComponent {
         console.log(this.selectedStatus);
         this.sendPutRequest();
     }
+
 
     public render() {
         console.log("framework Render()");
