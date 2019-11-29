@@ -65,7 +65,7 @@ export class UniComponents implements LimeWebComponent {
             if (object.secondaryText != null) {
                 secondaryText = object.secondaryText;
             }
-            let item = <div id={object.postId as unknown as string} draggable={true} onDragStart={this.getDragObjectID}>
+            let item = <div id={'card' + object.postId} draggable={true} onDragStart={this.getDragObjectID}>
                     <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} postId={object.postId} clickHandler={this.onListItemClick} />
                 </div>
                 
@@ -88,11 +88,13 @@ export class UniComponents implements LimeWebComponent {
     }
 
     private getDragObjectID(event) {
+        console.log("ID för detta = " + event.target.id);
         this.dragObjectID = event.target.id;
     }
 
     private drop(event) {
-        event.target.append(document.getElementById(this.dragObjectID));
+        console.log("Mottaget ID = " + this.dragObjectID);
+        event.target.append(this.element.querySelector('card' + this.dragObjectID));
     }
 
     public render() {
