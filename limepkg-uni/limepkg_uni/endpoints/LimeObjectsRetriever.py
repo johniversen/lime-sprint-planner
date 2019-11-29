@@ -33,8 +33,9 @@ class LimeobjectsRetriever(webserver.LimeResource):
         # Query the db and fill a json with data formatted by config
         response = self.query_db(query)
 
-        # Add priority info to the objects
-        response = self.add_priorities(response, config, limetype)
+        # Adds priority info and formats date info
+        response = self.format_response(response, config, limetype)
+        
         return response
 
     def get_config(self):
@@ -59,22 +60,34 @@ class LimeobjectsRetriever(webserver.LimeResource):
             if (key != "prio" and key != "displayName") :
                 jsonrequest['responseFormat']['object'][val] = {'_alias': key}
 
+        # Add ID 
+        jsonrequest['responseFormat']['object']['id'] = {'_alias': 'postId'}
         return jsonrequest
 
     def query_db(self, query):
         limeapp = self.application
         response = lime_query.execute_query(
-            query, limeapp.database.connection,
-            limeapp.limetypes, limeapp.acl, limeapp.user
+            query, 
+            limeapp.database.connection,
+            limeapp.limetypes, 
+            limeapp.acl, 
+            limeapp.user
         )
+        print(response)
         return response
 
-    def add_priorities(self, response, config, limetype):
+    def format_response(self, response, config, limetype):
         for obj in response['objects']:
+            # Add priority
             status = obj['status']
             obj['priorityValue'] = config['limetypes'][limetype]['prio'][status]
+            for key, val in obj.items():
+                # Format dateobjects
+                if key.startswith('date_'):
+                    date_str = val.strftime("%d/%m/%Y")
+                    obj[key] = date_str
+
 
         return response
-    
 
 api.add_resource(LimeobjectsRetriever, '/test/')

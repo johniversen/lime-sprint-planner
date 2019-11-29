@@ -16,9 +16,9 @@
 #   
 # Restrictions:
 #   Due to the nature of the database-API, there are certain restrictions 
-#   on what data can be retrieved and displayed: 
-#     DateTime   - DateTime variables are currently not handled by the database-api
-#                  and therefore cannot be returned. (?)
+#   on how data is retrieved and displayed: 
+#     DateTime   - DateTime variables must be prefixed with 'date_' in order to be 
+#                  formatted correctly. eg. 'date_done' or 'date_expected' etc.
 #     Duplicates - The database-api does not handle duplicates, and will not return
 #                  the same variable under two different aliases. This means that 
 #                  we can not use a variable both as status and as secondary_text
@@ -26,12 +26,14 @@
 
 limetypes:
   solutionimprovement:
+    date_done: donedate
     displayName: Solution Improvement
     title: title
     secondaryText: comment
     priority: priority
     misc: misc
     status: solutionimprovementstatus
+    responsible: coworker   # Can't get 'relationshipfield' from db?
     prio:
       deny: 1
       More info needed: 2
@@ -47,6 +49,7 @@ limetypes:
     value: value
     wonlostreason: wonlostreason
     status: dealstatus
+    weighted: weightedvalue
     prio:
       contact: 1
       requirement: 2

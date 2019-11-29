@@ -7,6 +7,7 @@ import {
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import { ListItem } from '@limetech/lime-elements';
 
+
 @Component({
     tag: 'lwc-limepkg-uni-uni-components',
     shadow: true,
@@ -29,8 +30,12 @@ export class UniComponents implements LimeWebComponent {
         secondaryText: string,
         priorityValue: number,
         status: string,
-        postId: number
+        postId: number,
+        priority: string
     }];
+
+    @Prop()
+    limeTypeMetaData: {}
 
     @Prop()
     onListItemClick: (event: CustomEvent<ListItem>) => void;
@@ -42,47 +47,51 @@ export class UniComponents implements LimeWebComponent {
     private listContainer = [];
 
     constructor() {
-        this.createOutPut = this.createOutPut.bind(this);
+        this.createOutput = this.createOutput.bind(this);
         this.allowDrop = this.allowDrop.bind(this);
         this.getDragObjectID = this.getDragObjectID.bind(this);
         this.drop = this.drop.bind(this);
     }
 
     public componentWillRender() {
-        //console.log("componentWillRender")
-        this.createOutPut();
+        this.createOutput();
     }
 
-    private createOutPut() {
+    private createOutput() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
+        console.log(this.limeTypeMetaData);
+        let columnList = []
         this.listContainer = [];
-        let outPutList = [];
-        outPutList.push(<h4 class="column-header">{this.mainData[0].status}</h4>)
-        let currentStatus = this.mainData[0].priorityValue;
-        //Måste läggas i Config vilken Header man vill ha på respektive lista?
+
+        Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
+            let column = {
+                header: key,
+                prio: this.limeTypeMetaData['prio'][key],
+                items: []
+            }
+            column.items.push(<h4 class="column-header">{column.header}</h4>)
+            columnList.push(column);
+        })
+
+        columnList.sort((a, b) => (a.prio > b.prio) ? 1 : ((b.prio > a.prio) ? -1 : 0));
+        this.listContainer = [];
+
         this.mainData.forEach(object => {
             let secondaryText = null;
             if (object.secondaryText != null) {
                 secondaryText = object.secondaryText;
             }
-            let item = <div id={'card' + object.postId} draggable={true} onDragStart={this.getDragObjectID}>
-                    <lwc-limepkg-uni-card header={object[Object.keys(object)[0]]} subTitle={secondaryText} postId={object.postId} clickHandler={this.onListItemClick} />
-                </div>
-                
+            let item =
+                <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} />
 
-            if (currentStatus == object.priorityValue) {
-                outPutList.push(item)
-            } else {
-                this.listContainer.push(outPutList);
-                currentStatus = object.priorityValue;
-                outPutList = [];
-                outPutList.push(<h4 class="column-header">{object.status}</h4>)
-                outPutList.push(item);
-            }
+            let temp = columnList.find(col => col.prio === object.priorityValue);
+            temp['items'].push(item);
         })
-        this.listContainer.push(outPutList);
+        columnList.forEach(column => {
+            this.listContainer.push(column.items);
+        })
     }
-
+            
     private allowDrop(event) {
         event.preventDefault();
     }
@@ -98,9 +107,8 @@ export class UniComponents implements LimeWebComponent {
     }
 
     public render() {
-        //console.log("Render i main-grid-compoennt");
+        console.log("Render i main-grid-compoennt");
         let output = this.listContainer.map(list => {
-            //console.log(list[0])
             return (
                 <div onDragOver={this.allowDrop} onDrop={this.drop}>
                     <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
