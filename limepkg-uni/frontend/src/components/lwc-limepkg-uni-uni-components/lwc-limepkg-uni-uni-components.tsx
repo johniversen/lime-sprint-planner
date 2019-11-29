@@ -6,7 +6,7 @@ import {
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import { ListItem } from '@limetech/lime-elements';
-import { forEachChild } from 'typescript';
+
 
 @Component({
     tag: 'lwc-limepkg-uni-uni-components',
@@ -44,23 +44,19 @@ export class UniComponents implements LimeWebComponent {
     private listContainer = [];
 
     constructor() {
-        this.createOutPut = this.createOutPut.bind(this);
+        this.createOutput = this.createOutput.bind(this);
     }
     public componentWillRender() {
-        //console.log("componentWillRender")
-        this.createOutPut();
+        this.createOutput();
     }
-    
 
-
-
-    private createOutPut() {
+    private createOutput() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         console.log(this.limeTypeMetaData);
         let columnList = []
         this.listContainer = [];
 
-        Object.keys(this.limeTypeMetaData['prio']).forEach((key, index) => {
+        Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
             let column = {
                 header: key,
                 prio: this.limeTypeMetaData['prio'][key],
@@ -79,7 +75,7 @@ export class UniComponents implements LimeWebComponent {
                 secondaryText = object.secondaryText;
             }
             let item =
-                <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} clickHandler={this.onListItemClick} />
+                <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} />
 
             let temp = columnList.find(col => col.prio === object.priorityValue);
             temp['items'].push(item);
@@ -90,9 +86,8 @@ export class UniComponents implements LimeWebComponent {
     }
 
     public render() {
-        //console.log("Render i main-grid-compoennt");
+        console.log("Render i main-grid-compoennt");
         let output = this.listContainer.map(list => {
-            //console.log(list[0])
             return (
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
                     {list}
