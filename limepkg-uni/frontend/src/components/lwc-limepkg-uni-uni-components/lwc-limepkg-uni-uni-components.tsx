@@ -6,7 +6,7 @@ import {
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State } from '@stencil/core';
 import { ListItem } from '@limetech/lime-elements';
-import { forEachChild } from 'typescript';
+
 
 @Component({
     tag: 'lwc-limepkg-uni-uni-components',
@@ -47,12 +47,8 @@ export class UniComponents implements LimeWebComponent {
         this.createOutPut = this.createOutPut.bind(this);
     }
     public componentWillRender() {
-        //console.log("componentWillRender")
         this.createOutPut();
     }
-    
-
-
 
     private createOutPut() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
@@ -60,7 +56,7 @@ export class UniComponents implements LimeWebComponent {
         let columnList = []
         this.listContainer = [];
 
-        Object.keys(this.limeTypeMetaData['prio']).forEach((key, index) => {
+        Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
             let column = {
                 header: key,
                 prio: this.limeTypeMetaData['prio'][key],

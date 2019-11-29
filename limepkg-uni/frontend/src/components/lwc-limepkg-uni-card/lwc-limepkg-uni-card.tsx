@@ -30,12 +30,12 @@ export class Card implements LimeWebComponent {
     public priority: string;
 
     @Prop()
-    public clickHandler: Function;
+    public clickHandler: Function; //Åtgärdas med @event()!
 
     @Element()
     public element: HTMLElement;
 
-    private async handleClick() {
+    private async handleClick() { // Emit event istället
         //console.log("HandleClick " + `${this.postId}`);
         let event = new CustomEvent("onClick", {
             detail: {
