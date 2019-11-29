@@ -40,12 +40,19 @@ export class UniComponents implements LimeWebComponent {
     @Prop()
     onListItemClick: (event: CustomEvent<ListItem>) => void;
 
+    @Prop()
+    dragObjectID: string;
+
     @State()
     private listContainer = [];
 
     constructor() {
         this.createOutput = this.createOutput.bind(this);
+        this.allowDrop = this.allowDrop.bind(this);
+        this.getDragObjectID = this.getDragObjectID.bind(this);
+        this.drop = this.drop.bind(this);
     }
+
     public componentWillRender() {
         this.createOutput();
     }
@@ -84,14 +91,30 @@ export class UniComponents implements LimeWebComponent {
             this.listContainer.push(column.items);
         })
     }
+            
+    private allowDrop(event) {
+        event.preventDefault();
+    }
+
+    private getDragObjectID(event) {
+        console.log("ID för detta = " + event.target.id);
+        this.dragObjectID = event.target.id;
+    }
+
+    private drop(event) {
+        console.log("Mottaget ID = " + this.dragObjectID);
+        event.target.append(this.element.querySelector('card' + this.dragObjectID));
+    }
 
     public render() {
         console.log("Render i main-grid-compoennt");
         let output = this.listContainer.map(list => {
             return (
-                <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
-                    {list}
-                </limel-flex-container>
+                <div onDragOver={this.allowDrop} onDrop={this.drop}>
+                    <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
+                        {list}
+                    </limel-flex-container>
+                </div>
             )
         })
         return (
