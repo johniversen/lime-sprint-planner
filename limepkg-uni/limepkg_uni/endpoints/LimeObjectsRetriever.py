@@ -5,6 +5,8 @@ from webargs.flaskparser import use_args
 from ..endpoints import api
 import lime_query
 from limepkg_uni.config import RuntimeConfig
+'''from datetime import date '''
+import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -14,21 +16,23 @@ class LimeobjectsRetriever(webserver.LimeResource):
     # This describes the schema for the payload when posting a new deal
     # See https://webargs.readthedocs.io/en/latest/ for more info.
     args = {
-        "limetype": fields.String(required=False)
+        "limetype": fields.String(required=False),
+        "chosenDate": fields.String(required=False)
     }
 
     @use_args(args)
     def get(self, args):
         limetype = args['limetype']
-        response = self.create_response(limetype)
+        chosenDate = args['chosenDate'] if 'chosenDate' in args else date.today()
+        response = self.create_response(limetype, chosenDate)
         return response
 
-    def create_response(self, limetype):
+    def create_response(self, limetype, chosenDate):
         # Get config
         config = self.get_config()
 
         # Get limetype that we wish to display from args
-        query = self.create_query(limetype, config)
+        query = self.create_query(limetype, chosenDate, config)
 
         # Query the db and fill a json with data formatted by config
         response = self.query_db(query)
@@ -45,7 +49,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
         config = rtcfg.get_config()
         return config
 
-    def create_query(self, limetype, config):
+    def create_query(self, limetype, chosenDate, config):
         # Build skeleton for database request
         jsonrequest = {
             'limetype': limetype,
@@ -55,6 +59,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
                 }
             }
         }
+
         # Fill json with info from the config
         for key, val in config['limetypes'][limetype].items():
             if (key != "prio" and key != "displayName") :
@@ -62,6 +67,32 @@ class LimeobjectsRetriever(webserver.LimeResource):
 
         # Add ID 
         jsonrequest['responseFormat']['object']['id'] = {'_alias': 'postId'}
+
+        # Add date filter (if applicable)
+        if 'date_done' in config['limetypes'][limetype]:
+            splitDate = chosenDate.split('-')
+            chosenDateObj =  datetime.datetime(int(splitDate[2]), int(splitDate[1]), int(splitDate[0]))
+            beginningOfChosenWeek = chosenDateObj - datetime.timedelta(days=-chosenDateObj.weekday()) 
+            endOfChosenWeek = beginningOfChosenWeek + datetime.timedelta(days=5)
+            jsonrequest['filter'] = {
+                'op': 'AND',
+                'exp': [
+                    {
+                        'key': config['limetypes'][limetype]['date_done'],
+                        'op': '<=',
+                        'exp': endOfChosenWeek
+                    },
+                    {
+                        'key': config['limetypes'][limetype]['date_done'],
+                        'op' : '>=',
+                        'exp': beginningOfChosenWeek
+                    }
+                ]
+            }
+
+        print('jsonrequest = ')
+        print(jsonrequest)
+
         return jsonrequest
 
     def query_db(self, query):
@@ -73,6 +104,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
             limeapp.acl, 
             limeapp.user
         )
+        print('response from db = ')
         print(response)
         return response
 
@@ -84,7 +116,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
             for key, val in obj.items():
                 # Format dateobjects
                 if key.startswith('date_'):
-                    date_str = val.strftime("%d/%m/%Y")
+                    date_str = val.strftime("%d-%m-%Y")
                     obj[key] = date_str
 
 

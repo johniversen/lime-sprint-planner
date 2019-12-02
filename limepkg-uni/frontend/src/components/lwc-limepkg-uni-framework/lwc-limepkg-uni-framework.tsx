@@ -76,6 +76,13 @@ export class Framework implements LimeWebComponent {
         this.getLimeTypes();
     }
 
+    public formatDate(date) {
+        let formattedDate = date.getDate() + '-'
+        formattedDate += date.getMonth() + 1 + '-'
+        formattedDate += date.getFullYear()
+        return formattedDate
+    }
+
     private getLimeTypes() {
         this.http.get(`https://localhost/lime/limepkg-uni/test/getlimetypes`).then(res => {
             this.saveLimeTypeData(res);
@@ -86,11 +93,22 @@ export class Framework implements LimeWebComponent {
     private saveLimeTypeData(res) {
         this.limetypeMetaData = { ...res.limetypes }
     }
+    private  encodeQueryData(data) {
+       const ret = [];
+       for (let d in data)
+           ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+       return ret.join('&');
+    }
 
     private getDataFromEndPoint(limeType) {
         this.fetchingDataComplete = false;
-
-        this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType).then(res => {
+        let args = {
+            'limetype': limeType,
+            'chosenDate': this.formatDate(this.dateValue)
+        }
+        let argsString = this.encodeQueryData(args)
+        this.http.get(`https://localhost/lime/limepkg-uni/test/?` + argsString).then(res => {
+        //this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType + `&chosenDate=` + chosenDate).then(res => {
 
             if (res.objects[0] == null) {
                 this.fetchingDataComplete = false;
@@ -209,6 +227,7 @@ export class Framework implements LimeWebComponent {
     }
     private handleDateChange(event) {
         this.dateValue = event.detail;
+        console.log(this.dateValue)
     }
 
     //Varför körs denna två gånger?
