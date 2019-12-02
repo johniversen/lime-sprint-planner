@@ -73,8 +73,6 @@ export class Framework implements LimeWebComponent {
 
     public componentWillLoad() {
         this.http = this.platform.get(PlatformServiceName.Http);
-        //console.log("componentWillLoad");
-        //this.getDataFromEndPoint("solutionimprovement")
         this.getLimeTypes();
     }
 
@@ -87,7 +85,6 @@ export class Framework implements LimeWebComponent {
 
     private saveLimeTypeData(res) {
         this.limetypeMetaData = { ...res.limetypes }
-        console.log(this.limetypeMetaData);
     }
 
     private getDataFromEndPoint(limeType) {
@@ -107,10 +104,7 @@ export class Framework implements LimeWebComponent {
     }
 
     private sendPutRequest() {
-        console.log("Send request");
         const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].status;
-        console.log(typeof (limetypeStatus));
-        console.log(limetypeStatus);
         let postId = this.currentPostId;
         let data = {
             [limetypeStatus]: {
@@ -118,7 +112,7 @@ export class Framework implements LimeWebComponent {
             }
         }
         this.http.put(`https://localhost/lime/api/v1/limeobject/` + `${this.selectedLimetype.value}` + `/` + `${postId}` + `/`, data).then(res => {
-            console.log(res);
+            console.log("PUT REQUEST SENT");
         })
     }
 
@@ -133,11 +127,9 @@ export class Framework implements LimeWebComponent {
         this.mainData = res.objects.map(el => {
             return this.mainData = { ...el };
         });
-        console.log(this.mainData);
     }
 
     private updateCurrentCardStatus() {
-        console.log("Update currentCardStatus()");
         this.mainData.map(obj => {
             if (obj.postId === this.currentPostId) {
                 return obj = { ...obj, status: this.selectedStatus.value };
@@ -173,17 +165,17 @@ export class Framework implements LimeWebComponent {
 
         const entries = Object.entries(this.dialogData);
 
-        for (const [key, value] of entries) {
+        for (let [key, value] of entries) {
             let item = {}
             if (value == "") {
                 item = {
-                    text: key,
+                    text: key[0].toUpperCase() + key.slice(1),
                     secondaryText: "Not assigned"
                 }
             } else {
                 item = {
-                    text: key,
-                    secondaryText: value
+                    text: key[0].toUpperCase() + key.slice(1),
+                    secondaryText: (typeof(value) === 'string' ? value[0].toUpperCase() + value.slice(1): value)
                 };
             }
             dialogOutput.push((item as ListItem));
@@ -206,13 +198,9 @@ export class Framework implements LimeWebComponent {
                 <limel-button label="Close" onClick={this.closeDialog} />
             </limel-flex-container>
         </limel-dialog>
-        //console.log(this.mainData);
-
     }
 
     private closeDialog() {
-        console.log("Close dialog");
-
         this.dialogIsOpen = false;
         this.dialog = null;
         this.updateCurrentCardStatus();
@@ -221,12 +209,10 @@ export class Framework implements LimeWebComponent {
     }
     private handleDateChange(event) {
         this.dateValue = event.detail;
-        console.log(this.dateValue);
     }
 
     //Varför körs denna två gånger?
     private limetypeOnChange(event) {
-        console.log("OnChange()");
         this.selectedLimetype = event.detail;
         let limeType = event.detail.value;
         this.getDataFromEndPoint(limeType);
@@ -234,18 +220,13 @@ export class Framework implements LimeWebComponent {
 
     private statusOnChange(event) {
         // I denna vill vi skicka vårt PUT-request
-        console.log("OnChange() för put");
         this.selectedStatus = Object.create(event.detail); // FEL? Funkar?
-        console.log(this.selectedStatus);
         this.sendPutRequest();
     }
 
 
     public render() {
-        console.log("framework Render()");
-        console.log(this.mainData);
-
-        let cardData = <h1>There are no data posts in the database</h1>;
+        let cardData = <h1>There are no data posts in the database.</h1>;
         if (this.fetchingDataComplete) {
             let limeTypeMetaData = null;
             Object.keys(this.limetypeMetaData).forEach((key) => {
