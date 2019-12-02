@@ -68,7 +68,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
         # Add ID 
         jsonrequest['responseFormat']['object']['id'] = {'_alias': 'postId'}
 
-        # Add date filter (if applicable)
+        # Add date filter (if applicable) TODO: Can we filter by dateTime in the query?
         if 'date_done' in config['limetypes'][limetype]:
             splitDate = chosenDate.split('-')
             chosenDateObj =  datetime.datetime(int(splitDate[2]), int(splitDate[1]), int(splitDate[0]))
