@@ -52,13 +52,12 @@ export class UniComponents implements LimeWebComponent {
 
     private createOutput() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
-        console.log(this.limeTypeMetaData);
         let columnList = []
         this.listContainer = [];
 
         Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
             let column = {
-                header: key,
+                header: key[0].toUpperCase() + key.slice(1),
                 prio: this.limeTypeMetaData['prio'][key],
                 items: []
             }
@@ -86,7 +85,6 @@ export class UniComponents implements LimeWebComponent {
     }
 
     public render() {
-        console.log("Render i main-grid-compoennt");
         let output = this.listContainer.map(list => {
             return (
                 <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
