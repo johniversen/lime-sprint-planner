@@ -57,6 +57,8 @@ export class Framework implements LimeWebComponent {
     public limetypeMetaData = [];
     public selectedLimetype: Option;
 
+    private firstRender = true;
+
     constructor() {
         this.handleDateChange         = this.handleDateChange.bind(this);
         this.handleDateChangeNoFilter = this.handleDateChangeNoFilter.bind(this);
@@ -251,6 +253,7 @@ export class Framework implements LimeWebComponent {
         let errorMessage   = this.mainData == null ? <h2>Select a limetype above</h2> : null
         // Felmeddelande när ingen data finns? ev. när http request failar?
 
+
         if (this.fetchingDataComplete) {
             let limeTypeMetaData = null;
             Object.keys(this.limetypeMetaData).forEach((key) => {
@@ -258,7 +261,7 @@ export class Framework implements LimeWebComponent {
                     limeTypeMetaData = this.limetypeMetaData[this.selectedLimetype.value];
                 }
             })
-
+            
             cardData =
                 <lwc-limepkg-uni-uni-components
                     platform         = {this.platform}
