@@ -23,7 +23,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
     @use_args(args)
     def get(self, args):
         limetype = args['limetype']
-        chosenDate = args['chosenDate'] if 'chosenDate' in args else date.today()
+        chosenDate = args['chosenDate'] if 'chosenDate' in args else None
         response = self.create_response(limetype, chosenDate)
         return response
 
@@ -68,12 +68,16 @@ class LimeobjectsRetriever(webserver.LimeResource):
         # Add ID 
         jsonrequest['responseFormat']['object']['id'] = {'_alias': 'postId'}
 
-        # Add date filter (if applicable) TODO: Can we filter by dateTime in the query?
-        if 'date_done' in config['limetypes'][limetype]:
-            splitDate = chosenDate.split('-')
-            chosenDateObj =  datetime.datetime(int(splitDate[2]), int(splitDate[1]), int(splitDate[0]))
+        # Add week filter (if applicable)
+        if (chosenDate != None and 'date_done' in config['limetypes'][limetype]):
+            # Create date obj from string
+            chosenDateObj = datetime.datetime.strptime(chosenDate, "%d-%m-%Y")
+            
+            # Create two objects representing beginning and end of the week. 
             beginningOfChosenWeek = chosenDateObj - datetime.timedelta(days=-chosenDateObj.weekday()) 
             endOfChosenWeek = beginningOfChosenWeek + datetime.timedelta(days=5)
+
+            # Add a filter to the request, only retrieve objects with date_done within the chosen week.
             jsonrequest['filter'] = {
                 'op': 'AND',
                 'exp': [
@@ -90,9 +94,6 @@ class LimeobjectsRetriever(webserver.LimeResource):
                 ]
             }
 
-        print('jsonrequest = ')
-        print(jsonrequest)
-
         return jsonrequest
 
     def query_db(self, query):
@@ -104,8 +105,6 @@ class LimeobjectsRetriever(webserver.LimeResource):
             limeapp.acl, 
             limeapp.user
         )
-        print('response from db = ')
-        print(response)
         return response
 
     def format_response(self, response, config, limetype):
