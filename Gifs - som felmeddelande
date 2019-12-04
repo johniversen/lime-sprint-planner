@@ -1,0 +1,25 @@
+<html>
+<head>
+<script type="text/javascript">
+  var gifURL = [
+       "https://media.giphy.com/media/26ufnwz3wDUli7GU0/giphy.gif"
+     , "https://media.giphy.com/media/baPIkfAo0Iv5K/giphy.gif"
+     , "https://media.giphy.com/media/zHDMgMM4O3zc4/giphy.gif"
+	 , "https://media.giphy.com/media/nYogYgSmIJaIo/giphy.gif"
+	 , "https://media.giphy.com/media/y63H09ZvHJdf2/giphy.gif"
+  ];
+  function gifTag() {
+    var img = '<img src=\"';
+    var randomGIF = Math.floor(Math.random() * gifURL.length);
+    img += gifURL[randomGIF];
+    img += '\" alt=\"Some alt text\"/>';
+    return img;
+  }
+</script>
+</head>
+<body>
+<script type="text/javascript">
+	document.write(gifTag());
+</script>
+</body>
+</html>
