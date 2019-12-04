@@ -24,10 +24,12 @@ class LimetypesRetriever(webserver.LimeResource):
          }
 
         for key, val in config['limetypes'].items():
-            response['limetypes'][key] = {}
-            response['limetypes'][key]['status'] = val['status']
-            response['limetypes'][key]['prio'] = val['prio']
+            response['limetypes'][key]                = {}
+            response['limetypes'][key]['status']      = val['status']
+            response['limetypes'][key]['prio']        = val['prio']
             response['limetypes'][key]['displayName'] = val['displayName']
+            if 'date_done' in val:
+                response['limetypes'][key]['date_done']   = val['date_done'] 
 
         return response
 

@@ -49,33 +49,36 @@ export class Framework implements LimeWebComponent {
     public selectedStatus: Option;
 
     private dialogData: { title: string, priorityValue: number, postId: number, priority: string };
-
     private http: HttpService;
-
     private dialog = null;
-
-    public selectedLimetype: Option;
-
     private fetchingDataComplete = false;
+    private currentPostId = null;
 
     public limetypeMetaData = [];
-
-    private currentPostId = null;
+    public selectedLimetype: Option;
 
     private firstRender = true;
 
     constructor() {
-        this.handleDateChange = this.handleDateChange.bind(this);
-        this.limetypeOnChange = this.limetypeOnChange.bind(this);
-        this.openDialog = this.openDialog.bind(this);
-        this.closeDialog = this.closeDialog.bind(this);
-        this.statusOnChange = this.statusOnChange.bind(this);
-        this.updateCurrentCardStatus = this.updateCurrentCardStatus.bind(this);
+        this.handleDateChange         = this.handleDateChange.bind(this);
+        this.handleDateChangeNoFilter = this.handleDateChangeNoFilter.bind(this);
+        this.limetypeOnChange         = this.limetypeOnChange.bind(this);
+        this.openDialog               = this.openDialog.bind(this);
+        this.closeDialog              = this.closeDialog.bind(this);
+        this.statusOnChange           = this.statusOnChange.bind(this);
+        this.updateCurrentCardStatus  = this.updateCurrentCardStatus.bind(this);
     }
 
     public componentWillLoad() {
         this.http = this.platform.get(PlatformServiceName.Http);
         this.getLimeTypes();
+    }
+
+    public formatDate(date) {
+        let formattedDate = date.getDate()  + '-'
+        formattedDate    += date.getMonth() + 1 + '-'
+        formattedDate    += date.getFullYear()
+        return formattedDate
     }
 
     private getLimeTypes() {
@@ -88,20 +91,32 @@ export class Framework implements LimeWebComponent {
     private saveLimeTypeData(res) {
         this.limetypeMetaData = { ...res.limetypes }
     }
+    private  encodeQueryData(data) {
+       const ret = [];
+       for (let d in data)
+           ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+       return ret.join('&');
+    }
 
     private getDataFromEndPoint(limeType) {
+        console.log("getDataFromEndpoint() ")
         this.fetchingDataComplete = false;
-
-        this.http.get(`https://localhost/lime/limepkg-uni/test/?limetype=` + limeType).then(res => {
-
-            if (res.objects[0] == null) {
-                this.fetchingDataComplete = false;
-                this.mainData = null;
-            }
-            else {
-                this.fetchingDataComplete = true;
-                this.updateMainData(res);
-            }
+        let args = {
+            'limetype': limeType
+        }
+        if (this.dateValue) {
+            args['chosenDate'] = this.formatDate(this.dateValue)
+        }
+        let argsString = this.encodeQueryData(args)
+        this.http.get(`https://localhost/lime/limepkg-uni/test/?` + argsString).then(res => {
+            this.updateMainData(res);
+            console.log("Get request successfull:")
+            console.log(res)
+            this.fetchingDataComplete = true;
+        }, err => {
+            console.log("Get request UNSUCCESSFUL:")
+            console.log(err)
+            this.fetchingDataComplete = true;
         });
     }
 
@@ -183,23 +198,23 @@ export class Framework implements LimeWebComponent {
             dialogOutput.push((item as ListItem));
         }
 
-        this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
+        this.dialog =   
+            <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
             <div>
-                {title}
-                <limel-list items={dialogOutput}>
-                </limel-list>
-                <limel-select
-                    // Vi vill ändra label så att den är status kortet/dialogen har just nu
-                    label={"Limetype status"}
-                    value={this.selectedStatus}
-                    options={this.statusOptions}
-                    onChange={this.statusOnChange}
-                />
+            {title}
+            <limel-list items={dialogOutput}></limel-list>
+            <limel-select
+            // Vi vill ändra label så att den är status kortet/dialogen har just nu
+                label    = {"Limetype status"}
+                value    = {this.selectedStatus}
+                options  = {this.statusOptions}
+                onChange = {this.statusOnChange}
+            />
             </div>
             <limel-flex-container justify="end" slot="button">
-                <limel-button label="Close" onClick={this.closeDialog} />
+            <limel-button label="Close" onClick={this.closeDialog} />
             </limel-flex-container>
-        </limel-dialog>
+            </limel-dialog>
     }
 
     private closeDialog() {
@@ -207,10 +222,16 @@ export class Framework implements LimeWebComponent {
         this.dialog = null;
         this.updateCurrentCardStatus();
         this.currentPostId = null;
-
     }
+
     private handleDateChange(event) {
         this.dateValue = event.detail;
+        this.getDataFromEndPoint(this.selectedLimetype.value)
+    }
+
+    private handleDateChangeNoFilter() {
+        this.dateValue = null;
+        this.getDataFromEndPoint(this.selectedLimetype.value)
     }
 
     //Varför körs denna två gånger?
@@ -221,20 +242,17 @@ export class Framework implements LimeWebComponent {
     }
 
     private statusOnChange(event) {
-        // I denna vill vi skicka vårt PUT-request
         this.selectedStatus = Object.create(event.detail); // FEL? Funkar?
         this.sendPutRequest();
     }
 
-
     public render() {
-        let cardData = null;
+        let cardData       = null 
+        let weekPicker     = null
+        let noFilterButton = null
+        let errorMessage   = this.mainData == null ? <h2>Select a limetype above</h2> : null
+        // Felmeddelande när ingen data finns? ev. när http request failar?
 
-        if (!this.firstRender) {
-            cardData = <h1>There are no data posts in the database.</h1>;
-        } else {
-            this.firstRender = false;
-        }
 
         if (this.fetchingDataComplete) {
             let limeTypeMetaData = null;
@@ -246,14 +264,30 @@ export class Framework implements LimeWebComponent {
             
             cardData =
                 <lwc-limepkg-uni-uni-components
-                    platform={this.platform}
-                    context={this.context}
-                    mainData={this.mainData}
-                    limeTypeMetaData={limeTypeMetaData}
-                    onListItemClick={this.openDialog}
+                    platform         = {this.platform}
+                    context          = {this.context}
+                    mainData         = {this.mainData}
+                    limeTypeMetaData = {limeTypeMetaData}
+                    onListItemClick  = {this.openDialog}
                 />
-        }
 
+            // If the limetype has a defined date_done, show weekpicker
+            if (this.limetypeMetaData[this.selectedLimetype.value]['date_done']) {
+                weekPicker = 
+                    <limel-date-picker
+                        type     = "week"
+                        label    = "week"
+                        value    = {this.dateValue}
+                        onChange = {this.handleDateChange}
+                    />
+                noFilterButton = 
+                    <limel-button
+                        label   = "Show all"
+                        primary = {true}
+                        onClick = {this.handleDateChangeNoFilter}
+                    />
+            }
+        }
         return [
             <limel-grid>
                 {this.dialog}
@@ -264,27 +298,24 @@ export class Framework implements LimeWebComponent {
                     </div>
                     <div id="filter">
                         <limel-select
-                            label="Limetype"
-                            value={this.selectedLimetype}
-                            options={this.limetypeOptions}
-                            onChange={this.limetypeOnChange}
+                            label    = "Limetype"
+                            value    = {this.selectedLimetype}
+                            options  = {this.limetypeOptions}
+                            onChange = {this.limetypeOnChange}
                         />
                     </div>
                     <div id="week-display">
-                        <p>
-                            <limel-date-picker
-                                type="week"
-                                label="week"
-                                value={this.dateValue}
-                                onChange={this.handleDateChange}
-                            />
-                        </p>
+                        {weekPicker}
+                    </div>
+                    <div id="no-filter-button">
+                        {noFilterButton}
                     </div>
                 </grid-header>
                 <div id="urgent">
 
                 </div>
                 <grid-main>
+                    {errorMessage}
                     {cardData}
                 </grid-main>
             </limel-grid>
