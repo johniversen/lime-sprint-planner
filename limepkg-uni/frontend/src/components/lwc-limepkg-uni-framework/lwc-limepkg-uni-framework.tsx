@@ -225,9 +225,10 @@ export class Framework implements LimeWebComponent {
         this.currentPostId = null;
 
     }
+
     private handleDateChange(event) {
         this.dateValue = event.detail;
-        console.log(this.dateValue)
+        this.getDataFromEndPoint(this.selectedLimetype.value)
     }
 
     //Varför körs denna två gånger?
