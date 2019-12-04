@@ -62,6 +62,8 @@ export class Framework implements LimeWebComponent {
 
     private currentPostId = null;
 
+    private firstRender = true;
+
     constructor() {
         this.handleDateChange = this.handleDateChange.bind(this);
         this.limetypeOnChange = this.limetypeOnChange.bind(this);
@@ -226,7 +228,14 @@ export class Framework implements LimeWebComponent {
 
 
     public render() {
-        let cardData = <h1>There are no data posts in the database.</h1>;
+        let cardData = null;
+
+        if (!this.firstRender) {
+            cardData = <h1>There are no data posts in the database.</h1>;
+        } else {
+            this.firstRender = false;
+        }
+
         if (this.fetchingDataComplete) {
             let limeTypeMetaData = null;
             Object.keys(this.limetypeMetaData).forEach((key) => {
@@ -234,7 +243,7 @@ export class Framework implements LimeWebComponent {
                     limeTypeMetaData = this.limetypeMetaData[this.selectedLimetype.value];
                 }
             })
-
+            
             cardData =
                 <lwc-limepkg-uni-uni-components
                     platform={this.platform}
