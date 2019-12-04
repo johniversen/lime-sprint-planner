@@ -245,9 +245,10 @@ export class Framework implements LimeWebComponent {
     }
 
     public render() {
-        let cardData     = null 
-        let weekPicker   = null;
-        let errorMessage = this.mainData == null ? <h2>Select a limetype above</h2> : null
+        let cardData       = null 
+        let weekPicker     = null
+        let noFilterButton = null
+        let errorMessage   = this.mainData == null ? <h2>Select a limetype above</h2> : null
         // Felmeddelande när ingen data finns? ev. när http request failar?
 
         if (this.fetchingDataComplete) {
@@ -270,19 +271,18 @@ export class Framework implements LimeWebComponent {
             // If the limetype has a defined date_done, show weekpicker
             if (this.limetypeMetaData[this.selectedLimetype.value]['date_done']) {
                 weekPicker = 
-                    <div>
                     <limel-date-picker
                         type     = "week"
                         label    = "week"
                         value    = {this.dateValue}
                         onChange = {this.handleDateChange}
                     />
+                noFilterButton = 
                     <limel-button
                         label   = "Show all"
                         primary = {true}
                         onClick = {this.handleDateChangeNoFilter}
                     />
-                    </div>
             }
         }
         return [
@@ -303,6 +303,9 @@ export class Framework implements LimeWebComponent {
                     </div>
                     <div id="week-display">
                         {weekPicker}
+                    </div>
+                    <div id="no-filter-button">
+                        {noFilterButton}
                     </div>
                 </grid-header>
                 <div id="urgent">
