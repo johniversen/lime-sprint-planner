@@ -42,6 +42,7 @@ export class Framework implements LimeWebComponent {
         priority: string
     }];
 
+
     @State()
     private dialogIsOpen = false;
 
@@ -146,16 +147,20 @@ export class Framework implements LimeWebComponent {
             }
             this.statusOptions.push(item);
         })
+        console.log(this.statusOptions)
     }
 
     @Listen('cardClicked')
     private openDialog(event) {
+        this.dialogIsOpen = true;
         this.updateStatusOptions();
         this.dialogIsOpen = true;
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
         this.dialogData = Object.assign({}, item);
-        this.selectedStatus = { text: item.status, value: item.status };
+        this.selectedStatus = this.statusOptions.find((option: any) => {
+            return item.status === option.text && item.status === option.value
+        })
 
         let dialogOutput: Array<ListItem<any>> = [];
         let title = <h1>{this.dialogData.title}</h1>;
@@ -175,25 +180,25 @@ export class Framework implements LimeWebComponent {
             } else {
                 item = {
                     text: key[0].toUpperCase() + key.slice(1),
-                    secondaryText: (typeof(value) === 'string' ? value[0].toUpperCase() + value.slice(1): value)
+                    secondaryText: (typeof (value) === 'string' ? value[0].toUpperCase() + value.slice(1) : value)
                 };
             }
             dialogOutput.push((item as ListItem));
         }
 
         this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-            <div>
-                {title}
-                <limel-list items={dialogOutput}>
-                </limel-list>
-                <limel-select
-                    // Vi vill ändra label så att den är status kortet/dialogen har just nu
-                    label={"Limetype status"}
-                    value={this.selectedStatus}
-                    options={this.statusOptions}
-                    onChange={this.statusOnChange}
-                />
-            </div>
+
+            {title}
+            <limel-list items={dialogOutput}>
+            </limel-list>
+            <limel-select
+                // Vi vill ändra till den nya label som valts.
+                label={"Limetype status"}
+                value={this.selectedStatus}
+                options={this.statusOptions}
+                onChange={this.statusOnChange}
+            />
+
             <limel-flex-container justify="end" slot="button">
                 <limel-button label="Close" onClick={this.closeDialog} />
             </limel-flex-container>
@@ -220,12 +225,29 @@ export class Framework implements LimeWebComponent {
 
     private statusOnChange(event) {
         // I denna vill vi skicka vårt PUT-request
-        this.selectedStatus = Object.create(event.detail); // FEL? Funkar?
+        //let option = { text: "Ett nytt värde", value: "event.detail.value" };
+        //const selectedStatus = { ...this.selectedStatus, text: event.detail.text, value: event.detail.value };
+        // FEL? Funkar?
+        console.log("h")
+     /*    this.selectedStatus = this.statusOptions.find((option: any) => {
+            return event.detail.text === option.text && event.detail.value === option.value
+        }) */
+
+        this.selectedStatus = event.detail;
+
+
+        //this.selectedStatus = option;
+        console.log("Status on change");
+        console.log(this.selectedStatus);
+        console.log(this.dialog);
+        // this.render();
         this.sendPutRequest();
     }
 
 
     public render() {
+        console.log("Render i framework");
+        console.log(this.dialogData)
         let cardData = <h1>There are no data posts in the database.</h1>;
         if (this.fetchingDataComplete) {
             let limeTypeMetaData = null;
@@ -244,10 +266,12 @@ export class Framework implements LimeWebComponent {
                     onListItemClick={this.openDialog}
                 />
         }
+        console.log(this.dialog);
 
         return [
             <limel-grid>
                 {this.dialog}
+
                 <grid-header>
                     <div id="heading-icon">
                         <limel-icon class="citrus-icon" name="heart_with_arrow" size="large" />
