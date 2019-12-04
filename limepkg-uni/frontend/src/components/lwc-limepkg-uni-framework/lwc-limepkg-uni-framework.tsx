@@ -63,6 +63,8 @@ export class Framework implements LimeWebComponent {
 
     private currentPostId = null;
 
+    private dialogOutput: Array<ListItem<any>> = [];
+
     constructor() {
         this.handleDateChange = this.handleDateChange.bind(this);
         this.limetypeOnChange = this.limetypeOnChange.bind(this);
@@ -162,7 +164,8 @@ export class Framework implements LimeWebComponent {
             return item.status === option.text && item.status === option.value
         })
 
-        let dialogOutput: Array<ListItem<any>> = [];
+        //let dialogOutput: Array<ListItem<any>> = [];
+        
         let title = <h1>{this.dialogData.title}</h1>;
         delete this.dialogData.title;
         delete this.dialogData.priorityValue;
@@ -183,26 +186,27 @@ export class Framework implements LimeWebComponent {
                     secondaryText: (typeof (value) === 'string' ? value[0].toUpperCase() + value.slice(1) : value)
                 };
             }
-            dialogOutput.push((item as ListItem));
+            //dialogOutput.push((item as ListItem));
+            this.dialogOutput.push((item as ListItem));
         }
 
-        this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-
-            {title}
-            <limel-list items={dialogOutput}>
-            </limel-list>
-            <limel-select
-                // Vi vill ändra till den nya label som valts.
-                label={"Limetype status"}
-                value={this.selectedStatus}
-                options={this.statusOptions}
-                onChange={this.statusOnChange}
-            />
-
-            <limel-flex-container justify="end" slot="button">
-                <limel-button label="Close" onClick={this.closeDialog} />
-            </limel-flex-container>
-        </limel-dialog>
+        /*  this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
+ 
+             {title}
+             <limel-list items={dialogOutput}></limel-list>
+             
+             <limel-select
+                 // Vi vill ändra till den nya label som valts.
+                 label={"Limetype status"}
+                 value={this.selectedStatus}
+                 options={this.statusOptions}
+                 onChange={this.statusOnChange}
+             />
+ 
+             <limel-flex-container justify="end" slot="button">
+                 <limel-button label="Close" onClick={this.closeDialog} />
+             </limel-flex-container>
+         </limel-dialog> */
     }
 
     private closeDialog() {
@@ -224,16 +228,15 @@ export class Framework implements LimeWebComponent {
     }
 
     private statusOnChange(event) {
-        // I denna vill vi skicka vårt PUT-request
-        //let option = { text: "Ett nytt värde", value: "event.detail.value" };
         //const selectedStatus = { ...this.selectedStatus, text: event.detail.text, value: event.detail.value };
         // FEL? Funkar?
         console.log("h")
-     /*    this.selectedStatus = this.statusOptions.find((option: any) => {
+        this.selectedStatus = this.statusOptions.find((option: any) => {
             return event.detail.text === option.text && event.detail.value === option.value
-        }) */
+        })
 
-        this.selectedStatus = event.detail;
+        //this.selectedStatus = event.detail;
+
 
 
         //this.selectedStatus = option;
@@ -249,6 +252,30 @@ export class Framework implements LimeWebComponent {
         console.log("Render i framework");
         console.log(this.dialogData)
         let cardData = <h1>There are no data posts in the database.</h1>;
+
+
+        if (this.dialogIsOpen) {
+            this.dialog = <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
+
+                {this.dialogData.title}
+                <limel-list items={this.dialogOutput}></limel-list>
+
+                <limel-select
+                    // Vi vill ändra till den nya label som valts.
+                    label={"Limetype status"}
+                    value={this.selectedStatus}
+                    options={this.statusOptions}
+                    onChange={this.statusOnChange}
+                />
+
+                <limel-flex-container justify="end" slot="button">
+                    <limel-button label="Close" onClick={this.closeDialog} />
+                </limel-flex-container>
+            </limel-dialog>
+
+            
+        }
+
         if (this.fetchingDataComplete) {
             let limeTypeMetaData = null;
             Object.keys(this.limetypeMetaData).forEach((key) => {
