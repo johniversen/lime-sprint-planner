@@ -27,7 +27,7 @@ export class Framework implements LimeWebComponent {
     @State()
     private dateValue = new Date();
 
-    private statusOptions: Option[] = [];
+   // private statusOptions: Option[] = [];
 
     @State()
     private limetypeOptions: Option[] = []
@@ -42,13 +42,13 @@ export class Framework implements LimeWebComponent {
         priority: string
     }];
 
+
     @State()
     private dialogIsOpen = false;
 
     @State()
     public selectedStatus: Option;
 
-    private dialogData: { title: string, priorityValue: number, postId: number, priority: string };
     private http: HttpService;
     private dialog = null;
     private fetchingDataComplete = false;
@@ -58,6 +58,13 @@ export class Framework implements LimeWebComponent {
     public selectedLimetype: Option;
 
     private firstRender = true;
+
+    // private dialogOutput: Array<ListItem<any>> = [];
+
+    private dialogMainData: { title: string, dialogListItems: Array<ListItem<any>>, dialogDropDownOptions: Option[] };
+    //private dialogDropDownOptions: Option[];
+
+
 
     constructor() {
         this.handleDateChange         = this.handleDateChange.bind(this);
@@ -155,32 +162,37 @@ export class Framework implements LimeWebComponent {
     }
 
     private updateStatusOptions() {
-        this.statusOptions = [];
+       // this.statusOptions = [];
+       let statusOptions = [];
         Object.keys(this.limetypeMetaData[this.selectedLimetype.value]['prio']).forEach((key) => {
             let item = {
                 text: key,
                 value: key
             }
-            this.statusOptions.push(item);
+            statusOptions.push(item);
         })
+        
+        return statusOptions;
     }
 
     @Listen('cardClicked')
     private openDialog(event) {
-        this.updateStatusOptions();
-        this.dialogIsOpen = true;
+        let statusOptions = this.updateStatusOptions();
+
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
-        this.dialogData = Object.assign({}, item);
-        this.selectedStatus = { text: item.status, value: item.status };
+        let dialogData = Object.assign({}, item);
 
+        this.selectedStatus = statusOptions.find((option: any) => {
+            return item.status === option.text && item.status === option.value
+        })
         let dialogOutput: Array<ListItem<any>> = [];
-        let title = <h1>{this.dialogData.title}</h1>;
-        delete this.dialogData.title;
-        delete this.dialogData.priorityValue;
-        delete this.dialogData.postId;
+        let title = dialogData.title;
+        delete dialogData.title;
+        delete dialogData.priorityValue;
+        delete dialogData.postId;
 
-        const entries = Object.entries(this.dialogData);
+        const entries = Object.entries(dialogData);
 
         for (let [key, value] of entries) {
             let item = {}
@@ -192,34 +204,25 @@ export class Framework implements LimeWebComponent {
             } else {
                 item = {
                     text: key[0].toUpperCase() + key.slice(1),
-                    secondaryText: (typeof(value) === 'string' ? value[0].toUpperCase() + value.slice(1): value)
+                    secondaryText: (typeof (value) === 'string' ? value[0].toUpperCase() + value.slice(1) : value)
                 };
             }
             dialogOutput.push((item as ListItem));
         }
 
-        this.dialog =   
-            <limel-dialog open={this.dialogIsOpen} onClose={this.closeDialog}>
-            <div>
-            {title}
-            <limel-list items={dialogOutput}></limel-list>
-            <limel-select
-            // Vi vill ändra label så att den är status kortet/dialogen har just nu
-                label    = {"Limetype status"}
-                value    = {this.selectedStatus}
-                options  = {this.statusOptions}
-                onChange = {this.statusOnChange}
-            />
-            </div>
-            <limel-flex-container justify="end" slot="button">
-            <limel-button label="Close" onClick={this.closeDialog} />
-            </limel-flex-container>
-            </limel-dialog>
+        this.dialogMainData = {
+            title: title,
+            dialogListItems: dialogOutput,
+            dialogDropDownOptions: statusOptions
+        };
+        this.dialogIsOpen = true;
+
     }
 
+    @Listen('closeDialog')
     private closeDialog() {
         this.dialogIsOpen = false;
-        this.dialog = null;
+        //this.dialog = null;
         this.updateCurrentCardStatus();
         this.currentPostId = null;
     }
@@ -241,17 +244,30 @@ export class Framework implements LimeWebComponent {
         this.getDataFromEndPoint(limeType);
     }
 
+    @Listen('statusOnChange')
     private statusOnChange(event) {
-        this.selectedStatus = Object.create(event.detail); // FEL? Funkar?
+
+        this.selectedStatus = this.dialogMainData.dialogDropDownOptions.find((option: any) => {
+            return event.detail.detail.text === option.text && event.detail.detail.value === option.value
+        })
         this.sendPutRequest();
     }
 
     public render() {
+
+
+        if (this.dialogIsOpen) {
+            this.dialog = <lwc-limepkg-uni-dialog dialogMainData={this.dialogMainData} selectedStatus={this.selectedStatus} isVisable={this.dialogIsOpen}></lwc-limepkg-uni-dialog >
+        } else {
+            this.dialog = null;
+        }
+
         let cardData       = null 
         let weekPicker     = null
         let noFilterButton = null
         let errorMessage   = this.mainData == null ? <h2>Select a limetype above</h2> : null
         // Felmeddelande när ingen data finns? ev. när http request failar?
+
 
 
         if (this.fetchingDataComplete) {
@@ -291,6 +307,7 @@ export class Framework implements LimeWebComponent {
         return [
             <limel-grid>
                 {this.dialog}
+
                 <grid-header>
                     <div id="heading-icon">
                         <limel-icon class="citrus-icon" name="heart_with_arrow" size="large" />

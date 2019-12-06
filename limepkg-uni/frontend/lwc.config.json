@@ -22,5 +22,9 @@
     {
         "name": "lwc-limepkg-uni-card",
         "slot": null
+    },
+    {
+        "name": "lwc-limepkg-uni-dialog",
+        "slot": null
     }
 ]

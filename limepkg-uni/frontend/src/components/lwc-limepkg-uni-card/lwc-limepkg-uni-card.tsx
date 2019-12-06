@@ -39,6 +39,7 @@ export class Card implements LimeWebComponent {
     @Element()
     public element: HTMLElement;
 
+    
     private cardClick() {
         let event = {
             value: this.postId,
