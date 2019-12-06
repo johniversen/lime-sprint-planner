@@ -55,17 +55,28 @@ export class UniComponents implements LimeWebComponent {
         let columnList = []
         this.listContainer = [];
 
-        Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
+        // If prio exists, create columns for each prio
+        if (this.limeTypeMetaData['prio']) {
+            Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
+                let column = {
+                    header: key[0].toUpperCase() + key.slice(1),
+                    prio: this.limeTypeMetaData['prio'][key],
+                    items: []
+                }
+                column.items.push(<h4 class="column-header">{column.header}</h4>)
+                columnList.push(column);
+            })
+            columnList.sort((a, b) => (a.prio > b.prio) ? 1 : ((b.prio > a.prio) ? -1 : 0));
+        } else { // If prio doesnt exist, show all objects in one column
             let column = {
-                header: key[0].toUpperCase() + key.slice(1),
-                prio: this.limeTypeMetaData['prio'][key],
+                header: "Priority undefined",
+                prio: 1,
                 items: []
             }
             column.items.push(<h4 class="column-header">{column.header}</h4>)
             columnList.push(column);
-        })
+        }
 
-        columnList.sort((a, b) => (a.prio > b.prio) ? 1 : ((b.prio > a.prio) ? -1 : 0));
         this.listContainer = [];
 
         this.mainData.forEach(object => {
@@ -74,7 +85,12 @@ export class UniComponents implements LimeWebComponent {
                 secondaryText = object.secondaryText;
             }
             let item =
-                <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} />
+                <lwc-limepkg-uni-card 
+                    header={object.title} 
+                    subTitle={secondaryText} 
+                    postId={object.postId} 
+                    priority={object.priority}
+                />
 
             let temp = columnList.find(col => col.prio === object.priorityValue);
             temp['items'].push(item);

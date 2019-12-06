@@ -13,6 +13,9 @@
 #                    Each value should contain a unique number afterwards that
 #                    decides its priority (position on the x axis of the app,  
 #                    1 being the leftmost)
+#   date_done      - This date is used to filter what objects will be retrieved  (not required)
+#                    for the frontend. For example: User picks week 34 on the 
+#                    frontend, if date_done is within week 34 it will be fetched.
 #   
 # Restrictions:
 #   Due to the nature of the database-API, there are certain restrictions 
