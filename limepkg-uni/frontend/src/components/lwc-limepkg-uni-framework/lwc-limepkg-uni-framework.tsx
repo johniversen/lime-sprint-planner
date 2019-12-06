@@ -177,6 +177,8 @@ export class Framework implements LimeWebComponent {
 
     @Listen('cardClicked')
     private openDialog(event) {
+
+        console.log("CardClicked")
         let statusOptions = this.updateStatusOptions();
 
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
@@ -261,6 +263,8 @@ export class Framework implements LimeWebComponent {
         } else {
             this.dialog = null;
         }
+
+        console.log(this.dialog);
 
         let cardData       = null 
         let weekPicker     = null

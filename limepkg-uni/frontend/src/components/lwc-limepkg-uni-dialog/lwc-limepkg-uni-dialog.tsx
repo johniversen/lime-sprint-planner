@@ -74,21 +74,6 @@ export class Dialog implements LimeWebComponent {
         this.closeDialog.emit(event);
     }
 
-    componentWillRender() {
-   //     this.generateOutput();
-    }
-
- /*    private generateOutput() {
-        const entries = Object.entries(this.mainContent);
-        let item;
-        for (let [key, value] of entries) {
-            item = {
-                text: key[0].toUpperCase() + key.slice(1),
-                secondaryText: (typeof (value) === 'string' ? value[0].toUpperCase() + value.slice(1) : value)
-            };
-        }
-        this.dialogOutput.push((item as ListItem));
-    } */
 
 
     statusOnChangeHandler(event) {
@@ -98,7 +83,7 @@ export class Dialog implements LimeWebComponent {
 
     public render() {
         console.log("Render i nya dialog!");
-
+        console.log(this.isVisable)
         return (
             <limel-dialog open={this.isVisable} onClose={this.closeDialogHandler}>
 
