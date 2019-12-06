@@ -62,7 +62,6 @@ grid-header > #week-display{
 
 grid-header > #no-filter-button{
     grid-area: no-filter-button;
-    margin-left: 2px;
 }
 
 #week-display > label > .mdc-text-field {

@@ -89,6 +89,7 @@ export class Framework implements LimeWebComponent {
     private saveLimeTypeData(res) {
         this.limetypeMetaData = { ...res.limetypes }
     }
+
     private  encodeQueryData(data) {
        const ret = [];
        for (let d in data)
@@ -170,7 +171,7 @@ export class Framework implements LimeWebComponent {
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
         this.dialogData = Object.assign({}, item);
-        this.selectedStatus = { text: item.status, value: item.status };
+        //this.selectedStatus = { text: item.status, value: item.status };
 
         let dialogOutput: Array<ListItem<any>> = [];
         let title = <h1>{this.dialogData.title}</h1>;
@@ -240,7 +241,8 @@ export class Framework implements LimeWebComponent {
     }
 
     private statusOnChange(event) {
-        this.selectedStatus = Object.create(event.detail); // FEL? Funkar?
+        this.selectedStatus = event.detail
+        // this.selectedStatus = Object.create(event.detail); // FEL? Funkar?
         this.sendPutRequest();
     }
 
