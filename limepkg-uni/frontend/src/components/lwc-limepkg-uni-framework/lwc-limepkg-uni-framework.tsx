@@ -80,7 +80,7 @@ export class Framework implements LimeWebComponent {
     }
 
     private getLimeTypes() {
-        this.http.get(`https://localhost/lime/limepkg-uni/test/getlimetypes`).then(res => {
+        this.http.get(`https://localhost/lime/limepkg-uni/getlimetypes`).then(res => {
             this.saveLimeTypeData(res);
             this.updateLimetypeOptions(res);
         });
@@ -107,7 +107,7 @@ export class Framework implements LimeWebComponent {
             args['chosenDate'] = this.formatDate(this.dateValue)
         }
         let argsString = this.encodeQueryData(args)
-        this.http.get(`https://localhost/lime/limepkg-uni/test/?` + argsString).then(res => {
+        this.http.get(`https://localhost/lime/limepkg-uni/?` + argsString).then(res => {
             this.updateMainData(res);
             console.log("Get request successfull:")
             console.log(res)
@@ -217,9 +217,9 @@ export class Framework implements LimeWebComponent {
     }
 
     private closeDialog() {
+        //this.updateCurrentCardStatus();
         this.dialogIsOpen = false;
         this.dialog = null;
-        this.updateCurrentCardStatus();
         this.currentPostId = null;
     }
 
@@ -240,9 +240,9 @@ export class Framework implements LimeWebComponent {
         this.getDataFromEndPoint(limeType);
     }
 
+    // WIP - update mainData state and re-render
     private statusOnChange(event) {
         this.selectedStatus = event.detail
-        // this.selectedStatus = Object.create(event.detail); // FEL? Funkar?
         this.sendPutRequest();
     }
 

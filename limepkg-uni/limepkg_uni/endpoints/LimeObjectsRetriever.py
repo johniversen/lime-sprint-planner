@@ -114,11 +114,11 @@ class LimeobjectsRetriever(webserver.LimeResource):
             obj['priorityValue'] = config['limetypes'][limetype]['prio'][status]
             for key, val in obj.items():
                 # Format dateobjects
-                if key.startswith('date_'):
+                if key.startswith('date_') and val != None:
                     date_str = val.strftime("%d-%m-%Y")
                     obj[key] = date_str
 
 
         return response
 
-api.add_resource(LimeobjectsRetriever, '/test/')
+api.add_resource(LimeobjectsRetriever, '/')
