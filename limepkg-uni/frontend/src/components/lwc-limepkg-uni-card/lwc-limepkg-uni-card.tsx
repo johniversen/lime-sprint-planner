@@ -52,7 +52,12 @@ export class Card implements LimeWebComponent {
         if (this.priority == "urgent") {
             return (
                 <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
-                    <h1>{this.header}</h1>
+                    <limel-icon id="card_icon" name="siren" size="large" />
+                    <h1>
+                        
+                        {this.header}
+                    </h1>
+
                     <h3>{this.subTitle}</h3>
                 </div>
             );

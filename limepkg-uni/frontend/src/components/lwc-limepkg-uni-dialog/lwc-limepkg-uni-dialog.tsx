@@ -20,9 +20,6 @@ export class Dialog implements LimeWebComponent {
     @Prop()
     public context: LimeWebComponentContext;
 
-    @Prop()
-    onClose: Function
-
     @Element()
     public element: HTMLElement;
 
