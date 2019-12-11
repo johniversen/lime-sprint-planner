@@ -11,35 +11,51 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .card {
+    display: grid;
+    grid-template-columns: 1;
+    grid-template-rows: 1;
+    grid-template-areas: 
+        "title"
+        "secondary";
+
     border-radius: 3px;
     padding: 5px;
-    padding-bottom: 15px;
     box-shadow: 0px 5px 6px -6px #adadad;
-    margin: 5px 10px;
+    margin: 5px 5px;
     background-color: #f5f5f5;
     cursor: pointer;
+    width: 90%;
+    box-sizing: border-box;
 
     h1 {
-        text-align: center;
         font-size: 12px;
         color: #575756;
+        text-align: left;
+        grid-area: title;
+        justify-self: start;
     }
     
     h3 {
-        text-align: center;
         font-size: 10px;
         color: #adadad;
+        text-align: left;
+        grid-area: secondary;
+        justify-self: start;
     } 
     
 }
 
 .urgent {
-    background-color: #f0575094;
+    grid-template-columns: 3;
+    grid-template-rows: 2;
+    grid-template-areas: 
+        "icon title title"
+        ". secondary secondary";
 
-    h3 {
-        text-align: center;
-        font-size: 10px;
-        color: #575756;
-    } 
+    .card_icon {
+        color: var(--lime-deep-red);
+        grid-area: icon;
+        padding: 1px;
+    }
 }
 

@@ -52,6 +52,7 @@ export class Card implements LimeWebComponent {
         if (this.priority == "urgent") {
             return (
                 <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
+                    <limel-icon class="card_icon" name="fire_element" size="medium" />
                     <h1>{this.header}</h1>
                     <h3>{this.subTitle}</h3>
                 </div>
