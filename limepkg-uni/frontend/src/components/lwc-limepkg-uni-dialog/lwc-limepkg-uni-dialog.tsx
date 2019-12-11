@@ -20,8 +20,8 @@ export class Dialog implements LimeWebComponent {
     @Prop()
     public context: LimeWebComponentContext;
 
-    @Prop()
-    onClose: Function
+/*     @Prop()
+    onClose: Function */
 
     @Element()
     public element: HTMLElement;
@@ -58,6 +58,13 @@ export class Dialog implements LimeWebComponent {
         bubbles: true
     }) closeDialog: EventEmitter;
 
+    @Event({
+        eventName: 'saveStatusChange',
+        composed: true,
+        cancelable: true,
+        bubbles: true
+    }) saveStatusChange: EventEmitter;
+
    // @Prop()
     //dialogDropDownOptions: Option[];
 
@@ -67,17 +74,19 @@ export class Dialog implements LimeWebComponent {
     constructor() {
         this.closeDialogHandler = this.closeDialogHandler.bind(this);
         this.statusOnChangeHandler = this.statusOnChangeHandler.bind(this);
+        this.saveStatusChangeHandler = this.saveStatusChangeHandler.bind(this);
     }
 
-    // Fixa event
+    
+    private saveStatusChangeHandler(event) {
+        this.saveStatusChange.emit(event);
+    }
+
     private closeDialogHandler(event) {
         this.closeDialog.emit(event);
     }
 
-
-
     statusOnChangeHandler(event) {
-
         this.statusOnChange.emit(event);
     }
 
@@ -99,6 +108,7 @@ export class Dialog implements LimeWebComponent {
                 />
 
                 <limel-flex-container justify="end" slot="button">
+                <limel-button label="Save" onClick={this.saveStatusChangeHandler} />
                     <limel-button label="Close" onClick={this.closeDialogHandler} />
                 </limel-flex-container>
             </limel-dialog>

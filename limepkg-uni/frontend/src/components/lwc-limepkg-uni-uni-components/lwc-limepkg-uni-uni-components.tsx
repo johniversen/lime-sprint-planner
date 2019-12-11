@@ -23,22 +23,36 @@ export class UniComponents implements LimeWebComponent {
 
     @Element()
     element: HTMLElement;
-
+    
+    // Ändra properties namn
     @Prop()
-    mainData: [{
-        title: string,
-        secondaryText: string,
-        priorityValue: number,
-        status: string,
-        postId: number,
-        priority: string
-    }];
+    mainData: Array<{
+        priorityValue: number
+        Card: {
+            Cardtitle: string,
+            Responsible: string
+        },
+        AdditionalInfo: {
+        }
+        postId: number
+        /*         title: string,
+                secondaryText: string,
+                priorityValue: number,
+                status: string,
+                postId: number,
+                priority: string */
+        /*      title: string,
+             secondaryText: string,
+             priorityValue: number,
+             status: string,
+             postId: number,
+             priority: string */
+    }>;
 
     @Prop()
     limeTypeMetaData: {}
 
-    @Prop()
-    onListItemClick: (event: CustomEvent<ListItem>) => void;
+
 
     @State()
     private listContainer = [];
@@ -46,21 +60,26 @@ export class UniComponents implements LimeWebComponent {
     constructor() {
         this.createOutput = this.createOutput.bind(this);
     }
-    public componentWillRender() {
+    public componentWillLoad() {
         this.createOutput();
     }
-
+    public componentWillUpdate() {
+        console.log("UNI UNI Component will update()")
+        this.createOutput();
+    }
+    // Ändra properties namn
     private createOutput() {
-        this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
+        let tempMainData = { ...this.mainData };
+        tempMainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         let columnList = []
         this.listContainer = [];
 
         // If prio exists, create columns for each prio
-        if (this.limeTypeMetaData['prio']) {
-            Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
+        if (this.limeTypeMetaData['PriorityHierarchy']) {
+            Object.keys(this.limeTypeMetaData['PriorityHierarchy']).forEach((key) => {
                 let column = {
                     header: key[0].toUpperCase() + key.slice(1),
-                    prio: this.limeTypeMetaData['prio'][key],
+                    prio: this.limeTypeMetaData['PriorityHierarchy'][key],
                     items: []
                 }
                 column.items.push(<h4 class="column-header">{column.header}</h4>)
@@ -79,17 +98,32 @@ export class UniComponents implements LimeWebComponent {
 
         this.listContainer = [];
 
-        this.mainData.forEach(object => {
-            let secondaryText = null;
-            if (object.secondaryText != null) {
-                secondaryText = object.secondaryText;
-            }
+        tempMainData.forEach(object => {
+            let additionalData: Array<ListItem<any>> = [];
+            let reqInfo = {
+                header: object.Card.Cardtitle,
+                postId: object.postId
+            };
+            delete object.Card.Cardtitle;
+            delete object.postId;
+            let listItem;
+            Object.keys(object).forEach((key, value) => {
+                listItem = {
+                    text: key,
+                    secondaryText: value
+                }
+                additionalData.push(listItem as ListItem);
+            });
+            //let secondaryText = null;
+
             let item =
-                <lwc-limepkg-uni-card 
-                    header={object.title} 
-                    subTitle={secondaryText} 
-                    postId={object.postId} 
-                    priority={object.priority}
+                <lwc-limepkg-uni-card
+                    reqInfo={reqInfo}   
+                    additionalInfo={additionalData}
+                // header={object.Card.Cardtitle}
+                    //subTitle={secondaryText}
+                    //postId={object.postId}
+                // priority={object.priority}
                 />
 
             let temp = columnList.find(col => col.prio === object.priorityValue);
@@ -108,6 +142,7 @@ export class UniComponents implements LimeWebComponent {
                 </limel-flex-container>
             )
         })
+        console.log(output);
         return (
             <limel-flex-container class="card" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
                 {output}
