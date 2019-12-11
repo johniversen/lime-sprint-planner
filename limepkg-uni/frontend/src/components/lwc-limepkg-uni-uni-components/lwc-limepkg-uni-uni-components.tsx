@@ -102,31 +102,16 @@ export class UniComponents implements LimeWebComponent {
         this.listContainer = [];
 
         this.mainData.forEach(object => {
-            let additionalData:Array<any> = [];
-            let reqInfo = {
-                header: object.Card.Cardtitle,
-                postId: object.postId
-            };
-            delete object.Card.Cardtitle;
-            delete object.postId;
-            let listItem;
-            Object.keys(object).forEach((key, value) => {
-                listItem = {
-                    text: key,
-                    secondaryText: value
-                }
-                additionalData.push(listItem);
-            });
-            //let secondaryText = null;
-
+            let card = object.Card
+            let optionalInfo = {}
+            if (object.AdditionalInfo['Priority']) {
+                optionalInfo['Priority'] = object.AdditionalInfo['Priority']
+            }
             let item =
                 <lwc-limepkg-uni-card
-                    reqInfo={reqInfo}   
-                    additionalInfo={additionalData}
-                // header={object.Card.Cardtitle}
-                    //subTitle={secondaryText}
-                    //postId={object.postId}
-                // priority={object.priority}
+                    postId={object.postId}   
+                    optionalInfo={optionalInfo}
+                    cardData={card}
                 />
 
             let temp = columnList.find(col => col.prio === object.priorityValue);

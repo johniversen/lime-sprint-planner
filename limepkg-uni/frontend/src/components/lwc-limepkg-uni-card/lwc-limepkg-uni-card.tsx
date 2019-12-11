@@ -30,15 +30,14 @@ export class Card implements LimeWebComponent {
     @Prop()
     public priority: string;
 
+    @Prop()
+    public optionalInfo: {}
 
     @Prop()
-    public reqInfo: {
-        header: String,
-        postId: number
-    }
+    public postId
 
     @Prop()
-    public additionalInfo: Array<any> = [];
+    public cardData: {}
 
     @Event({
         eventName: 'cardClicked',
@@ -53,35 +52,30 @@ export class Card implements LimeWebComponent {
 
     private cardClick() {
         let event = {
-            value: this.reqInfo.postId,
+            value: this.postId,
         }
         this.cardClicked.emit(event);
     }
 
 
     public render() {
-        let cardData;
-        cardData = this.additionalInfo.forEach(element => {
-            return <p>{element}</p>
-        });
-        if (this.additionalInfo['priority'] !== null && this.additionalInfo['priority'] == "urgent") {
+        let cardDataOutput = []
+        for (const [key, value] of Object.entries(this.cardData)) {
+            if(key !== 'CardTitle')
+                cardDataOutput.push(<p>{key + ':' + value}</p>)
+        }
+        if (this.optionalInfo['Priority'] !== null && this.optionalInfo['Priority'] == "urgent") {
             return (
-                <div class="urgent card" id={`${this.reqInfo.postId}`} onClick={this.cardClick.bind(this)}>
-                    <h1>{this.reqInfo.header}</h1>
-                    <li>
-                        {cardData}
-                    </li>
-                    
+                <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
+                    <h1>{this.cardData['CardTitle']}</h1>
+                        {cardDataOutput}
                 </div>
             );
         } else {
             return (
-                <div class="card" id={`${this.reqInfo.postId}`} onClick={this.cardClick.bind(this)}>
-                    <h1>{this.reqInfo.header}</h1>
-                    <h1>{this.reqInfo.header}</h1>
-                    <li>
-                        {cardData}
-                    </li>
+                <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
+                    <h1>{this.cardData['CardTitle']}</h1>
+                        {cardDataOutput}
                 </div>
             );
         }
