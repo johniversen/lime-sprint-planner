@@ -25,20 +25,19 @@ export class UniComponents implements LimeWebComponent {
     element: HTMLElement;
 
     @Prop()
-    mainData: [{
+    mainData:  Array<{
         title: string,
         secondaryText: string,
         priorityValue: number,
         status: string,
         postId: number,
         priority: string
-    }];
+    }>;
 
     @Prop()
     limeTypeMetaData: {}
 
-    @Prop()
-    onListItemClick: (event: CustomEvent<ListItem>) => void;
+  
 
     @State()
     private listContainer = [];
@@ -46,10 +45,13 @@ export class UniComponents implements LimeWebComponent {
     constructor() {
         this.createOutput = this.createOutput.bind(this);
     }
-    public componentWillRender() {
+    public componentWillLoad() {
         this.createOutput();
     }
-
+    public componentWillUpdate() {
+        console.log("UNI UNI Component will update()")
+        this.createOutput();
+    }
     private createOutput() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         let columnList = []
@@ -108,6 +110,7 @@ export class UniComponents implements LimeWebComponent {
                 </limel-flex-container>
             )
         })
+        console.log(output);
         return (
             <limel-flex-container class="outputContainer" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
                 {output}
