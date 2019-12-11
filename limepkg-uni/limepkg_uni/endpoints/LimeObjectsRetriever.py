@@ -137,6 +137,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
             # Add priority
             status = obj['PriorityVariable']
             newObj['priorityValue'] = config['limetypes'][limetype]['PriorityHierarchy'][status]
+            newObj['postId'] = obj['postId']
 
             pp.pprint(obj)
 
