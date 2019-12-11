@@ -1,5 +1,4 @@
 limel-grid {
-    font-family:'Roboto','Open Sans','Helvetica Neue', Arial, Helvetica, Verdana, sans-serif;
     --lime-grid-columns: 1;
     --lime-grid-cell-height: 80px;
     --lime-grid-area:
@@ -25,7 +24,7 @@ grid-header{
     border-radius: 2px;
 }
 
-.citrus-icon {
+.sprint-icon {
     box-sizing: border-box;
     padding: 0%;
     margin-top: 1%;
@@ -47,7 +46,7 @@ grid-header > #heading-icon{
 }
 
 #heading-icon h1{
-    font-size: small;
+    font-size: medium;
 }
 
 grid-header > #filter{

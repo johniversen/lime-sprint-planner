@@ -2,11 +2,9 @@ import {
     LimeWebComponent,
     LimeWebComponentContext,
     LimeWebComponentPlatform,
-    NotificationService,
-    PlatformServiceName,
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, Event, EventEmitter } from '@stencil/core';
-import { Option, ListItem, } from '@limetech/lime-elements';
+import { Option, ListItem, DialogHeading } from '@limetech/lime-elements';
 
 @Component({
     tag: 'lwc-limepkg-uni-dialog',
@@ -79,12 +77,15 @@ export class Dialog implements LimeWebComponent {
     }
 
     public render() {
+       const heading: DialogHeading = {
+            title: this.dialogMainData.title,
+            icon: 'info_popup'
+        };
+
         console.log("Render i nya dialog!");
         console.log(this.isVisable)
         return (
-            <limel-dialog open={this.isVisable} onClose={this.closeDialogHandler}>
-
-                <h1>{this.dialogMainData.title}</h1>
+            <limel-dialog heading={heading} open={this.isVisable} onClose={this.closeDialogHandler}>
                 <limel-list items={this.dialogMainData.dialogListItems}>
                 </limel-list>
                 <limel-select
