@@ -34,12 +34,20 @@ export class Framework implements LimeWebComponent {
 
     @State()
     private mainData: Array<{
-        title: string,
+        priorityValue: number
+        Card: {
+            Cardtitle: string,
+            Responsible: string
+        },
+        AdditionalInfo: {
+        }
+        postId: number
+/*         title: string,
         secondaryText: string,
         priorityValue: number,
         status: string,
         postId: number,
-        priority: string
+        priority: string */
     }>;
 
 
@@ -158,10 +166,11 @@ export class Framework implements LimeWebComponent {
         });
     }
 
+    // Ändra properties namn
     private updateCurrentCardStatus() {
         let item;
         this.mainData = this.mainData.map(obj => {
-            if (obj.postId === this.currentPostId) {
+            if (obj['postId'] === this.currentPostId) {
                 item = { ...obj, status: this.selectedStatus.value };
                 item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['prio'][this.selectedStatus.text];
                 obj = Object.assign(item);
@@ -170,8 +179,8 @@ export class Framework implements LimeWebComponent {
         })
     }
 
+    // Ändra properties namn
     private updateStatusOptions() {
-        // this.statusOptions = [];
         let statusOptions = [];
         Object.keys(this.limetypeMetaData[this.selectedLimetype.value]['prio']).forEach((key) => {
             let item = {
@@ -180,32 +189,25 @@ export class Framework implements LimeWebComponent {
             }
             statusOptions.push(item);
         })
-
         return statusOptions;
     }
-
+// Ändra properties namn
     @Listen('cardClicked')
     private openDialog(event) {
-
         console.log("CardClicked")
         let statusOptions = this.updateStatusOptions();
-
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
-
         let dialogData = Object.assign({}, item);
-
         this.selectedStatus = statusOptions.find((option: any) => {
-            return item.status === option.text && item.status === option.value
+            return item.priorityValue === option.text && item.priorityValue === option.value
         })
         let dialogOutput: Array<ListItem<any>> = [];
-        let title = dialogData.title;
-        delete dialogData.title;
+        let title = dialogData.Card.Cardtitle;
+        delete dialogData.Card.Cardtitle;
         delete dialogData.priorityValue;
         delete dialogData.postId;
-
         const entries = Object.entries(dialogData);
-
         for (let [key, value] of entries) {
             let item = {}
             if (value == "") {
@@ -221,22 +223,17 @@ export class Framework implements LimeWebComponent {
             }
             dialogOutput.push((item as ListItem));
         }
-
         this.dialogMainData = {
             title: title,
             dialogListItems: dialogOutput,
             dialogDropDownOptions: statusOptions
         };
         this.dialogIsOpen = true;
-
     }
 
     @Listen('closeDialog')
     private closeDialog() {
-        //this.updateCurrentCardStatus();
         this.dialogIsOpen = false;
-        //this.dialog = null;
-        // this.updateCurrentCardStatus();
         this.currentPostId = null;
     }
 
@@ -250,7 +247,6 @@ export class Framework implements LimeWebComponent {
         this.getDataFromEndPoint(this.selectedLimetype.value)
     }
 
-    //Varför körs denna två gånger?
     private limetypeOnChange(event) {
         this.selectedLimetype = event.detail;
         let limeType = event.detail.value;
@@ -273,8 +269,6 @@ export class Framework implements LimeWebComponent {
         this.selectedStatus = this.dialogMainData.dialogDropDownOptions.find((option: any) => {
             return event.detail.detail.text === option.text && event.detail.detail.value === option.value
         })
-        //this.updateCurrentCardStatus();
-        // this.sendPutRequest();
     }
 
     public render() {
