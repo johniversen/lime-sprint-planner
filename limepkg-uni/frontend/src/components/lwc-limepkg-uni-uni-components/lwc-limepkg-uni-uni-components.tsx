@@ -25,20 +25,19 @@ export class UniComponents implements LimeWebComponent {
     element: HTMLElement;
 
     @Prop()
-    mainData: [{
+    mainData:  Array<{
         title: string,
         secondaryText: string,
         priorityValue: number,
         status: string,
         postId: number,
         priority: string
-    }];
+    }>;
 
     @Prop()
     limeTypeMetaData: {}
 
-    @Prop()
-    onListItemClick: (event: CustomEvent<ListItem>) => void;
+  
 
     @Prop()
     dragObjectID: string;
@@ -53,27 +52,40 @@ export class UniComponents implements LimeWebComponent {
         this.drop = this.drop.bind(this);
     }
 
-    public componentWillRender() {
+    public componentWillLoad() {
         this.createOutput();
     }
-
+    public componentWillUpdate() {
+        console.log("UNI UNI Component will update()")
+        this.createOutput();
+    }
     private createOutput() {
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
-        console.log(this.limeTypeMetaData);
         let columnList = []
         this.listContainer = [];
 
-        Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
+        // If prio exists, create columns for each prio
+        if (this.limeTypeMetaData['prio']) {
+            Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
+                let column = {
+                    header: key[0].toUpperCase() + key.slice(1),
+                    prio: this.limeTypeMetaData['prio'][key],
+                    items: []
+                }
+                column.items.push(<h4 class="column-header">{column.header}</h4>)
+                columnList.push(column);
+            })
+            columnList.sort((a, b) => (a.prio > b.prio) ? 1 : ((b.prio > a.prio) ? -1 : 0));
+        } else { // If prio doesnt exist, show all objects in one column
             let column = {
-                header: key,
-                prio: this.limeTypeMetaData['prio'][key],
+                header: "Priority undefined",
+                prio: 1,
                 items: []
             }
             column.items.push(<h4 class="column-header">{column.header}</h4>)
             columnList.push(column);
-        })
+        }
 
-        columnList.sort((a, b) => (a.prio > b.prio) ? 1 : ((b.prio > a.prio) ? -1 : 0));
         this.listContainer = [];
 
         this.mainData.forEach(object => {
@@ -82,7 +94,12 @@ export class UniComponents implements LimeWebComponent {
                 secondaryText = object.secondaryText;
             }
             let item =
-                <lwc-limepkg-uni-card header={object.title} subTitle={secondaryText} postId={object.postId} priority={object.priority} />
+                <lwc-limepkg-uni-card 
+                    header={object.title} 
+                    subTitle={secondaryText} 
+                    postId={object.postId} 
+                    priority={object.priority}
+                />
 
             let temp = columnList.find(col => col.prio === object.priorityValue);
             temp['items'].push(item);
@@ -107,7 +124,6 @@ export class UniComponents implements LimeWebComponent {
     }
 
     public render() {
-        console.log("Render i main-grid-compoennt");
         let output = this.listContainer.map(list => {
             return (
                 <div onDragOver={this.allowDrop} onDrop={this.drop}>
@@ -117,6 +133,7 @@ export class UniComponents implements LimeWebComponent {
                 </div>
             )
         })
+        console.log(output);
         return (
             <limel-flex-container class="card" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
                 {output}

@@ -15,9 +15,9 @@ limel-grid {
 grid-header{
     box-sizing: border-box;
     grid-area: header;
-    --lime-grid-columns: 3;
+    --lime-grid-columns: 4;
     --lime-grid-area:
-        "heading filter week-display"; 
+        "heading filter week-display no-filter-button"; 
     padding: 1%;
     gap: 5%;
     background-color:whitesmoke;
@@ -60,6 +60,10 @@ grid-header > #week-display{
     grid-area: week-display;
 }
 
+grid-header > #no-filter-button{
+    grid-area: no-filter-button;
+}
+
 #week-display > label > .mdc-text-field {
     background-color: #444444 !important;
 }
@@ -82,6 +86,3 @@ grid-main{
 #urgent:empty{
     display: none;
 }
-
-
-
