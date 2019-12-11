@@ -11,6 +11,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .card {
+    display: grid;
+    grid-template-columns: 1;
+    grid-template-rows: 1;
+    grid-template-areas: 
+        "title"
+        "secondary";
+
     border-radius: 3px;
     padding: 5px;
     padding-bottom: 15px;
@@ -25,28 +32,30 @@ h1, h2, h3, h4, h5, h6 {
         font-size: 12px;
         color: #575756;
         text-align: left;
+        grid-area: title;
+        justify-self: start;
     }
     
     h3 {
         font-size: 10px;
         color: #adadad;
         text-align: left;
+        grid-area: secondary;
+        justify-self: start;
     } 
     
 }
 
 .urgent {
-//    background-color: #f0575094;
+    grid-template-columns: 3;
+    grid-template-rows: 2;
+    grid-template-areas: 
+        "icon title title"
+        ". secondary secondary";
 
-    h3 {
-        text-align: left;
-        font-size: 10px;
-        color: #575756;
-    } 
-
-    #card_icon {
+    .card_icon {
         color: var(--lime-deep-red);
-        float: left;
+        grid-area: icon;
     }
 }
 
