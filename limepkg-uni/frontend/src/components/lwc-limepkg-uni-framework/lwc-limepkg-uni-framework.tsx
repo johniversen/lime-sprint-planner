@@ -332,9 +332,6 @@ export class Framework implements LimeWebComponent {
                         {noFilterButton}
                     </div>
                 </grid-header>
-                <div id="urgent">
-
-                </div>
                 <grid-main>
                     {errorMessage}
                     {cardData}

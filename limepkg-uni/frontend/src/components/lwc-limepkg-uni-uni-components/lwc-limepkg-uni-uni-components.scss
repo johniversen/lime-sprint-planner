@@ -14,12 +14,30 @@ h1, h2, h3, h4, h5, h6 {
     border-right: dashed #adadad;
 }
 
-.card{
+.outputContainer{
     box-sizing: border-box;
-    padding: 0;
+    padding: 1%;
     width: 100%;
     align-items: stretch;
     flex-direction: row;
+    background-color: white;
+    border-radius: 2px;
+    
+    :nth-child(2n+2) h4 {
+        border-bottom: 1.5px solid #f76b07
+    }
+    :nth-child(3n+3) h4 {
+        border-bottom: 1.5px solid #00b3a7 
+    }
+    :nth-child(4n+4) h4 {
+        border-bottom: 1.5px solid #ff3195
+    }
+    :nth-child(5n+5) h4 {
+        border-bottom: 1.5px solid #00b7ff
+    }
+    :nth-child(6n+6) h4 {
+        border-bottom: 1.5px solid #85c436
+    }
 }
 
 limel-list > ul > li{
@@ -31,4 +49,6 @@ limel-list > ul > li{
     text-align: center;
     font-size: 16px;
     margin-bottom: 20px;
+    border-bottom: 1.5px solid #575756;
+    padding: 3px;
 }

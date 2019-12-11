@@ -103,13 +103,13 @@ export class UniComponents implements LimeWebComponent {
     public render() {
         let output = this.listContainer.map(list => {
             return (
-                <limel-flex-container direction={'vertical'} align={"stretch"} justify={"start"}>
+                <limel-flex-container class="cardContainer" direction={'vertical'} align={"stretch"} justify={"start"}>
                     {list}
                 </limel-flex-container>
             )
         })
         return (
-            <limel-flex-container class="card" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
+            <limel-flex-container class="outputContainer" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
                 {output}
             </limel-flex-container>
         );
