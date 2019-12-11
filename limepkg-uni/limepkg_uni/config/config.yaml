@@ -47,3 +47,57 @@ limetypes:
       Misc: misc
     Optional:                                     # Optional fields that add functionality on the frontend.
       Date Deadline: donedate                     # Formerly date_done - Will display a weekpicker on the frontend if defined. 
+
+  deal:
+    DisplayName: Deal
+    PriorityVariable: dealstatus
+    PriorityHierarchy:
+      contact: 1
+      requirement: 2
+      tender: 3
+      agreement: 4
+      rejection: 5
+      onhold: 6
+    Card:
+      CardTitle: name
+    AdditionalInfo:
+      value: value
+      priority: probability
+      wonlostreason: wonlostreason
+      weighted: weightedvalue
+
+  company:
+    DisplayName: Company
+    PriorityVariable: buyingstatus 
+    PriorityHierarchy:
+      notinterested: 1
+      inactive: 2
+      inactive: 3
+      prospect: 4
+      active: 5
+    Card:
+      CardTitle: name
+      Country: country
+
+  todo:
+    DisplayName: To Do
+    Card:
+      CardTitle: subject
+      status: location  
+      note: note
+
+  campaign:
+    DisplayName: Campaign
+    PriorityVariable: campaignstatus
+    PriorityHierarchy:
+      cancelled: 1
+      planned: 2
+      ongoing: 3
+      finished: 4
+    Card:
+      CardTitle: name
+    AdditionalInfo:
+      type: type
+      purpose: purpose
+      goal: goal
+      workmode: workmode

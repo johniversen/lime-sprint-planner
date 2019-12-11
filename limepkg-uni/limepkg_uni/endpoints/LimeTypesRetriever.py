@@ -5,6 +5,7 @@ from webargs.flaskparser import use_args
 from ..endpoints import api
 import lime_query
 from limepkg_uni.config import RuntimeConfig
+import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -25,11 +26,19 @@ class LimetypesRetriever(webserver.LimeResource):
 
         for key, val in config['limetypes'].items():
             response['limetypes'][key] = {}
-            response['limetypes'][key]['PriorityVariable'] = val['PriorityVariable']
             response['limetypes'][key]['DisplayName'] = val['DisplayName']
+            if 'PriorityVariable'  in val: response['limetypes'][key]['PriorityVariable'] = val['PriorityVariable']
             if 'PriorityHierarchy' in val: response['limetypes'][key]['PriorityHierarchy'] = val['PriorityHierarchy']
-            if 'Date Deadline' in val: response['limetypes'][key]['Optional']['Date Deadline'] = val['date_done'] 
+            if 'Optional' in val: 
+                if 'Date Deadline' in val['Optional']: 
+                    response['limetypes'][key]['Optional'] = {}
+                    response['limetypes'][key]['Optional']['Date Deadline'] = val['Optional']['Date Deadline'] 
 
+        pp = pprint.PrettyPrinter(indent=2)
+        print(' ')
+        print('response before format:')
+        pp.pprint(response)
+        print(' ')
         return response
 
     def get_config(self):

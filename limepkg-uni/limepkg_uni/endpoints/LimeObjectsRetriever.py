@@ -153,7 +153,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
                     for innerkey, innerval in val.items():
                         pp.pprint(innerval)
                         # If date, format the date
-                        if innerkey.startswith('Date ') and innerval != None:
+                        if innerkey.startswith('Date ') and obj[innerkey] != None:
                             if innerkey in obj: newObj[key][innerkey] = obj[innerkey].strftime('%d-%m-%Y')
                         else:
                             if innerkey in obj: newObj[key][innerkey] = obj[innerkey] 
@@ -161,7 +161,7 @@ class LimeobjectsRetriever(webserver.LimeResource):
                 else:
                     pp.pprint(val)
                     # If date, format the date
-                    if key.startswith('Date ') and val != None:
+                    if key.startswith('Date ') and obj[key] != None:
                         if key in obj: newObj[key] = obj[key].strftime('%d-%m-%Y')
                     else:
                         if key in obj: newObj[key] = obj[key]
