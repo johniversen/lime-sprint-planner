@@ -9,7 +9,7 @@ from limepkg_uni.config import RuntimeConfig
 logger = logging.getLogger(__name__)
 
 class LimetypesRetriever(webserver.LimeResource):
-    """Returns a list of lime objects from the db, formatted according to config"""
+    '''Returns a list of lime objects from the db, formatted according to config'''
 
     # This describes the schema for the payload when posting a new deal
     # See https://webargs.readthedocs.io/en/latest/ for more info.
@@ -25,10 +25,10 @@ class LimetypesRetriever(webserver.LimeResource):
 
         for key, val in config['limetypes'].items():
             response['limetypes'][key] = {}
-            response['limetypes'][key]['status'] = val['status']
-            response['limetypes'][key]['displayName'] = val['displayName']
-            if 'prio'      in val: response['limetypes'][key]['prio']      = val['prio']
-            if 'date_done' in val: response['limetypes'][key]['date_done'] = val['date_done'] 
+            response['limetypes'][key]['PriorityVariable'] = val['PriorityVariable']
+            response['limetypes'][key]['DisplayName'] = val['DisplayName']
+            if 'PriorityHierarchy' in val: response['limetypes'][key]['PriorityHierarchy'] = val['PriorityHierarchy']
+            if 'Date Deadline' in val: response['limetypes'][key]['Optional']['Date Deadline'] = val['date_done'] 
 
         return response
 
