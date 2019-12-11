@@ -27,20 +27,28 @@ export class Framework implements LimeWebComponent {
     @State()
     private dateValue = new Date();
 
-   // private statusOptions: Option[] = [];
+    // private statusOptions: Option[] = [];
 
     @State()
     private limetypeOptions: Option[] = []
 
     @State()
-    private mainData: [{
-        title: string,
+    private mainData: Array<{
+        priorityValue: number
+        Card: {
+            Cardtitle: string,
+            Responsible: string
+        },
+        AdditionalInfo: {
+        }
+        postId: number
+/*         title: string,
         secondaryText: string,
         priorityValue: number,
         status: string,
         postId: number,
-        priority: string
-    }];
+        priority: string */
+    }>;
 
 
     @State()
@@ -52,7 +60,8 @@ export class Framework implements LimeWebComponent {
     private http: HttpService;
     private dialog = null;
     private fetchingDataComplete = false;
-    private currentPostId = null;
+
+    private currentPostId: number;
 
     public limetypeMetaData = [];
     public selectedLimetype: Option;
@@ -67,13 +76,14 @@ export class Framework implements LimeWebComponent {
 
 
     constructor() {
-        this.handleDateChange         = this.handleDateChange.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
         this.handleDateChangeNoFilter = this.handleDateChangeNoFilter.bind(this);
-        this.limetypeOnChange         = this.limetypeOnChange.bind(this);
-        this.openDialog               = this.openDialog.bind(this);
-        this.closeDialog              = this.closeDialog.bind(this);
-        this.statusOnChange           = this.statusOnChange.bind(this);
-        this.updateCurrentCardStatus  = this.updateCurrentCardStatus.bind(this);
+        this.limetypeOnChange = this.limetypeOnChange.bind(this);
+        this.openDialog = this.openDialog.bind(this);
+        this.closeDialog = this.closeDialog.bind(this);
+        this.statusOnChange = this.statusOnChange.bind(this);
+        this.updateCurrentCardStatus = this.updateCurrentCardStatus.bind(this);
+        this.saveStatus = this.saveStatus.bind(this);
     }
 
     public componentWillLoad() {
@@ -82,9 +92,9 @@ export class Framework implements LimeWebComponent {
     }
 
     public formatDate(date) {
-        let formattedDate = date.getDate()  + '-'
-        formattedDate    += date.getMonth() + 1 + '-'
-        formattedDate    += date.getFullYear()
+        let formattedDate = date.getDate() + '-'
+        formattedDate += date.getMonth() + 1 + '-'
+        formattedDate += date.getFullYear()
         return formattedDate
     }
 
@@ -99,11 +109,13 @@ export class Framework implements LimeWebComponent {
         this.limetypeMetaData = { ...res.limetypes }
     }
 
+
     private  encodeQueryData(data) {
        const ret = [];
        for (let d in data)
            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
        return ret.join('&');
+
     }
 
     private getDataFromEndPoint(limeType) {
@@ -154,17 +166,22 @@ export class Framework implements LimeWebComponent {
         });
     }
 
+    // Ändra properties namn
     private updateCurrentCardStatus() {
-        this.mainData.map(obj => {
-            if (obj.postId === this.currentPostId) {
-                return obj = { ...obj, status: this.selectedStatus.value };
+        let item;
+        this.mainData = this.mainData.map(obj => {
+            if (obj['postId'] === this.currentPostId) {
+                item = { ...obj, status: this.selectedStatus.value };
+                item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['prio'][this.selectedStatus.text];
+                obj = Object.assign(item);
             }
+            return obj;
         })
     }
 
+    // Ändra properties namn
     private updateStatusOptions() {
-       // this.statusOptions = [];
-       let statusOptions = [];
+        let statusOptions = [];
         Object.keys(this.limetypeMetaData[this.selectedLimetype.value]['prio']).forEach((key) => {
             let item = {
                 text: key,
@@ -172,32 +189,25 @@ export class Framework implements LimeWebComponent {
             }
             statusOptions.push(item);
         })
-        
         return statusOptions;
     }
-
+// Ändra properties namn
     @Listen('cardClicked')
     private openDialog(event) {
-
         console.log("CardClicked")
         let statusOptions = this.updateStatusOptions();
-
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
-
         let dialogData = Object.assign({}, item);
-
         this.selectedStatus = statusOptions.find((option: any) => {
-            return item.status === option.text && item.status === option.value
+            return item.priorityValue === option.text && item.priorityValue === option.value
         })
         let dialogOutput: Array<ListItem<any>> = [];
-        let title = dialogData.title;
-        delete dialogData.title;
+        let title = dialogData.Card.Cardtitle;
+        delete dialogData.Card.Cardtitle;
         delete dialogData.priorityValue;
         delete dialogData.postId;
-
         const entries = Object.entries(dialogData);
-
         for (let [key, value] of entries) {
             let item = {}
             if (value == "") {
@@ -213,22 +223,17 @@ export class Framework implements LimeWebComponent {
             }
             dialogOutput.push((item as ListItem));
         }
-
         this.dialogMainData = {
             title: title,
             dialogListItems: dialogOutput,
             dialogDropDownOptions: statusOptions
         };
         this.dialogIsOpen = true;
-
     }
 
     @Listen('closeDialog')
     private closeDialog() {
-        //this.updateCurrentCardStatus();
         this.dialogIsOpen = false;
-        //this.dialog = null;
-        this.updateCurrentCardStatus();
         this.currentPostId = null;
     }
 
@@ -242,7 +247,6 @@ export class Framework implements LimeWebComponent {
         this.getDataFromEndPoint(this.selectedLimetype.value)
     }
 
-    //Varför körs denna två gånger?
     private limetypeOnChange(event) {
         this.selectedLimetype = event.detail;
         let limeType = event.detail.value;
@@ -250,13 +254,21 @@ export class Framework implements LimeWebComponent {
     }
 
 
+    @Listen('saveStatusChange')
+    private saveStatus(event) {
+        console.log(this.selectedStatus);
+        this.updateCurrentCardStatus();
+        this.sendPutRequest();
+        this.closeDialog();
+        
+    }
+
+
     @Listen('statusOnChange')
     private statusOnChange(event) {
-
         this.selectedStatus = this.dialogMainData.dialogDropDownOptions.find((option: any) => {
             return event.detail.detail.text === option.text && event.detail.detail.value === option.value
         })
-        this.sendPutRequest();
     }
 
     public render() {
@@ -268,12 +280,11 @@ export class Framework implements LimeWebComponent {
             this.dialog = null;
         }
 
-        console.log(this.dialog);
 
-        let cardData       = null 
-        let weekPicker     = null
+        let cardData = null
+        let weekPicker = null
         let noFilterButton = null
-        let errorMessage   = this.mainData == null ? <h2>Select a limetype above</h2> : null
+        let errorMessage = this.mainData == null ? <h2>Select a limetype above</h2> : null
         // Felmeddelande när ingen data finns? ev. när http request failar?
 
 
@@ -285,30 +296,30 @@ export class Framework implements LimeWebComponent {
                     limeTypeMetaData = this.limetypeMetaData[this.selectedLimetype.value];
                 }
             })
-            
+
             cardData =
                 <lwc-limepkg-uni-uni-components
-                    platform         = {this.platform}
-                    context          = {this.context}
-                    mainData         = {this.mainData}
-                    limeTypeMetaData = {limeTypeMetaData}
-                    onListItemClick  = {this.openDialog}
+                    platform={this.platform}
+                    context={this.context}
+                    mainData={this.mainData}
+                    limeTypeMetaData={limeTypeMetaData}
+
                 />
 
             // If the limetype has a defined date_done, show weekpicker
             if (this.limetypeMetaData[this.selectedLimetype.value]['date_done']) {
-                weekPicker = 
+                weekPicker =
                     <limel-date-picker
-                        type     = "week"
-                        label    = "week"
-                        value    = {this.dateValue}
-                        onChange = {this.handleDateChange}
+                        type="week"
+                        label="week"
+                        value={this.dateValue}
+                        onChange={this.handleDateChange}
                     />
-                noFilterButton = 
+                noFilterButton =
                     <limel-button
-                        label   = "Show all"
-                        primary = {true}
-                        onClick = {this.handleDateChangeNoFilter}
+                        label="Show all"
+                        primary={true}
+                        onClick={this.handleDateChangeNoFilter}
                     />
             }
         }
@@ -323,10 +334,10 @@ export class Framework implements LimeWebComponent {
                     </div>
                     <div id="filter">
                         <limel-select
-                            label    = "Limetype"
-                            value    = {this.selectedLimetype}
-                            options  = {this.limetypeOptions}
-                            onChange = {this.limetypeOnChange}
+                            label="Limetype"
+                            value={this.selectedLimetype}
+                            options={this.limetypeOptions}
+                            onChange={this.limetypeOnChange}
                         />
                     </div>
                     <div id="week-display">
