@@ -38,7 +38,7 @@ export class Card implements LimeWebComponent {
     }
 
     @Prop()
-    public additionalInfo: Array<ListItem<any>> = [];
+    public additionalInfo: Array<any> = [];
 
     @Event({
         eventName: 'cardClicked',
@@ -60,19 +60,28 @@ export class Card implements LimeWebComponent {
 
 
     public render() {
+        let cardData;
+        cardData = this.additionalInfo.forEach(element => {
+            return <p>{element}</p>
+        });
         if (this.additionalInfo['priority'] !== null && this.additionalInfo['priority'] == "urgent") {
             return (
                 <div class="urgent card" id={`${this.reqInfo.postId}`} onClick={this.cardClick.bind(this)}>
                     <h1>{this.reqInfo.header}</h1>
-                    <limel-list items={this.additionalInfo}></limel-list>
-                    <h3></h3>
+                    <li>
+                        {cardData}
+                    </li>
+                    
                 </div>
             );
         } else {
             return (
                 <div class="card" id={`${this.reqInfo.postId}`} onClick={this.cardClick.bind(this)}>
                     <h1>{this.reqInfo.header}</h1>
-                    <limel-list items={this.additionalInfo}></limel-list>
+                    <h1>{this.reqInfo.header}</h1>
+                    <li>
+                        {cardData}
+                    </li>
                 </div>
             );
         }

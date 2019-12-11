@@ -42,13 +42,13 @@ export class Framework implements LimeWebComponent {
         AdditionalInfo: {
         }
         postId: number
-/*         title: string,
-        secondaryText: string,
-        priorityValue: number,
-        status: string,
-        postId: number,
-        priority: string */
-    }>;
+        /*         title: string,
+                secondaryText: string,
+                priorityValue: number,
+                status: string,
+                postId: number,
+                priority: string */
+    }> = [];
 
 
     @State()
@@ -110,16 +110,17 @@ export class Framework implements LimeWebComponent {
     }
 
 
-    private  encodeQueryData(data) {
-       const ret = [];
-       for (let d in data)
-           ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
-       return ret.join('&');
+    private encodeQueryData(data) {
+        const ret = [];
+        for (let d in data)
+            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+        return ret.join('&');
 
     }
 
     private getDataFromEndPoint(limeType) {
         console.log("getDataFromEndpoint() ")
+        console.log(limeType)
         this.fetchingDataComplete = false;
         let args = {
             'limetype': limeType
@@ -154,8 +155,10 @@ export class Framework implements LimeWebComponent {
     }
 
     private updateLimetypeOptions(res) {
+        console.log("updateLImetype option");
+        console.log(res);
         for (let [key, val] of Object.entries(res['limetypes'])) {
-            let el = { text: val['displayName'] as string, value: key as string }
+            let el = { text: val['DisplayName'] as string, value: key as string }
             this.limetypeOptions.push(el)
         }
     }
@@ -191,7 +194,7 @@ export class Framework implements LimeWebComponent {
         })
         return statusOptions;
     }
-// Ändra properties namn
+    // Ändra properties namn
     @Listen('cardClicked')
     private openDialog(event) {
         console.log("CardClicked")
@@ -248,8 +251,11 @@ export class Framework implements LimeWebComponent {
     }
 
     private limetypeOnChange(event) {
+        console.log("Selected limetype handler on change");
+        console.log(this.selectedLimetype);
         this.selectedLimetype = event.detail;
         let limeType = event.detail.value;
+        console.log(this.selectedLimetype);
         this.getDataFromEndPoint(limeType);
     }
 
@@ -260,7 +266,7 @@ export class Framework implements LimeWebComponent {
         this.updateCurrentCardStatus();
         this.sendPutRequest();
         this.closeDialog();
-        
+
     }
 
 
@@ -272,8 +278,8 @@ export class Framework implements LimeWebComponent {
     }
 
     public render() {
-
-
+        console.log("framwork render()");
+        console.log(this.mainData);
         if (this.dialogIsOpen) {
             this.dialog = <lwc-limepkg-uni-dialog dialogMainData={this.dialogMainData} selectedStatus={this.selectedStatus} isVisable={this.dialogIsOpen}></lwc-limepkg-uni-dialog >
         } else {
@@ -284,7 +290,7 @@ export class Framework implements LimeWebComponent {
         let cardData = null
         let weekPicker = null
         let noFilterButton = null
-        let errorMessage = this.mainData == null ? <h2>Select a limetype above</h2> : null
+        let errorMessage = this.mainData.length === 0 ? <h2>Select a limetype above</h2> : null
         // Felmeddelande när ingen data finns? ev. när http request failar?
 
 
@@ -305,9 +311,11 @@ export class Framework implements LimeWebComponent {
                     limeTypeMetaData={limeTypeMetaData}
 
                 />
+            console.log("limetype meta data")
+            console.log(this.limetypeMetaData);
 
             // If the limetype has a defined date_done, show weekpicker
-            if (this.limetypeMetaData[this.selectedLimetype.value]['date_done']) {
+            if (this.limetypeMetaData[this.selectedLimetype.value]['Optional']['Date Deadline']) {
                 weekPicker =
                     <limel-date-picker
                         type="week"

@@ -67,10 +67,13 @@ export class UniComponents implements LimeWebComponent {
         console.log("UNI UNI Component will update()")
         this.createOutput();
     }
+
     // Ändra properties namn
     private createOutput() {
-        let tempMainData = { ...this.mainData };
-        tempMainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
+       // let tempMainData = [{}];
+        //tempMainData = { ...this.mainData };
+        //tempMainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
+        this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         let columnList = []
         this.listContainer = [];
 
@@ -98,8 +101,8 @@ export class UniComponents implements LimeWebComponent {
 
         this.listContainer = [];
 
-        tempMainData.forEach(object => {
-            let additionalData: Array<ListItem<any>> = [];
+        this.mainData.forEach(object => {
+            let additionalData:Array<any> = [];
             let reqInfo = {
                 header: object.Card.Cardtitle,
                 postId: object.postId
@@ -112,7 +115,7 @@ export class UniComponents implements LimeWebComponent {
                     text: key,
                     secondaryText: value
                 }
-                additionalData.push(listItem as ListItem);
+                additionalData.push(listItem);
             });
             //let secondaryText = null;
 
