@@ -146,7 +146,14 @@ export class UniComponents implements LimeWebComponent {
     private cardDrop(event) {
         var prio;
 
-        if (event.path[0].tagName == "H1") {
+        console.log("event");
+        console.log(event);
+
+        if (event.path[0].tagName == "DIV" && event.path[0].className == "container") {
+            prio = event.path[8].id;
+        } else if (event.path[0].tagName == "P") {
+            prio = event.path[7].id;
+        } else if (event.path[0].tagName == "H3" || event.path[0].tagName == "H1") {
             prio = event.path[6].id;
         } else if (event.path[0].tagName == "DIV") {
             prio = event.path[5].id;
