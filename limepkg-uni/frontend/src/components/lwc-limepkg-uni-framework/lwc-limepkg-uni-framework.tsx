@@ -172,14 +172,19 @@ export class Framework implements LimeWebComponent {
     // Ändra properties namn
     private updateCurrentCardStatus() {
         let item;
+        console.log("Updatecurrent card status");
+        console.log(this.currentPostId);
+        console.log(this.mainData);
         this.mainData = this.mainData.map(obj => {
             if (obj['postId'] === this.currentPostId) {
                 item = { ...obj, status: this.selectedStatus.value };
-                item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['prio'][this.selectedStatus.text];
+                item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['priorityHierarchy'][this.selectedStatus.text];
                 obj = Object.assign(item);
             }
+            console.log(obj);
             return obj;
         })
+       
     }
 
     // Ändra properties namn
@@ -199,14 +204,14 @@ export class Framework implements LimeWebComponent {
     private openDialog(event) {
         console.log("CardClicked")
         let statusOptions = this.updateStatusOptions();
+        
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
         let dialogData = Object.assign({}, item);
-        this.selectedStatus = statusOptions.find((option: any) => {
-            return item.priorityValue === option.text && item.priorityValue === option.value
-        })
 
-        console.log(item);
+        this.selectedStatus = statusOptions[item.priorityValue -1];
+
+        
         let dialogOutput: Array<ListItem<any>> = [];
         let title = dialogData.Card.CardTitle;
         delete dialogData.Card.CardTitle;
@@ -285,6 +290,7 @@ export class Framework implements LimeWebComponent {
     public render() {
         console.log("framwork render()");
         console.log(this.mainData);
+        console.log(this.selectedStatus);
         if (this.dialogIsOpen) {
             this.dialog = <lwc-limepkg-uni-dialog dialogMainData={this.dialogMainData} selectedStatus={this.selectedStatus} isVisable={this.dialogIsOpen}></lwc-limepkg-uni-dialog >
         } else {

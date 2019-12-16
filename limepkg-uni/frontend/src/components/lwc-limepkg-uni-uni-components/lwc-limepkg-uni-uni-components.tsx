@@ -101,7 +101,8 @@ export class UniComponents implements LimeWebComponent {
 
         this.listContainer = [];
 
-        this.mainData.forEach(object => {
+        this.mainData.forEach(obj => {
+            let object = Object.assign({}, obj)
             let card = {...object.Card}
             let cardTitle = (' ' + card.CardTitle).slice(1);
             console.log("objcet");
