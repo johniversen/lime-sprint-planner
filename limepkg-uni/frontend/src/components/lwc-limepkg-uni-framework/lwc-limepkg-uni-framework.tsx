@@ -337,8 +337,8 @@ export class Framework implements LimeWebComponent {
 
                 <grid-header>
                     <div id="heading-icon">
-                        <limel-icon class="citrus-icon" name="heart_with_arrow" size="large" />
-                        <h1>Sprint planner</h1>
+                        <limel-icon class="sprint-icon" name="running_rabbit" size="large" />
+                        <h1>Lime Sprinter</h1>
                     </div>
                     <div id="filter">
                         <limel-select
@@ -355,9 +355,6 @@ export class Framework implements LimeWebComponent {
                         {noFilterButton}
                     </div>
                 </grid-header>
-                <div id="urgent">
-
-                </div>
                 <grid-main>
                     {errorMessage}
                     {cardData}

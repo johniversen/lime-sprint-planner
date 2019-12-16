@@ -1,7 +1,4 @@
-
-
-limel-grid { 
-    font-family:'Roboto','Open Sans','Helvetica Neue', Arial, Helvetica, Verdana, sans-serif;
+limel-grid {
     --lime-grid-columns: 1;
     --lime-grid-cell-height: 80px;
     --lime-grid-area:
@@ -20,14 +17,14 @@ grid-header{
         "heading filter week-display no-filter-button"; 
     padding: 1%;
     gap: 5%;
-    background-color:whitesmoke;
+    background-color:white ;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    box-shadow: 2px --lime-light-gray;
+    border-radius: 2px;
 }
 
-.citrus-icon {
+.sprint-icon {
     box-sizing: border-box;
     padding: 0%;
     margin-top: 1%;
@@ -49,7 +46,7 @@ grid-header > #heading-icon{
 }
 
 #heading-icon h1{
-    font-size: small;
+    font-size: medium;
 }
 
 grid-header > #filter{
@@ -71,18 +68,4 @@ grid-header > #no-filter-button{
 grid-main{
     grid-area: main;
     padding-top: 0%;
-}
-
-#urgent{
-    box-sizing: border-box;
-    background-color: #f05750; 
-    border-style: solid;
-    border-color: red;
-    width: 100%;
-    padding: 0%;
-    margin: 0%;
-}
-
-#urgent:empty{
-    display: none;
 }
