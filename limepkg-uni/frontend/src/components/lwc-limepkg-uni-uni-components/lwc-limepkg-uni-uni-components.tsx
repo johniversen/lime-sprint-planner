@@ -102,7 +102,7 @@ export class UniComponents implements LimeWebComponent {
         this.listContainer = [];
 
         this.mainData.forEach(object => {
-            let card = object.Card
+            let card = {...object.Card}
             let cardTitle = card.Cardtitle
             delete card.Cardtitle
             let optionalInfo = {}
