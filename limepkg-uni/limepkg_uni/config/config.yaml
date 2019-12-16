@@ -41,7 +41,8 @@ limetypes:
     Card:
       CardTitle: title                            # Formerly 'title' (required)
       Comment: comment                            # Formerly 'secondaryText' - Text displayed on the cards (optional)
-      Responsible: coworker                       
+      Responsible: coworker
+      Estimate: estimate                       
     AdditionalInfo:                               # User defined fields, these will be displayed when user clicks on a card.
       Priority: priority
       Misc: misc

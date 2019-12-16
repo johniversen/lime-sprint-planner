@@ -64,12 +64,12 @@ export class Card implements LimeWebComponent {
         let cardDataOutput = []
         for (const [key, value] of Object.entries(this.cardData)) {
             if (!(value === "" || value === {} || typeof value ==='undefined')) {
-                cardDataOutput.push(<p>{key + ':' + value}</p>)
+                cardDataOutput.push(<p>{key + ': ' + value}</p>)
             }
         }
         if (this.optionalInfo['Priority'] !== null && this.optionalInfo['Priority'] == "urgent") {
             return (
-                <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this) draggable={true} onDragStart={this.cardDrag.bind(this)}>
+                <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this)} draggable={true} onDragStart={this.cardDrag.bind(this)}>
                     <limel-icon class="card_icon" name="fire_element" size="medium" />
                     <h1>{this.CardTitle}</h1>
                     <h3>{cardDataOutput}</h3>
@@ -77,8 +77,8 @@ export class Card implements LimeWebComponent {
             );
         } else {
             return (
-                <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this) draggable={true} onDragStart={this.cardDrag.bind(this)}>
-                    <h1>{this.cardTitle}</h1>
+                <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this)} draggable={true} onDragStart={this.cardDrag.bind(this)}>
+                    <h1>{this.CardTitle}</h1>
                     <h3>{cardDataOutput}</h3>
                 </div>
             );

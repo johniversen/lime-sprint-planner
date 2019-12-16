@@ -110,7 +110,7 @@ export class UniComponents implements LimeWebComponent {
         
         this.mainData.forEach(object => {
             let card = {...object.Card}
-            let cardTitle = (' ' + card.CardTitle).slice(1);
+            let CardTitle = (' ' + card.CardTitle).slice(1);
             console.log("objcet");
             console.log(card);
             delete card.CardTitle
@@ -120,7 +120,7 @@ export class UniComponents implements LimeWebComponent {
             }
             let item =
                 <lwc-limepkg-uni-card
-                    cardTitle={cardTitle}
+                    CardTitle={CardTitle}
                     postId={object.postId}   
                     cardData={card}
                     optionalInfo={optionalInfo}
