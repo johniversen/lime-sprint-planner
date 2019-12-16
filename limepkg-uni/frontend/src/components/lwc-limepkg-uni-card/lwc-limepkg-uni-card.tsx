@@ -39,6 +39,13 @@ export class Card implements LimeWebComponent {
         bubbles: true
     }) cardClicked: EventEmitter;
 
+    @Event({
+        eventName: 'cardDragged',
+        composed: true,
+        cancelable: true,
+        bubbles: true
+    }) cardDragged: EventEmitter;
+
     @Element()
     public element: HTMLElement;
 
@@ -47,6 +54,10 @@ export class Card implements LimeWebComponent {
             value: this.postId,
         }
         this.cardClicked.emit(event);
+    }
+
+    private cardDrag() {
+        this.cardDragged.emit(this.postId);
     }
 
     public render() {
@@ -58,7 +69,7 @@ export class Card implements LimeWebComponent {
         }
         if (this.optionalInfo['Priority'] !== null && this.optionalInfo['Priority'] == "urgent") {
             return (
-                <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
+                <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this) draggable={true} onDragStart={this.cardDrag.bind(this)}>
                     <limel-icon class="card_icon" name="fire_element" size="medium" />
                     <h1>{this.CardTitle}</h1>
                     <h3>{cardDataOutput}</h3>
@@ -66,8 +77,8 @@ export class Card implements LimeWebComponent {
             );
         } else {
             return (
-                <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
-                    <h1>{this.CardTitle}</h1>
+                <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this) draggable={true} onDragStart={this.cardDrag.bind(this)}>
+                    <h1>{this.cardTitle}</h1>
                     <h3>{cardDataOutput}</h3>
                 </div>
             );
