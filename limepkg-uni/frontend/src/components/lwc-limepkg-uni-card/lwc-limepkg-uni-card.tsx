@@ -52,7 +52,9 @@ export class Card implements LimeWebComponent {
     public render() {
         let cardDataOutput = []
         for (const [key, value] of Object.entries(this.cardData)) {
-            cardDataOutput.push(<p>{key + ': ' + value}</p>)
+            if (!(value === "" || value === {} || typeof value ==='undefined')) {
+                cardDataOutput.push(<p>{key + ':' + value}</p>)
+            }
         }
         if (this.optionalInfo['Priority'] !== null && this.optionalInfo['Priority'] == "urgent") {
             return (
