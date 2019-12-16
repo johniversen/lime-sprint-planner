@@ -36,7 +36,7 @@ export class Framework implements LimeWebComponent {
     private mainData: Array<{
         priorityValue: number
         Card: {
-            Cardtitle: string,
+            CardTitle: string,
             Responsible: string
         },
         AdditionalInfo: {
@@ -185,7 +185,7 @@ export class Framework implements LimeWebComponent {
     // Ändra properties namn
     private updateStatusOptions() {
         let statusOptions = [];
-        Object.keys(this.limetypeMetaData[this.selectedLimetype.value]['prio']).forEach((key) => {
+        Object.keys(this.limetypeMetaData[this.selectedLimetype.value]['PriorityHierarchy']).forEach((key) => {
             let item = {
                 text: key,
                 value: key
@@ -205,9 +205,11 @@ export class Framework implements LimeWebComponent {
         this.selectedStatus = statusOptions.find((option: any) => {
             return item.priorityValue === option.text && item.priorityValue === option.value
         })
+
+        console.log(item);
         let dialogOutput: Array<ListItem<any>> = [];
-        let title = dialogData.Card.Cardtitle;
-        delete dialogData.Card.Cardtitle;
+        let title = dialogData.Card.CardTitle;
+        delete dialogData.Card.CardTitle;
         delete dialogData.priorityValue;
         delete dialogData.postId;
         const entries = Object.entries(dialogData);
