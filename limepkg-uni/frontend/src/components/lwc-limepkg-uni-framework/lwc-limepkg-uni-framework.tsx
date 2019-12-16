@@ -288,26 +288,28 @@ export class Framework implements LimeWebComponent {
     @Listen('cardDropped')
     private statusOnDrop(event) {
         this.updateDraggedCardStatus(event.detail.cardID, event.detail.columnID);
-        this.sendPutRequestOnDrag(event.detail.cardID);
+        this.sendPutRequestOnDrag(event.detail.cardID, event.detail.columnID);
     }
 
     private updateDraggedCardStatus(postId, priorityValue) {
         let item;
         console.log(priorityValue);
-        let priority = this.getPriorityNameByValue(postId);
+        let priority = this.getPriorityNameByValue(priorityValue);
         this.mainData = this.mainData.map(obj => {
             if (obj.postId === postId) {
                 item = { ...obj, status: priority };
                 item['priorityValue'] = Number(priorityValue);
+                console.log("item");
+                console.log(item);
                 obj = Object.assign(item);
             }
             return obj;
         })
     }
 
-    private sendPutRequestOnDrag(postId) {
+    private sendPutRequestOnDrag(postId, priorityValue) {
         const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].status;
-        let priority = this.getPriorityNameByValue(postId);
+        let priority = this.getPriorityNameByValue(priorityValue);
         console.log(priority);
         let data = {
             [limetypeStatus]: {
@@ -320,11 +322,13 @@ export class Framework implements LimeWebComponent {
     }
 
     private getPriorityNameByValue(value) {
-        let priority = this.limetypeMetaData[this.selectedLimetype.value]['prio'];
+        let priorities = this.limetypeMetaData[this.selectedLimetype.value]['PriorityHierarchy'];
+        let priorityName = Object.keys(priorities).find(key => priorities[key] === Number(value));
 
-        
+        console.log("priorityName");
+        console.log(priorityName);
 
-        return "contact";
+        return priorityName;
     }
 
     public render() {
