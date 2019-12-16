@@ -13,7 +13,7 @@ h1, h2, h3, h4, h5, h6 {
 .card {
     display: grid;
     grid-template-columns: 1;
-    grid-template-rows: 1;
+    grid-template-rows: 2;
     grid-template-areas: 
         "title"
         "secondary";

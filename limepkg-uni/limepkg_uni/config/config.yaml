@@ -34,16 +34,16 @@ limetypes:
     title: title
     secondaryText: comment
     priority: priority
-    misc: misc
+    description: misc
     status: solutionimprovementstatus
     responsible: coworker   # Can't get 'relationshipfield' from db?
     prio:
-      deny: 1
-      More info needed: 2
-      reported: 3
-      started: 4
-      approved: 5
-      done: 6
+      approved: 1
+      started: 2
+      done: 3
+      More info needed: 4
+      deny: 5
+      reported: 6
 
   deal:
     displayName: Deal
