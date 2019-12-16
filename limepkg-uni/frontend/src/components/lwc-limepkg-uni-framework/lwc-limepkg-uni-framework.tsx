@@ -172,16 +172,15 @@ export class Framework implements LimeWebComponent {
     // Ändra properties namn
     private updateCurrentCardStatus() {
         let item;
-        console.log("Updatecurrent card status");
-        console.log(this.currentPostId);
-        console.log(this.mainData);
+
         this.mainData = this.mainData.map(obj => {
             if (obj['postId'] === this.currentPostId) {
+                console.log("KOmmer hit?");
                 item = { ...obj, status: this.selectedStatus.value };
-                item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['priorityHierarchy'][this.selectedStatus.text];
+                item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['PriorityHierarchy'][this.selectedStatus.text];
                 obj = Object.assign(item);
             }
-            console.log(obj);
+            
             return obj;
         })
        
@@ -199,7 +198,7 @@ export class Framework implements LimeWebComponent {
         })
         return statusOptions;
     }
-    // Ändra properties namn
+    // HÄR ÄR FEL! TAR BORT
     @Listen('cardClicked')
     private openDialog(event) {
         console.log("CardClicked")
