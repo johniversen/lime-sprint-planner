@@ -344,7 +344,7 @@ export class Framework implements LimeWebComponent {
         let cardData = null
         let weekPicker = null
         let noFilterButton = null
-        let errorMessage = this.mainData.length === 0 ? <h2>Select a limetype above</h2> : null
+        let errorMessage = typeof(this.selectedLimetype) == "undefined" ? <h2>Select a limetype above!</h2> : null
         // Felmeddelande när ingen data finns? ev. när http request failar?
 
 
