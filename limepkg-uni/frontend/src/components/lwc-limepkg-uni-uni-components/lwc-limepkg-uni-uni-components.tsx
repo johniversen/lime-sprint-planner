@@ -29,7 +29,7 @@ export class UniComponents implements LimeWebComponent {
     mainData: Array<{
         priorityValue: number
         Card: {
-            Cardtitle: string,
+            CardTitle: string,
             Responsible: string
         },
         AdditionalInfo: {
@@ -103,8 +103,10 @@ export class UniComponents implements LimeWebComponent {
 
         this.mainData.forEach(object => {
             let card = {...object.Card}
-            let cardTitle = card.Cardtitle
-            delete card.Cardtitle
+            let cardTitle = (' ' + card.CardTitle).slice(1);
+            console.log("objcet");
+            console.log(card);
+            delete card.CardTitle
             let optionalInfo = {}
             if (object.AdditionalInfo['Priority']) {
                 optionalInfo['Priority'] = object.AdditionalInfo['Priority']
