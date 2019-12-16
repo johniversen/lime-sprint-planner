@@ -66,8 +66,6 @@ export class Framework implements LimeWebComponent {
     public limetypeMetaData = [];
     public selectedLimetype: Option;
 
-    private firstRender = true;
-
     // private dialogOutput: Array<ListItem<any>> = [];
 
     private dialogMainData: { title: string, dialogListItems: Array<ListItem<any>>, dialogDropDownOptions: Option[] };
@@ -84,6 +82,10 @@ export class Framework implements LimeWebComponent {
         this.statusOnChange = this.statusOnChange.bind(this);
         this.updateCurrentCardStatus = this.updateCurrentCardStatus.bind(this);
         this.saveStatus = this.saveStatus.bind(this);
+        this.statusOnDrop = this.statusOnDrop.bind(this);
+        this.sendPutRequestOnDrag = this.sendPutRequestOnDrag.bind(this);
+        this.updateDraggedCardStatus = this.updateDraggedCardStatus.bind(this);
+        this.getPriorityNameByValue = this.getPriorityNameByValue.bind(this);
     }
 
     public componentWillLoad() {
@@ -144,6 +146,7 @@ export class Framework implements LimeWebComponent {
     private sendPutRequest() {
         const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].status;
         let postId = this.currentPostId;
+        console.log(this.limetypeMetaData);
         let data = {
             [limetypeStatus]: {
                 key: this.selectedStatus.value
@@ -263,7 +266,7 @@ export class Framework implements LimeWebComponent {
 
 
     @Listen('saveStatusChange')
-    private saveStatus(event) {
+    private saveStatus() {
         console.log(this.selectedStatus);
         this.updateCurrentCardStatus();
         this.sendPutRequest();
@@ -277,6 +280,48 @@ export class Framework implements LimeWebComponent {
         this.selectedStatus = this.dialogMainData.dialogDropDownOptions.find((option: any) => {
             return event.detail.detail.text === option.text && event.detail.detail.value === option.value
         })
+    }
+
+    @Listen('cardDropped')
+    private statusOnDrop(event) {
+        this.updateDraggedCardStatus(event.detail.cardID, event.detail.columnID);
+        this.sendPutRequestOnDrag(event.detail.cardID);
+    }
+
+    private updateDraggedCardStatus(postId, priorityValue) {
+        let item;
+        console.log(priorityValue);
+        let priority = this.getPriorityNameByValue(postId);
+        this.mainData = this.mainData.map(obj => {
+            if (obj.postId === postId) {
+                item = { ...obj, status: priority };
+                item['priorityValue'] = Number(priorityValue);
+                obj = Object.assign(item);
+            }
+            return obj;
+        })
+    }
+
+    private sendPutRequestOnDrag(postId) {
+        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].status;
+        let priority = this.getPriorityNameByValue(postId);
+        console.log(priority);
+        let data = {
+            [limetypeStatus]: {
+                key: priority
+            }
+        }
+        this.http.put(`https://localhost/lime/api/v1/limeobject/` + `${this.selectedLimetype.value}` + `/` + `${postId}` + `/`, data).then(res => {
+            console.log("PUT REQUEST SENT");
+        })
+    }
+
+    private getPriorityNameByValue(value) {
+        let priority = this.limetypeMetaData[this.selectedLimetype.value]['prio'];
+
+        
+
+        return "contact";
     }
 
     public render() {
