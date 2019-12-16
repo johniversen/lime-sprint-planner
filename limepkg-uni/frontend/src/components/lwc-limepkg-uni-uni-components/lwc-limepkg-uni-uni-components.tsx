@@ -21,15 +21,30 @@ export class UniComponents implements LimeWebComponent {
 
     @Element()
     element: HTMLElement;
-
+    
+    // Ändra properties namn
     @Prop()
-    mainData:  Array<{
-        title: string,
-        secondaryText: string,
-        priorityValue: number,
-        status: string,
-        postId: number,
-        priority: string
+    mainData: Array<{
+        priorityValue: number
+        Card: {
+            CardTitle: string,
+            Responsible: string
+        },
+        AdditionalInfo: {
+        }
+        postId: number
+        /*         title: string,
+                secondaryText: string,
+                priorityValue: number,
+                status: string,
+                postId: number,
+                priority: string */
+        /*      title: string,
+             secondaryText: string,
+             priorityValue: number,
+             status: string,
+             postId: number,
+             priority: string */
     }>;
 
     @Prop()
@@ -59,17 +74,22 @@ export class UniComponents implements LimeWebComponent {
         console.log("UNI UNI Component will update()")
         this.createOutput();
     }
+
+    // Ändra properties namn
     private createOutput() {
+       // let tempMainData = [{}];
+        //tempMainData = { ...this.mainData };
+        //tempMainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         let columnList = []
         this.listContainer = [];
 
         // If prio exists, create columns for each prio
-        if (this.limeTypeMetaData['prio']) {
-            Object.keys(this.limeTypeMetaData['prio']).forEach((key) => {
+        if (this.limeTypeMetaData['PriorityHierarchy']) {
+            Object.keys(this.limeTypeMetaData['PriorityHierarchy']).forEach((key) => {
                 let column = {
                     header: key[0].toUpperCase() + key.slice(1),
-                    prio: this.limeTypeMetaData['prio'][key],
+                    prio: this.limeTypeMetaData['PriorityHierarchy'][key],
                     items: []
                 }
                 column.items.push(<h4 class="column-header">{column.header}</h4>)
@@ -89,16 +109,21 @@ export class UniComponents implements LimeWebComponent {
         this.listContainer = [];
         
         this.mainData.forEach(object => {
-            let secondaryText = null;
-            if (object.secondaryText != null) {
-                secondaryText = object.secondaryText;
+            let card = {...object.Card}
+            let cardTitle = (' ' + card.CardTitle).slice(1);
+            console.log("objcet");
+            console.log(card);
+            delete card.CardTitle
+            let optionalInfo = {}
+            if (object.AdditionalInfo['Priority']) {
+                optionalInfo['Priority'] = object.AdditionalInfo['Priority']
             }
             let item =
-                <lwc-limepkg-uni-card 
-                    header={object.title} 
-                    subTitle={secondaryText} 
-                    postId={object.postId} 
-                    priority={object.priority}
+                <lwc-limepkg-uni-card
+                    cardTitle={cardTitle}
+                    postId={object.postId}   
+                    cardData={card}
+                    optionalInfo={optionalInfo}
                 />
 
             let temp = columnList.find(col => col.prio === object.priorityValue);
@@ -142,14 +167,14 @@ export class UniComponents implements LimeWebComponent {
     public render() {
         let output = this.listContainer.map(list => {
             return (
-                <limel-flex-container id={(this.listContainer.indexOf(list) + 1).toString()} direction={'vertical'} align={"stretch"} justify={"start"} onDragOver={this.allowDrop} onDrop={this.cardDrop.bind(this)}>
+                <limel-flex-container id={(this.listContainer.indexOf(list) + 1).toString()} class="cardContainer" direction={'vertical'} align={"stretch"} justify={"start"} onDragOver={this.allowDrop} onDrop={this.cardDrop.bind(this)}>
                     {list}
                 </limel-flex-container>
             )
         })
         console.log(output);
         return (
-            <limel-flex-container class="card" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
+            <limel-flex-container class="outputContainer" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
                 {output}
             </limel-flex-container>
         );

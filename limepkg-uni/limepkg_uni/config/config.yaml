@@ -28,69 +28,76 @@
 #                  for example. (?)
 
 limetypes:
-  solutionimprovement:
-    date_done: donedate
-    displayName: Solution Improvement
-    title: title
-    secondaryText: comment
-    priority: priority
-    misc: misc
-    status: solutionimprovementstatus
-    responsible: coworker   # Can't get 'relationshipfield' from db?
-    prio:
-      deny: 1
-      More info needed: 2
+  solutionimprovement:                            # Name of the limetype in the db
+    DisplayName: Solution Improvement             # String representing how the limetype is displayed on the frontend
+    PriorityVariable: solutionimprovementstatus   # Formerly 'status' - Represents the variable that determines the cards priority
+    PriorityHierarchy:                            # Formerly 'prio'   - The hierarchy of values that 'priorityVariable' can be. 
+      deny: 1                                     #                     Columns are created for each value in the hierarchy. 
+      More info needed: 2                         #                     Columns are sorted from low to high (left to right)
       reported: 3
       started: 4
       approved: 5
       done: 6
+    Card:
+      CardTitle: title                            # Formerly 'title' (required)
+      Comment: comment                            # Formerly 'secondaryText' - Text displayed on the cards (optional)
+      Responsible: coworker                       
+    AdditionalInfo:                               # User defined fields, these will be displayed when user clicks on a card.
+      Priority: priority
+      Misc: misc
+    Optional:                                     # Optional fields that add functionality on the frontend.
+      Date Deadline: donedate                     # Formerly date_done - Will display a weekpicker on the frontend if defined. 
 
   deal:
-    displayName: Deal
-    title: name
-    priority: probability
-    value: value
-    wonlostreason: wonlostreason
-    status: dealstatus
-    weighted: weightedvalue
-    prio:
+    DisplayName: Deal
+    PriorityVariable: dealstatus
+    PriorityHierarchy:
       contact: 1
       requirement: 2
       tender: 3
       agreement: 4
       rejection: 5
       onhold: 6
+    Card:
+      CardTitle: name
+    AdditionalInfo:
+      value: value
+      priority: probability
+      wonlostreason: wonlostreason
+      weighted: weightedvalue
 
   company:
-    displayName: Company
-    title: name
-    secondaryText: country
-    status: buyingstatus 
-    prio:
+    DisplayName: Company
+    PriorityVariable: buyingstatus 
+    PriorityHierarchy:
       notinterested: 1
       inactive: 2
       inactive: 3
       prospect: 4
       active: 5
+    Card:
+      CardTitle: name
+      Country: country
 
   todo:
-    displayName: To Do
-    title: subject
-    status: location  
-    note: note
-    prio:
+    DisplayName: To Do
+    Card:
+      CardTitle: subject
+      status: location  
+      note: note
 
   campaign:
-    displayName: Campaign
-    title: name
-    status: campaignstatus
-    type: type
-    purpose: purpose
-    goal: goal
-    workmode: workmode
-    prio:
+    DisplayName: Campaign
+    PriorityVariable: campaignstatus
+    PriorityHierarchy:
       cancelled: 1
       planned: 2
       ongoing: 3
       finished: 4
-
+    Card:
+      CardTitle: name
+    AdditionalInfo:
+      type: type
+      purpose: purpose
+      goal: goal
+      workmode: workmode
