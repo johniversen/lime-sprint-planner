@@ -316,6 +316,9 @@ export class Framework implements LimeWebComponent {
 
     private getPriorityNameByValue(value) {
         let priority = this.limetypeMetaData[this.selectedLimetype.value]['prio'];
+
+        
+
         return "contact";
     }
 

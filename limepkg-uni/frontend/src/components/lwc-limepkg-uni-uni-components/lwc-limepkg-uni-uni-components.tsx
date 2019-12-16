@@ -101,8 +101,6 @@ export class UniComponents implements LimeWebComponent {
                     priority={object.priority}
                 />
 
-            console.log(object);
-
             let temp = columnList.find(col => col.prio === object.priorityValue);
             temp['items'].push(item);
         })
