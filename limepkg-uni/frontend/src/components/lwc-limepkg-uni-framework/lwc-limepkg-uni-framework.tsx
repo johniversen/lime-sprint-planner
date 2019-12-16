@@ -217,19 +217,22 @@ export class Framework implements LimeWebComponent {
         delete dialogData.postId;
         const entries = Object.entries(dialogData);
         for (let [key, value] of entries) {
-            let item = {}
-            if (value == "") {
-                item = {
-                    text: key[0].toUpperCase() + key.slice(1),
-                    secondaryText: "Not assigned"
+            for(const innerKey in value) {
+                let item = {}
+                if (value[innerKey] == "") {
+                    item = {
+                        text: innerKey[0].toUpperCase() + innerKey.slice(1),
+                        secondaryText: "Not assigned"
+                    }
+                } else {
+                    item = {
+                        text: innerKey[0].toUpperCase() + innerKey.slice(1),
+                        secondaryText: (typeof (value[innerKey]) === 'string' ? value[innerKey][0].toUpperCase() + value[innerKey].slice(1) : value[innerKey])
+                    };
                 }
-            } else {
-                item = {
-                    text: key[0].toUpperCase() + key.slice(1),
-                    secondaryText: (typeof (value) === 'string' ? value[0].toUpperCase() + value.slice(1) : value)
-                };
+                dialogOutput.push((item as ListItem));
             }
-            dialogOutput.push((item as ListItem));
+         
         }
         this.dialogMainData = {
             title: title,

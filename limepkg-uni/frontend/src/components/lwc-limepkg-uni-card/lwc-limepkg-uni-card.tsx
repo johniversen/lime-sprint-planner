@@ -27,7 +27,7 @@ export class Card implements LimeWebComponent {
     public postId: number;
 
     @Prop()
-    public cardTitle: string;
+    public CardTitle: string;
 
     @Prop()
     public cardData: {}
@@ -71,7 +71,7 @@ export class Card implements LimeWebComponent {
             return (
                 <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this) draggable={true} onDragStart={this.cardDrag.bind(this)}>
                     <limel-icon class="card_icon" name="fire_element" size="medium" />
-                    <h1>{this.cardTitle}</h1>
+                    <h1>{this.CardTitle}</h1>
                     <h3>{cardDataOutput}</h3>
                 </div>
             );
@@ -79,7 +79,7 @@ export class Card implements LimeWebComponent {
             return (
                 <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this) draggable={true} onDragStart={this.cardDrag.bind(this)}>
                     <h1>{this.cardTitle}</h1>
-                    {cardDataOutput}
+                    <h3>{cardDataOutput}</h3>
                 </div>
             );
         }
