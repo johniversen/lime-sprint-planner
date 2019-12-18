@@ -48,8 +48,7 @@ export class Framework implements LimeWebComponent {
     @State()
     public selectedStatus: Option;
 
-
-    private dateValue : Date;
+    private dateValue: Date;
 
     private http: HttpService;
     private dialog = null;
@@ -61,7 +60,7 @@ export class Framework implements LimeWebComponent {
     public selectedLimetype: Option;
 
     private dialogMainData: { title: string, dialogListItems: Array<ListItem<any>>, dialogDropDownOptions: Option[] };
-    
+
     constructor() {
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleDateChangeNoFilter = this.handleDateChangeNoFilter.bind(this);
@@ -83,32 +82,12 @@ export class Framework implements LimeWebComponent {
         this.dateValue = new Date();
     }
 
-    public formatDate(date) {
-        let formattedDate = date.getDate() + '-'
-        formattedDate += date.getMonth() + 1 + '-'
-        formattedDate += date.getFullYear()
-        return formattedDate
-    }
-
     // Called on load to fill the top drop-down with Limetypes
     private getLimeTypes() {
         this.http.get(`https://localhost/lime/limepkg-uni/getlimetypes`).then(res => {
             this.saveLimeTypeData(res);
             this.updateLimetypeOptions(res);
         });
-    }
-
-    // Takes response from GET and saves to this.limetypeMetaData
-    private saveLimeTypeData(res) {
-        this.limetypeMetaData = { ...res.limetypes }
-    }
-
-    private encodeQueryData(data) {
-        const ret = [];
-        for (let d in data)
-            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
-        return ret.join('&');
-
     }
 
     // Called when you select a Limetype in the top drop-down
@@ -125,7 +104,6 @@ export class Framework implements LimeWebComponent {
         this.http.get(`https://localhost/lime/limepkg-uni/?` + argsString).then(res => {
             this.updateMainData(res);
             console.log("Get request successfull:")
-            console.log(res)
             this.fetchingDataComplete = true;
         }, err => {
             console.log("Get request UNSUCCESSFUL:")
@@ -137,7 +115,6 @@ export class Framework implements LimeWebComponent {
     // Called when selecting a status in drop-down inside dialog
     private sendPutRequest() {
         const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].PriorityVariable;
-
         let postId = this.currentPostId;
         let data = {
             [limetypeStatus]: {
@@ -145,6 +122,36 @@ export class Framework implements LimeWebComponent {
             }
         }
         this.http.put(`https://localhost/lime/api/v1/limeobject/` + `${this.selectedLimetype.value}` + `/` + `${postId}` + `/`, data)
+    }
+
+    private sendPutRequestOnDrag(postId, priorityValue) {
+        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].PriorityVariable;
+        let priority = this.getPriorityNameByValue(priorityValue);
+        let data = {
+            [limetypeStatus]: {
+                key: priority
+            }
+        }
+        this.http.put(`https://localhost/lime/api/v1/limeobject/` + `${this.selectedLimetype.value}` + `/` + `${postId}` + `/`, data);
+    }
+
+    // Takes response from GET and saves to this.limetypeMetaData
+    private saveLimeTypeData(res) {
+        this.limetypeMetaData = { ...res.limetypes }
+    }
+
+    private encodeQueryData(data) {
+        const ret = [];
+        for (let d in data)
+            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+        return ret.join('&');
+    }
+
+    private formatDate(date) {
+        let formattedDate = date.getDate() + '-'
+        formattedDate += date.getMonth() + 1 + '-'
+        formattedDate += date.getFullYear()
+        return formattedDate
     }
 
     private updateLimetypeOptions(res) {
@@ -164,17 +171,12 @@ export class Framework implements LimeWebComponent {
         let item;
         this.mainData = this.mainData.map(obj => {
             if (obj['postId'] === this.currentPostId) {
-
-                console.log("KOmmer hit?");
                 item = { ...obj };
-
                 item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['PriorityHierarchy'][this.selectedStatus.text];
                 obj = Object.assign(item);
             }
-            
             return obj;
         })
-       
     }
 
     private updateStatusOptions() {
@@ -188,29 +190,24 @@ export class Framework implements LimeWebComponent {
         })
         return statusOptions;
     }
-    
+
     @Listen('cardClicked')
     private openDialog(event) {
         let statusOptions = this.updateStatusOptions();
-        
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
-        let card = {...item.Card};
+        let card = { ...item.Card };
         delete card.CardTitle;
-        let dialogData = {...item, Card :card};
-
-        this.selectedStatus = statusOptions[item.priorityValue -1];
-
-        
+        let dialogData = { ...item, Card: card };
+        this.selectedStatus = statusOptions[item.priorityValue - 1];
         let dialogOutput: Array<ListItem<any>> = [];
         let title = item.Card.CardTitle;
-        console.log(card);
         delete dialogData.Card.CardTitle;
         delete dialogData.priorityValue;
         delete dialogData.postId;
         const entries = Object.entries(dialogData);
         for (let [key, value] of entries) {
-            for(const innerKey in value) {
+            for (const innerKey in value) {
                 let item = {}
                 if (value[innerKey] == "") {
                     item = {
@@ -225,7 +222,6 @@ export class Framework implements LimeWebComponent {
                 }
                 dialogOutput.push((item as ListItem));
             }
-         
         }
         this.dialogMainData = {
             title: title,
@@ -242,7 +238,6 @@ export class Framework implements LimeWebComponent {
     }
 
     private handleDateChange(event) {
-        console.log("Handöe Date change()");
         this.dateValue = event.detail;
         this.getDataFromEndPoint(this.selectedLimetype.value)
     }
@@ -263,7 +258,6 @@ export class Framework implements LimeWebComponent {
         this.updateCurrentCardStatus();
         this.sendPutRequest();
         this.closeDialog();
-
     }
 
     @Listen('statusOnChange')
@@ -281,26 +275,14 @@ export class Framework implements LimeWebComponent {
 
     private updateDraggedCardStatus(postId, priorityValue) {
         let item;
-        let priority = this.getPriorityNameByValue(priorityValue);
         this.mainData = this.mainData.map(obj => {
             if (obj.postId === postId) {
-                item = { ...obj};
+                item = { ...obj };
                 item['priorityValue'] = Number(priorityValue);
                 obj = Object.assign(item);
             }
             return obj;
         })
-    }
-
-    private sendPutRequestOnDrag(postId, priorityValue) {
-        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].PriorityVariable;
-        let priority = this.getPriorityNameByValue(priorityValue);
-        let data = {
-            [limetypeStatus]: {
-                key: priority
-            }
-        }
-        this.http.put(`https://localhost/lime/api/v1/limeobject/` + `${this.selectedLimetype.value}` + `/` + `${postId}` + `/`, data);
     }
 
     private getPriorityNameByValue(value) {
@@ -319,7 +301,7 @@ export class Framework implements LimeWebComponent {
         let cardData = null
         let weekPicker = null
         let noFilterButton = null
-        let errorMessage = typeof(this.selectedLimetype) == "undefined" ? <h2>Select a limetype above!</h2> : null
+        let errorMessage = typeof (this.selectedLimetype) == "undefined" ? <h2>Select a limetype above!</h2> : null
 
         if (this.fetchingDataComplete) {
             let limeTypeMetaData = null;
@@ -335,10 +317,9 @@ export class Framework implements LimeWebComponent {
                     context={this.context}
                     mainData={this.mainData}
                     limeTypeMetaData={limeTypeMetaData}
-
                 />
-            
-            
+
+
             // If the limetype has a defined date_done, show weekpicker
             if (this.limetypeMetaData[this.selectedLimetype.value]['Optional'] && this.limetypeMetaData[this.selectedLimetype.value]['Optional']['Date Deadline']) {
                 weekPicker =

@@ -94,7 +94,6 @@ export class UniComponents implements LimeWebComponent {
             let object = Object.assign({}, obj)
             let card = {...object.Card}
             let cardTitle = (' ' + card.CardTitle).slice(1);
-
             delete card.CardTitle
             let optionalInfo = {}
             if (object.AdditionalInfo['Priority']) {
@@ -127,18 +126,15 @@ export class UniComponents implements LimeWebComponent {
 
     private cardDrop(event) {
         var prio = this.getColumnID(event);
-
         let dragData = {
             cardID: this.cardID,
             columnID: prio
         }
-
         this.cardDropped.emit(dragData);
     }
 
     private getColumnID(event) {
         var prio;
-
         if (event.path[0].tagName == "DIV" && event.path[0].className == "container") {
             prio = event.path[8].id;
         } else if (event.path[0].tagName == "P") {
