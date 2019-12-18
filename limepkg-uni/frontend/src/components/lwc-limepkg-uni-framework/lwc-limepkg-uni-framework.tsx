@@ -66,8 +66,6 @@ export class Framework implements LimeWebComponent {
     public limetypeMetaData = [];
     public selectedLimetype: Option;
 
-    private firstRender = true;
-
     // private dialogOutput: Array<ListItem<any>> = [];
 
     private dialogMainData: { title: string, dialogListItems: Array<ListItem<any>>, dialogDropDownOptions: Option[] };
@@ -84,6 +82,10 @@ export class Framework implements LimeWebComponent {
         this.statusOnChange = this.statusOnChange.bind(this);
         this.updateCurrentCardStatus = this.updateCurrentCardStatus.bind(this);
         this.saveStatus = this.saveStatus.bind(this);
+        this.statusOnDrop = this.statusOnDrop.bind(this);
+        this.sendPutRequestOnDrag = this.sendPutRequestOnDrag.bind(this);
+        this.updateDraggedCardStatus = this.updateDraggedCardStatus.bind(this);
+        this.getPriorityNameByValue = this.getPriorityNameByValue.bind(this);
     }
 
     public componentWillLoad() {
@@ -148,6 +150,7 @@ export class Framework implements LimeWebComponent {
         console.log(limetypeStatus);
         console.log(this.selectedStatus);
         let postId = this.currentPostId;
+        console.log(this.limetypeMetaData);
         let data = {
             [limetypeStatus]: {
                 key: this.selectedStatus.value
@@ -274,7 +277,7 @@ export class Framework implements LimeWebComponent {
 
 
     @Listen('saveStatusChange')
-    private saveStatus(event) {
+    private saveStatus() {
         console.log(this.selectedStatus);
         this.updateCurrentCardStatus();
         this.sendPutRequest();
@@ -288,6 +291,52 @@ export class Framework implements LimeWebComponent {
         this.selectedStatus = this.dialogMainData.dialogDropDownOptions.find((option: any) => {
             return event.detail.detail.text === option.text && event.detail.detail.value === option.value
         })
+    }
+
+    @Listen('cardDropped')
+    private statusOnDrop(event) {
+        this.updateDraggedCardStatus(event.detail.cardID, event.detail.columnID);
+        this.sendPutRequestOnDrag(event.detail.cardID, event.detail.columnID);
+    }
+
+    private updateDraggedCardStatus(postId, priorityValue) {
+        let item;
+        console.log(priorityValue);
+        let priority = this.getPriorityNameByValue(priorityValue);
+        this.mainData = this.mainData.map(obj => {
+            if (obj.postId === postId) {
+                item = { ...obj, status: priority };
+                item['priorityValue'] = Number(priorityValue);
+                console.log("item");
+                console.log(item);
+                obj = Object.assign(item);
+            }
+            return obj;
+        })
+    }
+
+    private sendPutRequestOnDrag(postId, priorityValue) {
+        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].status;
+        let priority = this.getPriorityNameByValue(priorityValue);
+        console.log(priority);
+        let data = {
+            [limetypeStatus]: {
+                key: priority
+            }
+        }
+        this.http.put(`https://localhost/lime/api/v1/limeobject/` + `${this.selectedLimetype.value}` + `/` + `${postId}` + `/`, data).then(res => {
+            console.log("PUT REQUEST SENT");
+        })
+    }
+
+    private getPriorityNameByValue(value) {
+        let priorities = this.limetypeMetaData[this.selectedLimetype.value]['PriorityHierarchy'];
+        let priorityName = Object.keys(priorities).find(key => priorities[key] === Number(value));
+
+        console.log("priorityName");
+        console.log(priorityName);
+
+        return priorityName;
     }
 
     public render() {
@@ -304,7 +353,7 @@ export class Framework implements LimeWebComponent {
         let cardData = null
         let weekPicker = null
         let noFilterButton = null
-        let errorMessage = this.mainData.length === 0 ? <h2>Select a limetype above</h2> : null
+        let errorMessage = typeof(this.selectedLimetype) == "undefined" ? <h2>Select a limetype above!</h2> : null
         // Felmeddelande när ingen data finns? ev. när http request failar?
 
 

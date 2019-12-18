@@ -4,9 +4,7 @@ import {
     LimeWebComponentPlatform,
     //NotificationService,
 } from '@limetech/lime-web-components-interfaces';
-import { Component, Element, h, Prop, State } from '@stencil/core';
-import { ListItem } from '@limetech/lime-elements';
-
+import { Component, Element, h, Prop, State, Listen, Event, EventEmitter } from '@stencil/core';
 
 @Component({
     tag: 'lwc-limepkg-uni-uni-components',
@@ -52,13 +50,22 @@ export class UniComponents implements LimeWebComponent {
     @Prop()
     limeTypeMetaData: {}
 
-
-
     @State()
     private listContainer = [];
+    
+    @Event({
+        eventName: 'cardDropped',
+        composed: true,
+        cancelable: true,
+        bubbles: true
+    }) cardDropped: EventEmitter;
+
+    private cardID;
 
     constructor() {
         this.createOutput = this.createOutput.bind(this);
+        this.allowDrop = this.allowDrop.bind(this);
+        this.cardDrag = this.cardDrag.bind(this);
     }
     public componentWillLoad() {
         this.createOutput();
@@ -99,11 +106,13 @@ export class UniComponents implements LimeWebComponent {
 
         this.listContainer = [];
 
+
         this.mainData.forEach(obj => {
             let object = Object.assign({}, obj)
             let card = {...object.Card}
             let cardTitle = (' ' + card.CardTitle).slice(1);
             
+
             delete card.CardTitle
             let optionalInfo = {}
             if (object.AdditionalInfo['Priority']) {
@@ -111,7 +120,7 @@ export class UniComponents implements LimeWebComponent {
             }
             let item =
                 <lwc-limepkg-uni-card
-                    cardTitle={cardTitle}
+                    CardTitle={CardTitle}
                     postId={object.postId}   
                     cardData={card}
                     optionalInfo={optionalInfo}
@@ -125,10 +134,44 @@ export class UniComponents implements LimeWebComponent {
         })
     }
 
+    private allowDrop(event) {
+        event.preventDefault();
+    }
+
+    @Listen('cardDragged')
+    private cardDrag(event) {
+        this.cardID = event.detail;
+    }
+
+    private cardDrop(event) {
+        var prio;
+
+        if (event.path[0].tagName == "DIV" && event.path[0].className == "container") {
+            prio = event.path[8].id;
+        } else if (event.path[0].tagName == "P") {
+            prio = event.path[7].id;
+        } else if (event.path[0].tagName == "H3" || event.path[0].tagName == "H1") {
+            prio = event.path[6].id;
+        } else if (event.path[0].tagName == "DIV") {
+            prio = event.path[5].id;
+        } else if (event.path[0].tagName == "LWC-LIMEPKG-UNI-CARD" || event.path[0].tagName == "H4") {
+            prio = event.path[3].id;
+        } else if (event.path[0].tagName == "LIMEL-FLEX-CONTAINER") {
+            prio = event.path[0].id;
+        }
+
+        let dragData = {
+            cardID: this.cardID,
+            columnID: prio
+        }
+
+        this.cardDropped.emit(dragData);
+    }
+
     public render() {
         let output = this.listContainer.map(list => {
             return (
-                <limel-flex-container class="cardContainer" direction={'vertical'} align={"stretch"} justify={"start"}>
+                <limel-flex-container id={(this.listContainer.indexOf(list) + 1).toString()} class="cardContainer" direction={'vertical'} align={"stretch"} justify={"start"} onDragOver={this.allowDrop} onDrop={this.cardDrop.bind(this)}>
                     {list}
                 </limel-flex-container>
             )
@@ -140,4 +183,4 @@ export class UniComponents implements LimeWebComponent {
             </limel-flex-container>
         );
     }
-}
+} 

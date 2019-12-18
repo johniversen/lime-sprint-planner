@@ -27,7 +27,7 @@ export class Card implements LimeWebComponent {
     public postId: number;
 
     @Prop()
-    public cardTitle: string;
+    public CardTitle: string;
 
     @Prop()
     public cardData: {}
@@ -39,6 +39,13 @@ export class Card implements LimeWebComponent {
         bubbles: true
     }) cardClicked: EventEmitter;
 
+    @Event({
+        eventName: 'cardDragged',
+        composed: true,
+        cancelable: true,
+        bubbles: true
+    }) cardDragged: EventEmitter;
+
     @Element()
     public element: HTMLElement;
 
@@ -49,26 +56,30 @@ export class Card implements LimeWebComponent {
         this.cardClicked.emit(event);
     }
 
+    private cardDrag() {
+        this.cardDragged.emit(this.postId);
+    }
+
     public render() {
         let cardDataOutput = []
         for (const [key, value] of Object.entries(this.cardData)) {
             if (!(value === "" || value === {} || typeof value ==='undefined')) {
-                cardDataOutput.push(<p>{key + ':' + value}</p>)
+                cardDataOutput.push(<p>{key + ': ' + value}</p>)
             }
         }
         if (this.optionalInfo['Priority'] !== null && this.optionalInfo['Priority'] == "urgent") {
             return (
-                <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
+                <div class="urgent card" id={`${this.postId}`} onClick={this.cardClick.bind(this)} draggable={true} onDragStart={this.cardDrag.bind(this)}>
                     <limel-icon class="card_icon" name="fire_element" size="medium" />
-                    <h1>{this.cardTitle}</h1>
+                    <h1>{this.CardTitle}</h1>
                     <h3>{cardDataOutput}</h3>
                 </div>
             );
         } else {
             return (
-                <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this)}>
-                    <h1>{this.cardTitle}</h1>
-                    {cardDataOutput}
+                <div class="card" id={`${this.postId}`} onClick={this.cardClick.bind(this)} draggable={true} onDragStart={this.cardDrag.bind(this)}>
+                    <h1>{this.CardTitle}</h1>
+                    <h3>{cardDataOutput}</h3>
                 </div>
             );
         }
