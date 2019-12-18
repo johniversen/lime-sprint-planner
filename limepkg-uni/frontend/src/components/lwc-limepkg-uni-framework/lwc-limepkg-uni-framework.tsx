@@ -221,7 +221,8 @@ export class Framework implements LimeWebComponent {
 
         
         let dialogOutput: Array<ListItem<any>> = [];
-        let title = dialogData.Card.CardTitle;
+        let title = item.Card.CardTitle;
+        console.log(card);
         delete dialogData.Card.CardTitle;
         delete dialogData.priorityValue;
         delete dialogData.postId;
@@ -236,7 +237,7 @@ export class Framework implements LimeWebComponent {
                     }
                 } else {
                     item = {
-                        text: innerKey[0].toUpperCase() + innerKey.slice(1),
+                        text: innerKey.charAt(0).toUpperCase() + innerKey.slice(1),
                         secondaryText: (typeof (value[innerKey]) === 'string' ? value[innerKey][0].toUpperCase() + value[innerKey].slice(1) : value[innerKey])
                     };
                 }

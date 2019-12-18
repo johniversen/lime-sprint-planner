@@ -92,7 +92,7 @@ export class Dialog implements LimeWebComponent {
         };
 
         console.log("Render i nya dialog!");
-        console.log(this.isVisable)
+        console.log(this.dialogMainData);
         return (
             <limel-dialog heading={heading} open={this.isVisable} onClose={this.closeDialogHandler}>
                 <limel-list items={this.dialogMainData.dialogListItems}>

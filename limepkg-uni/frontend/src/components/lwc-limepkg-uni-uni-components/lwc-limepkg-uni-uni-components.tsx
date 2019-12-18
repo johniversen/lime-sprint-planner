@@ -120,7 +120,7 @@ export class UniComponents implements LimeWebComponent {
             }
             let item =
                 <lwc-limepkg-uni-card
-                    CardTitle={CardTitle}
+                    CardTitle={cardTitle}
                     postId={object.postId}   
                     cardData={card}
                     optionalInfo={optionalInfo}
