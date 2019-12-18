@@ -97,7 +97,7 @@ export class UniComponents implements LimeWebComponent {
 
             delete card.CardTitle
             let optionalInfo = {}
-            if (object.AdditionalInfo['Priority']) {
+            if (object.AdditionalInfo && object.AdditionalInfo['Priority']) {
                 optionalInfo['Priority'] = object.AdditionalInfo['Priority']
             }
             let item =

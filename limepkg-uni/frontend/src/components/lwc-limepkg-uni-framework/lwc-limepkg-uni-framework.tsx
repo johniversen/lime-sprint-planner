@@ -109,6 +109,7 @@ export class Framework implements LimeWebComponent {
 
     // Called when you select a Limetype in the top drop-down
     private getDataFromEndPoint(limeType) {
+        console.log(this.limetypeMetaData)
         this.fetchingDataComplete = false;
         let args = {
             'limetype': limeType
@@ -304,6 +305,7 @@ export class Framework implements LimeWebComponent {
     }
 
     public render() {
+
         if (this.dialogIsOpen) {
             this.dialog = <lwc-limepkg-uni-dialog dialogMainData={this.dialogMainData} selectedStatus={this.selectedStatus} isVisable={this.dialogIsOpen}></lwc-limepkg-uni-dialog >
         } else {
@@ -331,10 +333,9 @@ export class Framework implements LimeWebComponent {
                     limeTypeMetaData={limeTypeMetaData}
 
                 />
-            
 
             // If the limetype has a defined date_done, show weekpicker
-            if (this.limetypeMetaData[this.selectedLimetype.value]['Optional']['Date Deadline']) {
+            if (this.limetypeMetaData[this.selectedLimetype.value]['Optional'] && this.limetypeMetaData[this.selectedLimetype.value]['Optional']['Date Deadline']) {
                 weekPicker =
                     <limel-date-picker
                         type="week"
