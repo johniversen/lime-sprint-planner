@@ -9,8 +9,7 @@ För information om hur du kan konfiguera appen, se: lime-sprint-planner/limepkg
 * Kortens grid är gjorda med custom css. Borde "lime-fieras".
 * Korten skulle kunna snyggas till ytterliggare. För närvarande hanteras allt som ska finnas i kortet i ett enda objekt, och kan därför inte stylas individuellt. Dvs. du kan inte ändra hur stor del av kortet vem som är ansvarig ska ta, utan det kommer alltid ta lika stor plats som t.ex. tidsestimeringen.
 * Ikon på kort som motsvarar tagg. För närvarande finns bara ikon på kort om kortets prioritering är akut/urgent.
-* Fortsatt implentering av andra punkter än solutionimprovement.
-** T.ex. datumhantering i Deal eller Company, om det skulle finnas något som känns naturligt.
+* Fortsatt implentering av andra punkter än solutionimprovement. T.ex. datumhantering i Deal eller Company, om det skulle finnas något som känns naturligt.
 
 
 ### Installationsinstruktioner för utvecklingsmiljö
