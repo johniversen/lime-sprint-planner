@@ -24,8 +24,8 @@ export class Framework implements LimeWebComponent {
     @Element()
     public element: HTMLElement;
 
-    @State()
-    private dateValue = new Date();
+
+
 
     @State()
     private limetypeOptions: Option[] = []
@@ -47,6 +47,9 @@ export class Framework implements LimeWebComponent {
 
     @State()
     public selectedStatus: Option;
+
+
+    private dateValue : Date;
 
     private http: HttpService;
     private dialog = null;
@@ -77,6 +80,7 @@ export class Framework implements LimeWebComponent {
     public componentWillLoad() {
         this.http = this.platform.get(PlatformServiceName.Http);
         this.getLimeTypes();
+        this.dateValue = new Date();
     }
 
     public formatDate(date) {
@@ -113,7 +117,8 @@ export class Framework implements LimeWebComponent {
         let args = {
             'limetype': limeType
         }
-        if (this.dateValue) {
+        if (this.limetypeMetaData[limeType]['Optional'] && this.limetypeMetaData[limeType]['Optional']['Date Deadline'] && this.dateValue !== null) {
+            console.log(this.dateValue);
             args['chosenDate'] = this.formatDate(this.dateValue)
         }
         let argsString = this.encodeQueryData(args)
@@ -237,6 +242,7 @@ export class Framework implements LimeWebComponent {
     }
 
     private handleDateChange(event) {
+        console.log("Handöe Date change()");
         this.dateValue = event.detail;
         this.getDataFromEndPoint(this.selectedLimetype.value)
     }
@@ -332,9 +338,9 @@ export class Framework implements LimeWebComponent {
 
                 />
             
-
+            
             // If the limetype has a defined date_done, show weekpicker
-            if (this.limetypeMetaData[this.selectedLimetype.value]['Optional']['Date Deadline']) {
+            if (this.limetypeMetaData[this.selectedLimetype.value]['Optional'] && this.limetypeMetaData[this.selectedLimetype.value]['Optional']['Date Deadline']) {
                 weekPicker =
                     <limel-date-picker
                         type="week"

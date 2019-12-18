@@ -126,6 +126,17 @@ export class UniComponents implements LimeWebComponent {
     }
 
     private cardDrop(event) {
+        var prio = this.getColumnID(event);
+
+        let dragData = {
+            cardID: this.cardID,
+            columnID: prio
+        }
+
+        this.cardDropped.emit(dragData);
+    }
+
+    private getColumnID(event) {
         var prio;
 
         if (event.path[0].tagName == "DIV" && event.path[0].className == "container") {
@@ -142,19 +153,14 @@ export class UniComponents implements LimeWebComponent {
             prio = event.path[0].id;
         }
 
-        let dragData = {
-            cardID: this.cardID,
-            columnID: prio
-        }
-
-        this.cardDropped.emit(dragData);
+        return prio;
     }
 
     public render() {
         let output = this.listContainer.map(list => {
             // Return for the vertical card container
             return (
-                <limel-flex-container id={(this.listContainer.indexOf(list) + 1).toString()} class="cardContainer" direction={'vertical'} align={"stretch"} justify={"start"} onDragOver={this.allowDrop} onDrop={this.cardDrop.bind(this)}>
+                <limel-flex-container id={(this.listContainer.indexOf(list) + 1).toString()} class="cardContainer" direction={'vertical'} align={"stretch"} justify={"start"} onDragOver={this.allowDrop.bind(this)} onDrop={this.cardDrop.bind(this)}>
                     {list}
                 </limel-flex-container>
             )

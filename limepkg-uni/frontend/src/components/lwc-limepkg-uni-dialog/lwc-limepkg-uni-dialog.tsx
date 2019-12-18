@@ -22,9 +22,6 @@ export class Dialog implements LimeWebComponent {
     public element: HTMLElement;
 
     @Prop()
-    header: string
-
-    @Prop()
     mainContent: [{}]
 
     @Prop()
@@ -72,7 +69,7 @@ export class Dialog implements LimeWebComponent {
         this.closeDialog.emit(event);
     }
 
-    statusOnChangeHandler(event) {
+    private statusOnChangeHandler(event) {
         this.statusOnChange.emit(event);
     }
 
