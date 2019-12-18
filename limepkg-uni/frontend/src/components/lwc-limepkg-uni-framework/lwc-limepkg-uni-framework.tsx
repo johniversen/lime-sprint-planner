@@ -146,9 +146,6 @@ export class Framework implements LimeWebComponent {
     private sendPutRequest() {
         const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].PriorityVariable;
         console.log("send put request()");
-        console.log(this.limetypeMetaData);
-        console.log(limetypeStatus);
-        console.log(this.selectedStatus);
         let postId = this.currentPostId;
         console.log(this.limetypeMetaData);
         let data = {
@@ -179,11 +176,10 @@ export class Framework implements LimeWebComponent {
     // Ändra properties namn
     private updateCurrentCardStatus() {
         let item;
-
         this.mainData = this.mainData.map(obj => {
             if (obj['postId'] === this.currentPostId) {
                 console.log("KOmmer hit?");
-                item = { ...obj, status: this.selectedStatus.value };
+                item = { ...obj };
                 item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['PriorityHierarchy'][this.selectedStatus.text];
                 obj = Object.assign(item);
             }
@@ -302,11 +298,12 @@ export class Framework implements LimeWebComponent {
 
     private updateDraggedCardStatus(postId, priorityValue) {
         let item;
+        console.log("updateDraggedOnDrop");
         console.log(priorityValue);
         let priority = this.getPriorityNameByValue(priorityValue);
         this.mainData = this.mainData.map(obj => {
             if (obj.postId === postId) {
-                item = { ...obj, status: priority };
+                item = { ...obj};
                 item['priorityValue'] = Number(priorityValue);
                 console.log("item");
                 console.log(item);
@@ -317,7 +314,7 @@ export class Framework implements LimeWebComponent {
     }
 
     private sendPutRequestOnDrag(postId, priorityValue) {
-        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].status;
+        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].PriorityVariable;
         let priority = this.getPriorityNameByValue(priorityValue);
         console.log(priority);
         let data = {
