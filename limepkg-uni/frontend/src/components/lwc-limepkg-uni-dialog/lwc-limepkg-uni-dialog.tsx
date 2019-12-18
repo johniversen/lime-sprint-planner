@@ -27,9 +27,6 @@ export class Dialog implements LimeWebComponent {
     @Prop()
     mainContent: [{}]
 
-   // @Prop()
-    //statusOptions: Option[] = [];
-
     @Prop()
     isVisable: boolean
 
@@ -60,12 +57,6 @@ export class Dialog implements LimeWebComponent {
         bubbles: true
     }) saveStatusChange: EventEmitter;
 
-   // @Prop()
-    //dialogDropDownOptions: Option[];
-
-
-    //private dialogOutput: Array<ListItem<any>> = [];
-
     constructor() {
         this.closeDialogHandler = this.closeDialogHandler.bind(this);
         this.statusOnChangeHandler = this.statusOnChangeHandler.bind(this);
@@ -91,14 +82,11 @@ export class Dialog implements LimeWebComponent {
             icon: 'info_popup'
         };
 
-        console.log("Render i nya dialog!");
-        console.log(this.dialogMainData);
         return (
             <limel-dialog heading={heading} open={this.isVisable} onClose={this.closeDialogHandler}>
                 <limel-list items={this.dialogMainData.dialogListItems}>
                 </limel-list>
                 <limel-select
-                    // Vi vill ändra till den nya label som valts.
                     label={"Limetype status"}
                     value={this.selectedStatus}
                     options={this.dialogMainData.dialogDropDownOptions}

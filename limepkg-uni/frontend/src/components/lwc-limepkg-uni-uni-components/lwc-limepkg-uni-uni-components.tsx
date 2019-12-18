@@ -2,7 +2,6 @@ import {
     LimeWebComponent,
     LimeWebComponentContext,
     LimeWebComponentPlatform,
-    //NotificationService,
 } from '@limetech/lime-web-components-interfaces';
 import { Component, Element, h, Prop, State, Listen, Event, EventEmitter } from '@stencil/core';
 
@@ -21,8 +20,7 @@ export class UniComponents implements LimeWebComponent {
 
     @Element()
     element: HTMLElement;
-    
-    // Ändra properties namn
+
     @Prop()
     mainData: Array<{
         priorityValue: number
@@ -33,18 +31,6 @@ export class UniComponents implements LimeWebComponent {
         AdditionalInfo: {
         }
         postId: number
-        /*         title: string,
-                secondaryText: string,
-                priorityValue: number,
-                status: string,
-                postId: number,
-                priority: string */
-        /*      title: string,
-             secondaryText: string,
-             priorityValue: number,
-             status: string,
-             postId: number,
-             priority: string */
     }>;
 
     @Prop()
@@ -71,13 +57,10 @@ export class UniComponents implements LimeWebComponent {
         this.createOutput();
     }
     public componentWillUpdate() {
-        console.log("UNI UNI Component will update()")
         this.createOutput();
     }
 
-    
     private createOutput() {
-       
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         let columnList = []
         this.listContainer = [];
@@ -106,12 +89,11 @@ export class UniComponents implements LimeWebComponent {
 
         this.listContainer = [];
 
-
+        // Loops through mainData and creates a card for every entry
         this.mainData.forEach(obj => {
             let object = Object.assign({}, obj)
             let card = {...object.Card}
             let cardTitle = (' ' + card.CardTitle).slice(1);
-            
 
             delete card.CardTitle
             let optionalInfo = {}
@@ -170,13 +152,14 @@ export class UniComponents implements LimeWebComponent {
 
     public render() {
         let output = this.listContainer.map(list => {
+            // Return for the vertical card container
             return (
                 <limel-flex-container id={(this.listContainer.indexOf(list) + 1).toString()} class="cardContainer" direction={'vertical'} align={"stretch"} justify={"start"} onDragOver={this.allowDrop} onDrop={this.cardDrop.bind(this)}>
                     {list}
                 </limel-flex-container>
             )
         })
-        console.log(output);
+        // Return for horizontal list of statuses, the "headers"
         return (
             <limel-flex-container class="outputContainer" direction={"horizontal"} align={"center"} justify={"space-evenly"}>
                 {output}
