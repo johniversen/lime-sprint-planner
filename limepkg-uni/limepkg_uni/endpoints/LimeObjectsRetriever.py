@@ -69,16 +69,44 @@ class LimeobjectsRetriever(webserver.LimeResource):
             }
         }
 
+        print(' ')
+        print('LOOKING FOR RESPONSIBLE:')
+        print(' ')
         # Fill json with info from the config
         for key, val in config['limetypes'][limetype].items():
-            if (key == 'Responsible'):
-                jsonrequest['responseFormat']['object'][val] = {'name': None}
-            elif (key != 'PriorityHierarchy' and key != 'DisplayName'):
+            if (key != 'PriorityHierarchy' and key != 'DisplayName'):
+                if (key == 'Responsible'):
+                    print(' ')
+                    print(' ')
+                    print('FOUND RESPONSIBLE')
+                    jsonrequest['responseFormat']['object'][val] = {'name': None}
+                    print(' ')
+                    print(' ')
                 if isinstance(val, dict):
                     for innerkey, innerval in val.items():
-                       jsonrequest['responseFormat']['object'][innerval] = {'_alias': innerkey} 
+                        if (innerkey == 'Responsible'):
+                            print(' ')
+                            print(' ')
+                            print('FOUND RESPONSIBLE')
+                            jsonrequest['responseFormat']['object'][innerval] = {'name': None}
+                            print(' ')
+                            print(' ')
+                        else:
+                            jsonrequest['responseFormat']['object'][innerval] = {'_alias': innerkey} 
                 else:
-                    jsonrequest['responseFormat']['object'][val] = {'_alias': key} 
+                    if (key == 'Responsible'):
+                        print(' ')
+                        print(' ')
+                        print('FOUND RESPONSIBLE')
+                        jsonrequest['responseFormat']['object'][val] = {'name': None}
+                        print(' ')
+                        print(' ')
+                    else:
+                        jsonrequest['responseFormat']['object'][val] = {'_alias': key} 
+
+        print(' ')
+        print('STOPPED LOOKING FOR RESPONSIBLE')
+        print(' ')
 
         # Add ID 
         jsonrequest['responseFormat']['object']['id'] = {'_alias': 'postId'}
@@ -138,10 +166,6 @@ class LimeobjectsRetriever(webserver.LimeResource):
             status = obj['PriorityVariable']
             newObj['priorityValue'] = config['limetypes'][limetype]['PriorityHierarchy'][status]
             newObj['postId'] = obj['postId']
-
-            pp.pprint(obj)
-
-            pp.pprint(config['limetypes'][limetype].items())
             # Restructure response to reflect config
             for key, val in config['limetypes'][limetype].items():
                 if key == 'DisplayName' or key == 'PriorityHierarchy' or key == 'PriorityVariable':
@@ -149,21 +173,25 @@ class LimeobjectsRetriever(webserver.LimeResource):
 
                 # If nested 
                 if isinstance(val, dict): 
-                    pp.pprint(val)
                     newObj[key] = {}
                     for innerkey, innerval in val.items():
                         pp.pprint(innerval)
                         # If date, format the date
                         if innerkey.startswith('Date ') and obj[innerkey] != None:
                             if innerkey in obj: newObj[key][innerkey] = obj[innerkey].strftime('%d-%m-%Y')
+                        # If 'coworker' format name
+                        elif innerkey == 'Responsible':
+                            if 'coworker' in obj and obj['coworker']['name'] != None: newObj[key][innerkey] = obj['coworker']['name']
                         else:
                             if innerkey in obj: newObj[key][innerkey] = obj[innerkey] 
                 # If not nested 
                 else:
-                    pp.pprint(val)
                     # If date, format the date
                     if key.startswith('Date ') and obj[key] != None:
                         if key in obj: newObj[key] = obj[key].strftime('%d-%m-%Y')
+                    # If 'coworker' format name
+                    elif key == 'Responsible':
+                        if 'coworker' in obj and obj['coworker']['name'] != None: newObj[key] = obj['coworker']['name']
                     else:
                         if key in obj: newObj[key] = obj[key]
 
