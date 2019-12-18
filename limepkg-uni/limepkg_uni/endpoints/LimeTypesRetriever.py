@@ -5,11 +5,12 @@ from webargs.flaskparser import use_args
 from ..endpoints import api
 import lime_query
 from limepkg_uni.config import RuntimeConfig
+import pprint
 
 logger = logging.getLogger(__name__)
 
 class LimetypesRetriever(webserver.LimeResource):
-    """Returns a list of lime objects from the db, formatted according to config"""
+    '''Returns a list of lime objects from the db, formatted according to config'''
 
     # This describes the schema for the payload when posting a new deal
     # See https://webargs.readthedocs.io/en/latest/ for more info.
@@ -25,11 +26,19 @@ class LimetypesRetriever(webserver.LimeResource):
 
         for key, val in config['limetypes'].items():
             response['limetypes'][key] = {}
-            response['limetypes'][key]['status'] = val['status']
-            response['limetypes'][key]['displayName'] = val['displayName']
-            if 'prio'      in val: response['limetypes'][key]['prio']      = val['prio']
-            if 'date_done' in val: response['limetypes'][key]['date_done'] = val['date_done'] 
+            response['limetypes'][key]['DisplayName'] = val['DisplayName']
+            if 'PriorityVariable'  in val: response['limetypes'][key]['PriorityVariable'] = val['PriorityVariable']
+            if 'PriorityHierarchy' in val: response['limetypes'][key]['PriorityHierarchy'] = val['PriorityHierarchy']
+            if 'Optional' in val: 
+                if 'Date Deadline' in val['Optional']: 
+                    response['limetypes'][key]['Optional'] = {}
+                    response['limetypes'][key]['Optional']['Date Deadline'] = val['Optional']['Date Deadline'] 
 
+        pp = pprint.PrettyPrinter(indent=2)
+        print(' ')
+        print('response before format:')
+        pp.pprint(response)
+        print(' ')
         return response
 
     def get_config(self):
