@@ -132,6 +132,7 @@ export class Framework implements LimeWebComponent {
     // Called when selecting a status in drop-down inside dialog
     private sendPutRequest() {
         const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].PriorityVariable;
+
         let postId = this.currentPostId;
         let data = {
             [limetypeStatus]: {
@@ -156,10 +157,12 @@ export class Framework implements LimeWebComponent {
 
     private updateCurrentCardStatus() {
         let item;
-
         this.mainData = this.mainData.map(obj => {
             if (obj['postId'] === this.currentPostId) {
-                item = { ...obj, status: this.selectedStatus.value };
+
+                console.log("KOmmer hit?");
+                item = { ...obj };
+
                 item['priorityValue'] = this.limetypeMetaData[this.selectedLimetype.value]['PriorityHierarchy'][this.selectedStatus.text];
                 obj = Object.assign(item);
             }
@@ -275,7 +278,7 @@ export class Framework implements LimeWebComponent {
         let priority = this.getPriorityNameByValue(priorityValue);
         this.mainData = this.mainData.map(obj => {
             if (obj.postId === postId) {
-                item = { ...obj, status: priority };
+                item = { ...obj};
                 item['priorityValue'] = Number(priorityValue);
                 obj = Object.assign(item);
             }
@@ -284,7 +287,7 @@ export class Framework implements LimeWebComponent {
     }
 
     private sendPutRequestOnDrag(postId, priorityValue) {
-        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].status;
+        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].PriorityVariable;
         let priority = this.getPriorityNameByValue(priorityValue);
         let data = {
             [limetypeStatus]: {
