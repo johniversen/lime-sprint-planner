@@ -62,6 +62,8 @@ export class Card implements LimeWebComponent {
 
     public render() {
         let cardDataOutput = []
+        // Fills cardDataOutput with entries from cardData
+        // cardDataOutput is then what is displayed on the card, except for title
         for (const [key, value] of Object.entries(this.cardData)) {
             if (!(value === "" || value === {} || typeof value ==='undefined')) {
                 cardDataOutput.push(<p>{key + ': ' + value}</p>)
