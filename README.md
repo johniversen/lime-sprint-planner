@@ -1,5 +1,18 @@
 # lime-sprint-planner
 
+För information om hur du kan konfiguera appen, se: lime-sprint-planner/limepkg-uni/limepkg_uni/config/config.yaml
+
+### Framtida implementeringar
+* Implmentering av taggar.
+* För närvarande är ikonerna i dialogen hårdkodad. Borde ändras till att motsvara en tagg för kortet.
+* Färgerna för de olika statusarna är hårdkodade. Borde ändras till att motsvara statusen, om där redan finns "färger för statusar".
+* Kortens grid är gjorda med custom css. Borde "lime-fieras".
+* Korten skulle kunna snyggas till ytterliggare. För närvarande hanteras allt som ska finnas i kortet i ett enda objekt, och kan därför inte stylas individuellt. Dvs. du kan inte ändra hur stor del av kortet vem som är ansvarig ska ta, utan det kommer alltid ta lika stor plats som t.ex. tidsestimeringen.
+* Ikon på kort som motsvarar tagg. För närvarande finns bara ikon på kort om kortets prioritering är akut/urgent.
+* Fortsatt implentering av andra punkter än solutionimprovement.
+      * T.ex. datumhantering i Deal eller Company, om det skulle finnas något som känns naturligt.
+
+
 ### Installationsinstruktioner för utvecklingsmiljö
 Samt startande av webserver
 
