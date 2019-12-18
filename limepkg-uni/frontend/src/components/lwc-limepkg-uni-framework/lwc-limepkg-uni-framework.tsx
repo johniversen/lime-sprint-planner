@@ -142,7 +142,11 @@ export class Framework implements LimeWebComponent {
     }
 
     private sendPutRequest() {
-        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].status;
+        const limetypeStatus = this.limetypeMetaData[this.selectedLimetype.value].PriorityVariable;
+        console.log("send put request()");
+        console.log(this.limetypeMetaData);
+        console.log(limetypeStatus);
+        console.log(this.selectedStatus);
         let postId = this.currentPostId;
         let data = {
             [limetypeStatus]: {
@@ -198,7 +202,7 @@ export class Framework implements LimeWebComponent {
         })
         return statusOptions;
     }
-    // HÄR ÄR FEL! TAR BORT
+    
     @Listen('cardClicked')
     private openDialog(event) {
         console.log("CardClicked")
@@ -206,7 +210,9 @@ export class Framework implements LimeWebComponent {
         
         let item = this.mainData.find(obj => obj.postId === event.detail.value);
         this.currentPostId = item.postId;
-        let dialogData = Object.assign({}, item);
+        let card = {...item.Card};
+        delete card.CardTitle;
+        let dialogData = {...item, Card :card};
 
         this.selectedStatus = statusOptions[item.priorityValue -1];
 
@@ -261,10 +267,8 @@ export class Framework implements LimeWebComponent {
 
     private limetypeOnChange(event) {
         console.log("Selected limetype handler on change");
-        console.log(this.selectedLimetype);
         this.selectedLimetype = event.detail;
         let limeType = event.detail.value;
-        console.log(this.selectedLimetype);
         this.getDataFromEndPoint(limeType);
     }
 
@@ -321,8 +325,7 @@ export class Framework implements LimeWebComponent {
                     limeTypeMetaData={limeTypeMetaData}
 
                 />
-            console.log("limetype meta data")
-            console.log(this.limetypeMetaData);
+            
 
             // If the limetype has a defined date_done, show weekpicker
             if (this.limetypeMetaData[this.selectedLimetype.value]['Optional']['Date Deadline']) {

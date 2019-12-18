@@ -68,11 +68,9 @@ export class UniComponents implements LimeWebComponent {
         this.createOutput();
     }
 
-    // Ändra properties namn
+    
     private createOutput() {
-       // let tempMainData = [{}];
-        //tempMainData = { ...this.mainData };
-        //tempMainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
+       
         this.mainData.sort((a, b) => (a.priorityValue > b.priorityValue) ? 1 : ((b.priorityValue > a.priorityValue) ? -1 : 0));
         let columnList = []
         this.listContainer = [];
@@ -105,8 +103,7 @@ export class UniComponents implements LimeWebComponent {
             let object = Object.assign({}, obj)
             let card = {...object.Card}
             let cardTitle = (' ' + card.CardTitle).slice(1);
-            console.log("objcet");
-            console.log(card);
+            
             delete card.CardTitle
             let optionalInfo = {}
             if (object.AdditionalInfo['Priority']) {
