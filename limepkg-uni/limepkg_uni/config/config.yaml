@@ -6,47 +6,63 @@
 #
 # The presentation alias is the name by which the variable is displayed in the app.
 # These can be named whatever you'd like, with the exception of these special keywords: 
-#   title          - Becomes the title (header) of the item.                     (required)
-#   secondary_text - Displayed underneath the header.                            (not required) 
-#   status         - Determines what variable decides priority.                  (required) 
-#   prio           - List of possible values from 'status' that decide priority. (required)
-#                    Each value should contain a unique number afterwards that
-#                    decides its priority (position on the x axis of the app,  
-#                    1 being the leftmost)
-#   date_done      - This date is used to filter what objects will be retrieved  (not required)
-#                    for the frontend. For example: User picks week 34 on the 
-#                    frontend, if date_done is within week 34 it will be fetched.
+#   DisplayName       - The string that will be displayed in the list of limetypes. (required)
+#                       This string is defined directly here in the config, 
+#                       so unlike the other fields in the config it will 
+#                       not retrieve a field from the DB.  
+#   PriorityVariable  - Determines what variable decides priority.                  (optional)
+#                       If no priority is set, all cards will simply be displayed
+#                       in a single row. 
+#   PriorityHierarchy - List of possible values from 'PriorityVariable'             (optional)
+#                       that decide priority. Each value should contain 
+#                       a unique number afterwards that decides its priority.
+#                       (position on the x axis of the board, 1 being the leftmost)
+#   Card:             - Defines title, optional text and custom fields for the card.(required)
+#     CardTitle       - Becomes the title (header) of the card.                     (required)
+#     Comment         - Displayed underneath the header of the card.                (optional) 
+#   AdditionalInfo:   - Defines what fields will be displayed on the dialog that    (optional)
+#                       opens when users click on a card. 
+#     Priority:       - If this variable returns 'urgent' from the db, a fire icon  (optional) 
+#                       will be displayed on the card. (if placed in AdditionalInfo)
+#                       (originally hardcoded for the solutionmprovement limetype)
+#
+#   Optional:         - Contains optional fields that add functionality frontend.   (optional)
+#                       Currently only contains the 'Date Deadline' field/option.
+#     Date Deadline   - Will display a weekpicker on the frontend if defined.       (optional)
+#                       Limetypes without this field will default to displaying
+#                       all cards at the same time. Limetypes with the Date Deadline
+#                       field set will have the option to only display limetypes 
+#                       with a deadline set within the selected week.
 #   
-# Restrictions:
-#   Due to the nature of the database-API, there are certain restrictions 
-#   on how data is retrieved and displayed: 
-#     DateTime   - DateTime variables must be prefixed with 'date_' in order to be 
-#                  formatted correctly. eg. 'date_done' or 'date_expected' etc.
+# Restrictions: (TODO: Fix)
+# There are currently some  restrictions on how data is retrieved and displayed: 
+#     DateTime   - DateTime variables must be prefixed with 'Date ' in order to be 
+#                  formatted correctly. eg. 'Date Done'.
 #     Duplicates - The database-api does not handle duplicates, and will not return
 #                  the same variable under two different aliases. This means that 
 #                  we can not use a variable both as status and as secondary_text
-#                  for example. (?)
+#                  for example.
 
 limetypes:
   solutionimprovement:                            # Name of the limetype in the db
     DisplayName: Solution Improvement             # String representing how the limetype is displayed on the frontend
-    PriorityVariable: solutionimprovementstatus   # Formerly 'status' - Represents the variable that determines the cards priority
-    PriorityHierarchy:                            # Formerly 'prio'   - The hierarchy of values that 'priorityVariable' can be. 
-      deny: 1                                     #                     Columns are created for each value in the hierarchy. 
-      More info needed: 2                         #                     Columns are sorted from low to high (left to right)
+    PriorityVariable: solutionimprovementstatus   # Represents the variable that determines the cards priority
+    PriorityHierarchy:                            # The hierarchy of values that 'priorityVariable' can be. 
+      deny: 1                                     #     Columns are created for each value in the hierarchy. 
+      More info needed: 2                         #     Columns are sorted from low to high. (left to right)
       reported: 3
       started: 4
       approved: 5
       done: 6
     Card:
-      CardTitle: title                            # Formerly 'title' (required)
-      Comment: comment                            # Formerly 'secondaryText' - Text displayed on the cards (optional)
-      Responsible: coworker                     
-    AdditionalInfo:                               # User defined fields, these will be displayed when user clicks on a card.
-      Priority: priority
+      CardTitle: title                            # Title of the card                      (required)
+      Comment: comment                            # Text displayed on the cards            (optional)
+      Responsible: coworker                       # User defined field to show on the card (optional)
+    AdditionalInfo:                               # User defined fields, these will be     (optional)
+      Priority: priority                          #     displayed when a user clicks on a card. 
       Misc: misc
-    Optional:                                     # Optional fields that add functionality on the frontend.
-      Date Deadline: donedate                     # Formerly date_done - Will display a weekpicker on the frontend if defined. 
+    Optional:                                     # Optional fields that add functionality on the frontend. (optional)
+      Date Deadline: donedate                     # Will display a weekpicker on the frontend if defined.   (optional)
 
   deal:
     DisplayName: Deal

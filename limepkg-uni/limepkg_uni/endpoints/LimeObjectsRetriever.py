@@ -6,7 +6,6 @@ from ..endpoints import api
 import lime_query
 from limepkg_uni.config import RuntimeConfig
 import datetime
-import pprint
 
 logger = logging.getLogger(__name__)
 
@@ -33,22 +32,12 @@ class LimeobjectsRetriever(webserver.LimeResource):
 
         # Get limetype that we wish to display from args
         query = self.create_query(limetype, chosenDate, config)
-        print(' ')
-        print('query:')
-        print(query)
 
         # Query the db and fill a json with data formatted by config
         response = self.query_db(query)
-        print(' ')
-        print('response from db query:')
-        print(response)
 
         # Adds priority info and formats date info
         response = self.format_response(response, config, limetype)
-        print(' ')
-        print('formatted response sent to frontend:')
-        print(response)
-        
         return response
 
     def get_config(self):
@@ -69,44 +58,20 @@ class LimeobjectsRetriever(webserver.LimeResource):
             }
         }
 
-        print(' ')
-        print('LOOKING FOR RESPONSIBLE:')
-        print(' ')
         # Fill json with info from the config
         for key, val in config['limetypes'][limetype].items():
             if (key != 'PriorityHierarchy' and key != 'DisplayName'):
                 if (key == 'Responsible'):
-                    print(' ')
-                    print(' ')
-                    print('FOUND RESPONSIBLE')
-                    jsonrequest['responseFormat']['object'][val] = {'name': None}
-                    print(' ')
-                    print(' ')
                 if isinstance(val, dict):
                     for innerkey, innerval in val.items():
                         if (innerkey == 'Responsible'):
-                            print(' ')
-                            print(' ')
-                            print('FOUND RESPONSIBLE')
-                            jsonrequest['responseFormat']['object'][innerval] = {'name': None}
-                            print(' ')
-                            print(' ')
                         else:
                             jsonrequest['responseFormat']['object'][innerval] = {'_alias': innerkey} 
                 else:
                     if (key == 'Responsible'):
-                        print(' ')
-                        print(' ')
-                        print('FOUND RESPONSIBLE')
                         jsonrequest['responseFormat']['object'][val] = {'name': None}
-                        print(' ')
-                        print(' ')
                     else:
                         jsonrequest['responseFormat']['object'][val] = {'_alias': key} 
-
-        print(' ')
-        print('STOPPED LOOKING FOR RESPONSIBLE')
-        print(' ')
 
         # Add ID 
         jsonrequest['responseFormat']['object']['id'] = {'_alias': 'postId'}
@@ -137,8 +102,6 @@ class LimeobjectsRetriever(webserver.LimeResource):
                 ]
             }
 
-        pp = pprint.PrettyPrinter(indent=2)
-        pp.pprint(jsonrequest)
         return jsonrequest
 
     def query_db(self, query):
@@ -153,10 +116,6 @@ class LimeobjectsRetriever(webserver.LimeResource):
         return response
 
     def format_response(self, response, config, limetype):
-        pp = pprint.PrettyPrinter(indent=2)
-        print(' ')
-        print('response before format:')
-        pp.pprint(response)
         newResponse = {}
         newResponse['objects'] = []
 
@@ -175,7 +134,6 @@ class LimeobjectsRetriever(webserver.LimeResource):
                 if isinstance(val, dict): 
                     newObj[key] = {}
                     for innerkey, innerval in val.items():
-                        pp.pprint(innerval)
                         # If date, format the date
                         if innerkey.startswith('Date ') and obj[innerkey] != None:
                             if innerkey in obj: newObj[key][innerkey] = obj[innerkey].strftime('%d-%m-%Y')
@@ -197,7 +155,6 @@ class LimeobjectsRetriever(webserver.LimeResource):
 
             newResponse['objects'].append(newObj)
 
-        pp.pprint(newResponse)
         return newResponse
 
 api.add_resource(LimeobjectsRetriever, '/')
